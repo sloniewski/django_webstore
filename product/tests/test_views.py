@@ -23,8 +23,8 @@ class TestProductView(TestCase):
 
     def test_template_used(self):
         self.assertTemplateUsed(
-            self.get_response(),
-            'product/product-detail.html',
+            response=self.get_response(),
+            template_name='product/product_detail.html',
         )
 
 

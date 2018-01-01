@@ -219,3 +219,6 @@ GitHub.sublime-settings
 .history
 
 # End of https://www.gitignore.io/api/django,python,pycharm,sublimetext,visualstudiocode
+
+.idea/
+

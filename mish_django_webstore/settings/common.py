@@ -9,7 +9,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'webstore_user',
+    'users',
     'product',
     'cart',
     'order',
@@ -89,4 +89,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
-AUTH_USER_MODEL = 'webstore_user.WebStoreUser'
+AUTH_USER_MODEL = 'users.CustomUser'

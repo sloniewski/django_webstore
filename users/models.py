@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
 
 
-class WebStoreUser(AbstractUser):
+class CustomUser(AbstractUser):
     pass

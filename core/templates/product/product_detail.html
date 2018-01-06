@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
     {{ object.name }}
@@ -10,9 +11,15 @@
         <h2>{{ object.name }}</h2>
         <div class="product-description">{{ object.description }}</div>
         <div class="product-price">{{ object.price }}</div>
-        <form action="">
-            <input type="number" id="item-quantity">
+        <form id='add-item-form' action="">
+            <label>qty.
+                <input type="number" id="item-quantity">
+            </label>
             <input type="submit" id="add-to-cart">
         </form>
     </div>
 {% endblock body %}
+
+{% block scripts %}
+    <script src="{% static 'scripts/product-page.js' %}"></script>
+{% endblock scripts %}

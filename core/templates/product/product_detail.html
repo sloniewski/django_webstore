@@ -6,12 +6,14 @@
 {% endblock title %}
 
 {% block body %}
-    <div id="cart-item-count"></div>
+    <div id="cart-item-count">0</div>
     <div class="product-card">
         <h2>{{ object.name }}</h2>
         <div class="product-description">{{ object.description }}</div>
         <div class="product-price">{{ object.price }}</div>
-        <form id='add-item-form' action="">
+        <form id='add-item-form' action="{% url 'cart:add-item' %}">
+            {% csrf_token %}
+            <input id="product-id" type="hidden" value="{{ object.id }}">
             <label>qty.
                 <input type="number" id="item-quantity">
             </label>
@@ -21,5 +23,6 @@
 {% endblock body %}
 
 {% block scripts %}
+    <script src="{% static 'scripts/ajax-utils.js' %}"></script>
     <script src="{% static 'scripts/product-page.js' %}"></script>
 {% endblock scripts %}

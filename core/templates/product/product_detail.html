@@ -5,5 +5,14 @@
 {% endblock title %}
 
 {% block body %}
-    <h2>{{ object.name }}</h2>
+    <div id="cart-item-count"></div>
+    <div class="product-card">
+        <h2>{{ object.name }}</h2>
+        <div class="product-description">{{ object.description }}</div>
+        <div class="product-price">{{ object.price }}</div>
+        <form action="">
+            <input type="number" id="item-quantity">
+            <input type="submit" id="add-to-cart">
+        </form>
+    </div>
 {% endblock body %}

@@ -38,5 +38,3 @@ class TestAddItemView(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['item'], product.id)
         self.assertEqual(data['qty'], 5)
-
-        self.fail('test not finised  ')

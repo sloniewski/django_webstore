@@ -1,15 +1,9 @@
-from selenium import webdriver
-from django.test import TestCase
 from product.models import Product
 
+from .base import FunctionalTest
 
-class BasicTest(TestCase):
 
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-
-    def tearDown(self):
-        self.browser.quit()
+class BasicTest(FunctionalTest):
 
     def test_if_functional_tests_work(self):
         product = Product.objects.create(name='my-test-product')

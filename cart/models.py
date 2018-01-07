@@ -65,5 +65,8 @@ class Cart(models.Model):
     def get_item_count(self):
         return self.cartitem_set.aggregate(Sum('quantity'))['quantity__sum']
 
+    def get_items(self):
+        return self.cartitem_set.all()
+
     def get_user(self):
         pass

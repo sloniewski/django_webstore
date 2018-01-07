@@ -50,14 +50,3 @@ class TestCartModel(TestCase):
 
         self.assertEqual(cart_A.session.session_key, cart_B.session.session_key)
         self.assertNotEqual(cart_A.session.session_key, cart_C.session.session_key)
-
-    def test_get_cart_items(self):
-        prod_A = Product.objects.create(name='Red Windsor')
-        prod_B = Product.objects.create(name='Emmental')
-        cart = Cart.objects.create(session=self.session.session_key)
-        cart.add_item(prod_A.id, 6)
-        cart.add_item(prod_B.id, 7)
-        cart_items = cart.get_items()
-
-        self.assertIn(prod_A, cart_items)
-        self.assertIn(prod_B, cart_items)

@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 
@@ -8,12 +9,7 @@ User = get_user_model()
 
 
 class CartManager(models.Manager):
-
-    def get_or_create(self, session_key):
-        if self.filter(session=session_key).exists():
-            return self.get(session=session_key)
-        else:
-            return self.create(session=session_key)
+    pass
 
 
 class CartItem(models.Model):
@@ -27,9 +23,18 @@ class CartItem(models.Model):
     )
     quantity = models.PositiveIntegerField()
 
+    def add_qty(self, qty):
+        self.quantity += qty
+        self.save()
+
+    class Meta:
+        unique_together = [
+            ('cart', 'product')
+        ]
+
 
 class Cart(models.Model):
-    session = models.ForeignKey(
+    session = models.OneToOneField(
         Session,
         on_delete=models.CASCADE,
     )
@@ -43,13 +48,22 @@ class Cart(models.Model):
         auto_now_add=True,
     )
 
-    objects = CartManager
-
     def add_item(self, item, qty):
-        pass
+        try:
+            cart_item = CartItem.objects.get(
+                product_id=item,
+                cart=self,
+            )
+            cart_item.add_qty(qty)
+        except CartItem.DoesNotExist:
+            CartItem.objects.create(
+                product_id=item,
+                cart=self,
+                quantity=qty,
+            )
 
     def get_item_count(self):
-        pass
+        return self.cartitem_set.aggregate(Sum('quantity'))['quantity__sum']
 
     def get_user(self):
         pass

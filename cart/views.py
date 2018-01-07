@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from django.views.defaults import page_not_found, bad_request
 from django.views.generic import FormView
 
@@ -22,17 +22,17 @@ class CartAddItem(FormView):
 
         item = form.cleaned_data['item']
         qty = form.cleaned_data['qty']
-
-        cart = Cart.objects.get_or_create(self.request.session.session_key)
+        cart = Cart.objects.get_or_create(session_id=self.request.session.session_key)[0]
         cart.add_item(item, qty)
 
-        return HttpResponse(
-                    json.loads({ 'item': item,
-                                 'qty': qty,
-                                 'cart_items': cart.items,
-                                 }
-                               )
-        )
+        data = json.dumps({
+            'added': {
+                'item': item,
+                'qty': qty,
+            },
+            'cart_items': cart.get_item_count(),
+        })
+        return HttpResponse(data)
 
     def form_invalid(self, form):
         return bad_request(self.request, 'bad request')

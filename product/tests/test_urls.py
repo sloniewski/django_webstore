@@ -16,7 +16,6 @@ class TestProductDetailUrl(TestCase):
 
     def test_resolve(self):
         resolver = resolve(reverse('product:product-detail', kwargs={'slug': self.test_slug}))
-
         self.assertEqual((), resolver.args)
         self.assertEqual({'slug': self.test_slug}, resolver.kwargs)
         self.assertEqual('product', resolver.app_name)

@@ -1,7 +1,9 @@
 from django.test import TestCase
-from django.contrib.auth import get_user_model
 
-from product.models import Product
+from product.models import (
+    Product,
+    Price,
+)
 
 
 class TestProductModel(TestCase):
@@ -40,12 +42,25 @@ class TestProductModel(TestCase):
             second=product.get_absolute_url(),
         )
 
-
-class TestUserModel(TestCase):
-
-    def test_user_model_set_properly(self):
+    def test_get_latest_price(self):
+        product = Product.objects.create(
+            name='test product',
+        )
+        prices = Price.objects.bulk_create([
+            Price(value=12.0101, valid_from='2018-01-01', product=product),
+            Price(value=45.345, valid_from='2017-04-05', product=product),
+            Price(value=78.9999, valid_from='2016-08-12', product=product),
+        ])
         self.assertEqual(
-            get_user_model().__name__,
-            'WebStoreUser',
-            msg='check settings to point to appropriate user model from webstore_user.models'
+            product.get_price,
+            '12.0101',
+        )
+
+    def test_behaviour_if_no_price_is_set(self):
+        product = Product.objects.create(
+            name='test product',
+        )
+        self.assertEqual(
+            product.get_price,
+            None,
         )

@@ -1,29 +1,29 @@
 from django.shortcuts import reverse
 from django.test import TestCase
 
-from . import Product
+from product.models import Product
 
 
 class TestProductView(TestCase):
 
-    def get_response(self):
+    def setUp(self):
         product = Product.objects.create(
             name='The Holy Grail',
         )
-        response = self.client.get(
-            reverse('product:product-detail', kwargs={'slug': product.slug}))
-        return response
+        self.response = self.client.get(
+            reverse('product:product-detail', kwargs={'slug': product.slug})
+        )
 
     def test_http_status(self):
         self.assertEqual(
-            first=self.get_response().status_code,
+            first=self.response.status_code,
             second=200,
             msg='view did not return expected response',
         )
 
     def test_template_used(self):
         self.assertTemplateUsed(
-            response=self.get_response(),
+            response=self.response,
             template_name='product/product_detail.html',
         )
 

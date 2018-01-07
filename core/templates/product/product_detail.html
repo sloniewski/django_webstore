@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load product_tags %}
 
 {% block title %}
     {{ object.name }}
@@ -10,7 +11,7 @@
     <div class="product-card">
         <h2>{{ object.name }}</h2>
         <div class="product-description">{{ object.description }}</div>
-        <div class="product-price">{{ object.price }}</div>
+        <div class="product-price">{{ object.get_price| product_price }}</div>
         <form id='add-item-form' action="{% url 'cart:add-item' %}">
             {% csrf_token %}
             <input id="product-id" type="hidden" value="{{ object.id }}">

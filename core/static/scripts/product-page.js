@@ -24,8 +24,8 @@ $( document ).ready( function(){
 					qty: item_qty
 				}
 			}).done(function (data) {
-				consoe.log(data);
-				return item_qty;
+				data = JSON.parse(data);
+				$('#cart-item-count').text(data.cart_items);
 			}).fail(function() {
 				return 0;
 			});

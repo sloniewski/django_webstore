@@ -1,8 +1,8 @@
+from datetime import date
+
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
-
-from datetime import date
 
 from . import utils
 

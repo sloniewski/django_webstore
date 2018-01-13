@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 
 
-from product.models import Product
+from webstore.product.models import Product
 
 
 def validate_product_exits(item):

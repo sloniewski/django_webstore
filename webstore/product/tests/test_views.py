@@ -1,7 +1,7 @@
 from django.shortcuts import reverse
 from django.test import TestCase
 
-from product.models import Product
+from webstore.product.models import Product
 
 
 class TestProductView(TestCase):

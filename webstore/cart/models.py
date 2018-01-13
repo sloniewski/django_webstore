@@ -3,7 +3,7 @@ from django.db.models import Sum
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 
-from product.models import Product
+from webstore.product.models import Product
 
 User = get_user_model()
 
@@ -26,6 +26,9 @@ class CartItem(models.Model):
     def add_qty(self, qty):
         self.quantity += qty
         self.save()
+
+    def get_total_price(self):
+        return self.quantity * self.product.get_price
 
     class Meta:
         unique_together = [

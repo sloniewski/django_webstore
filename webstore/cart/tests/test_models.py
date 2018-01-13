@@ -3,10 +3,8 @@ from importlib import import_module
 from django.conf import settings
 from django.contrib.sessions.models import Session
 
-from cart.models import Cart, CartItem
-from product.models import Product
-
-from unittest import skip
+from webstore.cart.models import Cart, CartItem
+from webstore.product.models import Product
 
 
 class TestCartModel(TestCase):
@@ -50,3 +48,14 @@ class TestCartModel(TestCase):
 
         self.assertEqual(cart_A.session.session_key, cart_B.session.session_key)
         self.assertNotEqual(cart_A.session.session_key, cart_C.session.session_key)
+
+    def test_line_summary(self):
+        self.fail('test not finished')
+
+    def test_cart_total(self):
+        cart = Cart.objects.get_or_create(session_id=self.session.session_key)[0]
+        prod_A = Product.objects.create(name='Red Windsor')
+        prod_B = Product.objects.create(name='Emmental')
+        cart.add_item(prod_A.id, 6)
+        cart.add_item(prod_B.id, 7)
+        self.fail('test not finished')

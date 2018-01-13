@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from product.models import (
+from webstore.product.models import (
     Product,
     Price,
 )

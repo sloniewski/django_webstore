@@ -1,11 +1,11 @@
+import json
+
 from django.http import HttpResponse
 from django.views.defaults import page_not_found, bad_request
-from django.views.generic import FormView
+from django.views.generic import FormView, ListView
 
 from .forms import AddItemForm
 from .models import Cart
-
-import json
 
 
 class CartAddItem(FormView):
@@ -36,3 +36,14 @@ class CartAddItem(FormView):
 
     def form_invalid(self, form):
         return bad_request(self.request, 'bad request')
+
+
+class CartSummaryView(ListView):
+    template_name='cart/cart_list.html'
+
+    def get_queryset(self):
+        try:
+            cart = Cart.objects.get(session_id=self.request.session.session_key)
+        except Cart.DoesNotExist:
+            return None
+        return cart.get_items()

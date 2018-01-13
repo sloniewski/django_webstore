@@ -9,13 +9,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users',
-    'product',
-    'cart',
-    'order',
-    'core',
-    'dashboard',
-    'rating',
+    'webstore.users',
+    'webstore.product',
+    'webstore.cart',
+    'webstore.order',
+    'webstore.core',
+    'webstore.dashboard',
+    'webstore.rating',
+    'webstore.functional_tests'
 ]
 
 MIDDLEWARE = [
@@ -28,13 +29,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'mish_django_webstore.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': ['webstore/templates'],
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -46,7 +47,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mish_django_webstore.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 
 
@@ -86,7 +87,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/webstore/'
+
 
 
 AUTH_USER_MODEL = 'users.CustomUser'

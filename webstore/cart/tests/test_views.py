@@ -1,7 +1,7 @@
 from django.shortcuts import reverse
 from django.test import TestCase
 
-from product.models import Product
+from webstore.product.models import Product
 
 import json
 from unittest import skip
@@ -25,7 +25,6 @@ class TestAddItemView(TestCase):
         )
         self.assertEqual(response.status_code, 400)
 
-    @skip
     def test_on_post_return_item_qty_added_to_cart(self):
         product = Product.objects.create(name='Mint Chocolate')
         response = self.client.post(
@@ -33,12 +32,11 @@ class TestAddItemView(TestCase):
             data={
                 'item': product.id,
                 'qty': 5,
-                'cart_items': 5,
             }
         )
         data = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(data['item'], product.id)
-        self.assertEqual(data['qty'], 5)
+        self.assertEqual(data['added']['item'], product.id)
+        self.assertEqual(data['added']['qty'], 5)
         self.assertEqual(data['cart_items'], 5)

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from cart import forms
-from product.models import Product
+from webstore.cart import forms
+from webstore.product.models import Product
 
 
 class TestAddItemForm(TestCase):

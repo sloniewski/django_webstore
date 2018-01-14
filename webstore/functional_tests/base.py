@@ -10,6 +10,7 @@ from selenium import webdriver
 
 
 class FunctionalTest(StaticLiveServerTestCase):
+    
     def setUp(self):
         self.browser = webdriver.Firefox()
         SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
@@ -20,7 +21,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def create_test_product(self, name=None, price=None):
         if name is None:
-            name = random_string(6)
+            name = 'product' + random_string(6)
         product = Product.objects.create(name=name)
 
         if price is None:

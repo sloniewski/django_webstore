@@ -4,7 +4,6 @@ from django.test import TestCase
 from webstore.product.models import Product
 
 import json
-from unittest import skip
 
 
 class TestAddItemView(TestCase):

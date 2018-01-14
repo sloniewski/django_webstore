@@ -16,3 +16,21 @@ class TestCartAddItemUrl(TestCase):
         self.assertEqual({}, resolver.kwargs)
         self.assertEqual('cart', resolver.app_name)
         self.assertEqual('cart', resolver.namespace)
+
+
+class TestCartSummaryUrl(TestCase):
+  
+    def test_reverse(self):
+        self.assertEqual(
+            first='/cart/',
+            second=reverse('cart:summary', kwargs={})
+        )
+
+    def test_resolve(self):
+        resolver = resolve(reverse('cart:summary', kwargs={}))
+        self.assertEqual((), resolver.args)
+        self.assertEqual({}, resolver.kwargs)
+        self.assertEqual('cart', resolver.app_name)
+        self.assertEqual('cart', resolver.namespace)
+  
+  

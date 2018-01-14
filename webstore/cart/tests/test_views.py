@@ -33,7 +33,8 @@ class TestAddItemView(TestCase):
                 'qty': 5,
             }
         )
-        data = json.loads(response.content)
+        data = json.loads(response.content.decode("utf-8"))
+
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(data['added']['item'], product.id)

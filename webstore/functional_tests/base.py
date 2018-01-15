@@ -10,7 +10,7 @@ from selenium import webdriver
 
 
 class FunctionalTest(StaticLiveServerTestCase):
-    
+
     def setUp(self):
         self.browser = webdriver.Firefox()
         SessionStore = import_module(settings.SESSION_ENGINE).SessionStore

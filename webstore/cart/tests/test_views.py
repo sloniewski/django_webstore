@@ -7,6 +7,9 @@ import json
 
 
 class TestAddItemView(TestCase):
+    '''
+    Tests for view responsible for adding items to cart
+    ''' 
 
     def test_get_raises_404(self):
         response = self.client.get(
@@ -40,3 +43,16 @@ class TestAddItemView(TestCase):
         self.assertEqual(data['added']['item'], product.id)
         self.assertEqual(data['added']['qty'], 5)
         self.assertEqual(data['cart_items'], 5)
+
+
+class TestCartSummaryView(TestCase):
+
+    def test_cart_summary_view(self):
+        response = self.client.get(
+            path=reverse('cart:cart-summary'),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response=response,
+            template_name='cart/cart_summary',
+        )

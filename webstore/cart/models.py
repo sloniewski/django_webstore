@@ -1,5 +1,7 @@
+from decimal import Decimal
+
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, F
 from django.contrib.auth import get_user_model
 from django.contrib.sessions.models import Session
 
@@ -23,12 +25,16 @@ class CartItem(models.Model):
     )
     quantity = models.PositiveIntegerField()
 
+    @property
+    def price(self):
+        return self.product.get_price()
+
     def add_qty(self, qty):
         self.quantity += qty
         self.save()
 
-    def get_total_price(self):
-        return self.quantity * self.product.get_price
+    def get_item_value(self):
+        return self.quantity * Decimal(self.product.get_price)
 
     class Meta:
         unique_together = [
@@ -71,5 +77,8 @@ class Cart(models.Model):
     def get_items(self):
         return self.cartitem_set.all()
 
-    def get_user(self):
-        pass
+    def get_cart_value(self):
+        value = 0
+        for item in self.cartitem_set.filter(quantity__gte=1):
+            value += item.get_item_value()
+        return value

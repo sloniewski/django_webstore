@@ -49,10 +49,10 @@ class TestCartSummaryView(TestCase):
 
     def test_cart_summary_view(self):
         response = self.client.get(
-            path=reverse('cart:cart-summary'),
+            path=reverse('cart:cart-item-list'),
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
             response=response,
-            template_name='cart/cart_summary',
+            template_name='cart/cart_list.html',
         )

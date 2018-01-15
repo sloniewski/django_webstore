@@ -4,7 +4,8 @@ from django.conf import settings
 from django.contrib.sessions.models import Session
 
 from webstore.cart.models import Cart, CartItem
-from webstore.product.models import Product
+from webstore.product.models import Product, Price
+from webstore.product.utils import random_string
 
 
 class TestCartModel(TestCase):
@@ -14,6 +15,25 @@ class TestCartModel(TestCase):
         self.session = SessionStore()
         self.session.create()
         self.session.save()
+    
+    def create_test_product(self, name=None, price=None):
+        '''
+        Helper method for creating Product objects
+        '''
+
+        if name is None:
+            name = 'product' + random_string(6)
+        product = Product.objects.create(name=name)
+
+        if price is None:
+            return product
+
+        Price.objects.create(
+            value=price,
+            valid_from='2018-01-01',
+            product=product,
+        )
+        return product
 
     def test_add_item_to_cart(self):
         session = Session.objects.get(pk=self.session.session_key)
@@ -49,13 +69,18 @@ class TestCartModel(TestCase):
         self.assertEqual(cart_A.session.session_key, cart_B.session.session_key)
         self.assertNotEqual(cart_A.session.session_key, cart_C.session.session_key)
 
-    def test_line_summary(self):
-        self.fail('test not finished')
-
-    def test_cart_total(self):
+    def test_cart_and_cartitem_total(self):
         cart = Cart.objects.get_or_create(session_id=self.session.session_key)[0]
-        prod_A = Product.objects.create(name='Red Windsor')
-        prod_B = Product.objects.create(name='Emmental')
+        prod_A = self.create_test_product(price=2.71)
+        prod_B = self.create_test_product(price=6.02)
         cart.add_item(prod_A.id, 6)
         cart.add_item(prod_B.id, 7)
-        self.fail('test not finished')
+
+        value = cart.get_cart_value()
+        self.assertEqual(value, 58.40)
+
+        item_A = cart.cartitem_set.get(product=prod_A)
+        self.assertEqual(item_A.get_item_value(), 16.26)
+
+        item_B = cart.cartitem_set.get(product=prod_B)
+        self.assertEqual(item_B.get_item_value(), 42.14)

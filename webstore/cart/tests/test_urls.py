@@ -22,15 +22,13 @@ class TestCartSummaryUrl(TestCase):
   
     def test_reverse(self):
         self.assertEqual(
-            first='/cart/',
-            second=reverse('cart:cart-summary', kwargs={})
+            first='/cart/list-item/',
+            second=reverse('cart:cart-item-list', kwargs={})
         )
 
     def test_resolve(self):
-        resolver = resolve(reverse('cart:cart-summary', kwargs={}))
+        resolver = resolve(reverse('cart:cart-item-list', kwargs={}))
         self.assertEqual((), resolver.args)
         self.assertEqual({}, resolver.kwargs)
         self.assertEqual('cart', resolver.app_name)
         self.assertEqual('cart', resolver.namespace)
-  
-  

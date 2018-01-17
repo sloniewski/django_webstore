@@ -10,15 +10,17 @@ from .models import Cart
 
 class CartAddItem(FormView):
     form_class = AddItemForm
+    
+    def dispatch(self,request, *args, **kwargs):
+        if request.session.session_key is None:
+            request.session.modified = True
+            request.session.save()
+        return super().dispatch(request, args, kwargs)
 
     def get(self, request, *args, **kwargs):
         return page_not_found(request, 'page not found')
 
     def form_valid(self, form):
-
-        if self.request.session.session_key is None:
-            self.request.session.modified = True
-            self.request.session.save()
 
         item = form.cleaned_data['item']
         qty = form.cleaned_data['qty']

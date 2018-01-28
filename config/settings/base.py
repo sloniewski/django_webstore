@@ -1,7 +1,4 @@
 
-
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -16,7 +13,9 @@ INSTALLED_APPS = [
     'webstore.core',
     'webstore.dashboard',
     'webstore.rating',
-    'webstore.functional_tests'
+    'webstore.functional_tests',
+    'webstore.cash',
+    'django.contrib.admindocs',
 ]
 
 MIDDLEWARE = [
@@ -35,7 +34,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': ['webstore/templates'],
-        'APP_DIRS': False,
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',

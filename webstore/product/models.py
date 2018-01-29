@@ -4,6 +4,7 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
 
+from webstore.cash import fields
 from . import utils
 
 
@@ -44,7 +45,7 @@ class Product(models.Model):
     def get_price(self):
         price = self.price_set.first()
         if price is not None:
-            return str(price.value)
+            return price.value
         return None
 
     def __str__(self):
@@ -52,10 +53,8 @@ class Product(models.Model):
 
 
 class Price(models.Model):
-    value = models.DecimalField(
-        max_digits=12,
-        decimal_places=4,
-    )
+
+    value = fields.CashField()
     product = models.ForeignKey(
         Product,
         on_delete=models.DO_NOTHING,

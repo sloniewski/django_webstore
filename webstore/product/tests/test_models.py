@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from webstore.cash.models import Cash
 from webstore.product.models import (
     Product,
     Price,
@@ -51,9 +52,10 @@ class TestProductModel(TestCase):
             Price(value=45.345, valid_from='2017-04-05', product=product),
             Price(value=78.9999, valid_from='2016-08-12', product=product),
         ])
+        self.assertIsInstance(product.get_price, Cash)
         self.assertEqual(
             product.get_price,
-            '12.0101',
+            Cash('12.0101'),
         )
 
     def test_behaviour_if_no_price_is_set(self):
@@ -64,3 +66,17 @@ class TestProductModel(TestCase):
             product.get_price,
             None,
         )
+
+
+class TestPriceModel(TestCase):
+
+    def test_price_type(self):
+        product = Product.objects.create(
+            name='test product',
+        )
+        price = Price(
+            value=12.0101,
+            valid_from='2018-01-01',
+            product=product
+        )
+        self.assertIsInstance(price.value, Cash)

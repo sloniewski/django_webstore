@@ -1,11 +1,16 @@
 from django.db.models import CharField
 from django.core.exceptions import ValidationError
 
-from .cash import Cash
+from .models import Cash
 
 
 class CashField(CharField):
     max_length = 12
+
+    def __init__(self, *args, **kwargs):
+        # sets max_length=32, to fool the defalut charfield validator
+        kwargs.setdefault('max_length', 32)
+        super().__init__(*args, **kwargs)
 
     def parse_cash(self, value):
         try:

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from webstore.cash.db.cash import Cash
-from webstore.cash.db.fields import CashField
+from webstore.cash.models import Cash
+from webstore.cash.fields import CashField
 
 
 class TestCash(TestCase):

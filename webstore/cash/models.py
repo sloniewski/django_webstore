@@ -12,10 +12,24 @@ class Cash(Decimal):
 
     currency = settings.WEBSTORE_CURRENCY
 
-    def __add__(self, other):
+    def __add__(self, other, context=None):
+
         if not isinstance(other, (Cash)):
             raise ValueError('operation might be performed only with other Cash instance')
+
+        assert self.currency == other.currency, 'adding of two different currencies is not implemented'
         return Cash(super().__add__(other))
+
+    def __mul__(self, other, context=None):
+        """
+        Implements multiplications for Cash class, multiplication is limited only to integers.
+        Multiplying price or other monetary value by something else does not make sense
+
+        """
+
+        if not isinstance(other, (int,)):
+            raise ValueError('operation might be performed only with other Integer instance')
+        return Cash(super().__mul__(other))
 
     def __repr__(self):
         """Represents the number as an instance of Cash."""

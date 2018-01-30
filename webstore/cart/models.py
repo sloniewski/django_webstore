@@ -34,7 +34,12 @@ class CartItem(models.Model):
         self.save()
 
     def get_item_value(self):
-        return self.quantity * self.product.get_price
+        """
+        Returns value of order-line.
+
+        """
+        # Order of multiplication is important, we want to call __mul__ of Cash class
+        return self.product.get_price * self.quantity
 
     class Meta:
         unique_together = [

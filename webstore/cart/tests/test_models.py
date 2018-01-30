@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.sessions.models import Session
 
 from webstore.cart.models import Cart, CartItem
+from webstore.cash.models import Cash
 from webstore.product.models import Product, Price
 from webstore.product.utils import random_string
 
@@ -61,6 +62,7 @@ class TestCartModel(TestCase):
         )
 
     def test_get_or_create_cart(self):
+        # Create a few sessions to test if get_or_create is idempotent due to issues with MySql
         cart_A = Cart.objects.get_or_create(session_id=self.session.session_key)[0]
         cart_B = Cart.objects.get_or_create(session_id=self.session.session_key)[0]
         self.session.create()
@@ -77,10 +79,12 @@ class TestCartModel(TestCase):
         cart.add_item(prod_B.id, 7)
 
         value = cart.get_cart_value()
-        self.assertEqual(value, 58.40)
+        self.assertEqual(value, Cash('58.40'))
 
         item_A = cart.cartitem_set.get(product=prod_A)
-        self.assertEqual(item_A.get_item_value(), 16.26)
+        self.assertEqual(item_A.get_item_value(), Cash('16.26'))
+        self.assertIsInstance(item_A.get_item_value(), Cash)
 
         item_B = cart.cartitem_set.get(product=prod_B)
-        self.assertEqual(item_B.get_item_value(), 42.14)
+        self.assertEqual(item_B.get_item_value(), Cash('42.14'))
+        self.assertIsInstance(item_B.get_item_value(), Cash)

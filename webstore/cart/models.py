@@ -34,7 +34,7 @@ class CartItem(models.Model):
         self.save()
 
     def get_item_value(self):
-        return self.quantity * Decimal(self.product.get_price)
+        return self.quantity * self.product.get_price
 
     class Meta:
         unique_together = [

@@ -8,8 +8,10 @@ cart summary
 
 <ol>
 {% for object in object_list %}
-    <li>{{ object.product.name }}, qty: {{ object.quantity }}, price {{ object.get_total_price }}</li>
+    <li>
+        <span class="cart-list-item">{{ object.product.name }}</span>, qty: {{ object.quantity }}, price {{ object.get_total_price }}
+    </li>
 {% endfor %}
 </ol>
-TOTAL: {{ object_list.0.cart.get_cart_value }}
+TOTAL: <span id="cart-total-value">{{ object_list.0.cart.get_cart_value }}</span>
 {% endblock body %}

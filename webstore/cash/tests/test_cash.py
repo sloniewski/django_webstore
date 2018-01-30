@@ -29,3 +29,20 @@ class TestCashField(TestCase):
         field = CashField()
         value = field.get_prep_value(Cash('2.2'))
         self.assertEqual(value, '2.2')
+
+    def test_adding(self):
+        result = Cash('2') + Cash('2')
+        self.assertEqual(result, Cash('4'))
+        self.assertIsInstance(result, Cash)
+        with self.assertRaises(ValueError):
+            result_1 = Cash('2') + int(2)
+            result_2 = Cash('2') + float(2.02)
+
+
+    def test_multiplication(self):
+        result = Cash('2') * 2
+        self.assertEqual(result, Cash('4'))
+        self.assertIsInstance(result, Cash)
+        with self.assertRaises(ValueError):
+            result_1 = Cash('2') * int(2)
+            result_2 = Cash('2') * float(2.02)

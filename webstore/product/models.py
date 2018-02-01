@@ -54,13 +54,16 @@ class Product(models.Model):
 
 class Price(models.Model):
 
-    value = fields.CashField()
+    value = fields.CashField(
+        help_text="returns instance of Cash"
+    )
     product = models.ForeignKey(
         Product,
         on_delete=models.DO_NOTHING,
     )
     valid_from = models.DateField(
         default=date.today,
+        help_text="helps to determine which price is valid at moment of runtime"
     )
     created = models.DateTimeField(
         auto_now_add=True,

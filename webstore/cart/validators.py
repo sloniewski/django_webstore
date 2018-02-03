@@ -12,6 +12,9 @@ def validate_product_exits(item):
 
 
 def validate_product_quantity(item, qty):
+    """
+    Not implemented !!!
+    """
     return True
 
 

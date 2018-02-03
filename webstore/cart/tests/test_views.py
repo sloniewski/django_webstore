@@ -8,7 +8,7 @@ import json
 
 class TestAddItemView(TestCase):
     '''
-    Tests for view responsible for adding items to cart
+    Tests view responsible for adding items to cart
     ''' 
 
     def test_get_raises_404(self):

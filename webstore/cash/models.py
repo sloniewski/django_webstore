@@ -7,14 +7,13 @@ class Cash(Decimal):
     """
     Intended as a representation as any amount of monetary value
     through all application code
-
     """
 
     currency = settings.WEBSTORE_CURRENCY
 
     def __add__(self, other, context=None):
 
-        if not isinstance(other, (Cash)):
+        if not isinstance(other, (Cash,)):
             raise ValueError('operation might be performed only with other Cash instance')
 
         assert self.currency == other.currency, 'adding of two different currencies is not implemented'
@@ -23,8 +22,7 @@ class Cash(Decimal):
     def __mul__(self, other, context=None):
         """
         Implements multiplications for Cash class, multiplication is limited only to integers.
-        Multiplying price or other monetary value by something else does not make sense
-
+        Multiplying Cash, as it is used to represent price, by something else does not make sense.
         """
 
         if not isinstance(other, (int,)):

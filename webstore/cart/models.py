@@ -27,7 +27,7 @@ class CartItem(models.Model):
 
     @property
     def price(self):
-        return self.product.get_price()
+        return self.product.get_price
 
     def add_qty(self, qty):
         self.quantity += qty

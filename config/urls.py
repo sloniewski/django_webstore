@@ -23,4 +23,5 @@ urlpatterns = [
     path('admin/doc/', include('django.contrib.admindocs.urls')),
     path('product/', include('webstore.product.urls')),
     path('cart/', include('webstore.cart.urls')),
+    path('order/', include('webstore.order.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

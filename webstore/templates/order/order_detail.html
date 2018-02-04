@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Order summary
+{% endblock title %}
+
+{% block body %}
+
+<ol>
+{% for object in object.items %}
+    <li>
+        <span class="cart-list-item">{{ object.product.name }}</span>, qty: {{ object.quantity }}, price {{ object.price }}
+    </li>
+{% endfor %}
+</ol>
+TOTAL: <span id="cart-total-value">{{ object.value }}</span>
+{% endblock body %}

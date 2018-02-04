@@ -15,7 +15,7 @@ class OrderCreateView(View):
         order = Order.objects.create_from_cart(cart=cart, user=request.user)
         cart.delete()
 
-        return redirect('order:order-detail', kwargs={'pk': order.id })
+        return redirect('order:order-detail', kwargs={'pk': order.id})
     
 
 class OrderDetailView(DetailView):

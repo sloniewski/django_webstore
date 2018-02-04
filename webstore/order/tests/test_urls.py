@@ -6,13 +6,13 @@ class TestOrderUrls(TestCase):
 
     def test_reverse(self):
         self.assertEqual(
-            first='/order/summary/',
-            second=reverse('order:summary', kwargs={})
+            first='/order/detail/1',
+            second=reverse('order:order-detail', kwargs={'pk': 1})
         )
 
     def test_resolve(self):
-        resolver = resolve(reverse('order:summary', kwargs={}))
+        resolver = resolve(reverse('order:order-detail', kwargs={'pk': 1}))
         self.assertEqual((), resolver.args)
-        self.assertEqual({}, resolver.kwargs)
-        self.assertEqual('cart', resolver.app_name)
-        self.assertEqual('cart', resolver.namespace)
+        self.assertEqual({'pk': 1}, resolver.kwargs)
+        self.assertEqual('order', resolver.app_name)
+        self.assertEqual('order', resolver.namespace)

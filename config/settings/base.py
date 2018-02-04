@@ -12,7 +12,6 @@ INSTALLED_APPS = [
     'webstore.order',
     'webstore.core',
     'webstore.dashboard',
-    'webstore.rating',
     'webstore.functional_tests',
     'webstore.cash',
     'django.contrib.admindocs',

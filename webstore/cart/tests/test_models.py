@@ -78,7 +78,7 @@ class TestCartModel(TestCase):
         cart.add_item(prod_A.id, 6)
         cart.add_item(prod_B.id, 7)
 
-        value = cart.get_cart_value()
+        value = cart.value
         self.assertEqual(value, Cash('58.40'))
 
         item_A = cart.cartitem_set.get(product=prod_A)

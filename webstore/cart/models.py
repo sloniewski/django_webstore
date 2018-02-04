@@ -82,7 +82,8 @@ class Cart(models.Model):
     def get_items(self):
         return self.cartitem_set.all()
 
-    def get_cart_value(self):
+    @property
+    def value(self):
         value = 0
         for item in self.cartitem_set.filter(quantity__gte=1):
             value += item.get_item_value()

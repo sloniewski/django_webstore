@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     'webstore.dashboard',
     'webstore.functional_tests',
     'webstore.cash',
+    'webstore.delivery',
     'django.contrib.admindocs',
 ]
 

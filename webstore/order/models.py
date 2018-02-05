@@ -46,6 +46,19 @@ class OrderManager(models.Manager):
 
 
 class Order(models.Model):
+    NEW = 'new'
+    PAYED = 'paid'
+    SHIPPED = 'shipped'
+    ORDER_STATUS = (
+        (NEW, 'new'),
+        (PAYED, 'paid'),
+        (SHIPPED, 'shipped'),    
+    )
+    
+    status = models.CharField(
+        max_length=32,
+        choices=ORDER_STATUS,
+    )
     
     objects = OrderManager()
 
@@ -57,6 +70,11 @@ class Order(models.Model):
     created = models.DateTimeField(
         auto_now_add=True,
     )
+
+    class Meta:
+        ordering= (
+            '-created',
+        )
 
     @property
     def items(self):

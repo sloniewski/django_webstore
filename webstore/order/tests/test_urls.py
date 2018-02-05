@@ -32,3 +32,34 @@ class TestOrderCreateUrl(TestCase):
         self.assertEqual({}, resolver.kwargs)
         self.assertEqual('order', resolver.app_name)
         self.assertEqual('order', resolver.namespace)
+
+
+class TestOrderCreateUrl(TestCase):
+    
+    def test_reverse(self):
+        self.assertEqual(
+            first='/order/confirm/1',
+            second=reverse('order:order-confirm', kwargs={'pk': 1})
+        )
+
+    def test_resolve(self):
+        resolver = resolve(reverse('order:order-confirm', kwargs={'pk': 1}))
+        self.assertEqual((), resolver.args)
+        self.assertEqual({'pk': 1}, resolver.kwargs)
+        self.assertEqual('order', resolver.app_name)
+        self.assertEqual('order', resolver.namespace)
+
+class TestOrderCreateUrl(TestCase):
+    
+    def test_reverse(self):
+        self.assertEqual(
+            first='/order/list/',
+            second=reverse('order:order-list', kwargs={})
+        )
+
+    def test_resolve(self):
+        resolver = resolve(reverse('order:order-list', kwargs={}))
+        self.assertEqual((), resolver.args)
+        self.assertEqual({}, resolver.kwargs)
+        self.assertEqual('order', resolver.app_name)
+        self.assertEqual('order', resolver.namespace)

@@ -21,3 +21,11 @@ class OrderCreateView(View):
 class OrderDetailView(DetailView):
     model = Order
     template_name = 'order/order_detail.html'
+
+
+class OrderConfirmView(View):
+    pass
+
+
+class OrderListView(View):
+    pass

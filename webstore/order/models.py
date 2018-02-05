@@ -47,11 +47,13 @@ class OrderManager(models.Manager):
 
 class Order(models.Model):
     NEW = 'new'
-    PAYED = 'paid'
+    CONFIRMED = 'confirmed'
+    PAID = 'paid'
     SHIPPED = 'shipped'
     ORDER_STATUS = (
         (NEW, 'new'),
-        (PAYED, 'paid'),
+        (CONFIRMED, 'confirmed'),
+        (PAID, 'paid'),
         (SHIPPED, 'shipped'),    
     )
     

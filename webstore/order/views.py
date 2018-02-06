@@ -1,8 +1,9 @@
 from django.shortcuts import redirect
 from django.views import View
-from django.views.generic import DetailView
+from django.views.generic import DetailView, FormView, ListView
 
 from webstore.cart.models import Cart
+from webstore.delivery.forms import ChooseDeliveryForm
 
 from .models import Order
 
@@ -23,9 +24,14 @@ class OrderDetailView(DetailView):
     template_name = 'order/order_detail.html'
 
 
-class OrderConfirmView(View):
-    pass
+class OrderConfirmView(FormView):
+    form_class = ChooseDeliveryForm
+    template_name = 'order/order_confirm.html'
 
 
-class OrderListView(View):
-    pass
+class OrderListView(ListView):
+    model = Order
+    template_name = 'order/order_list.html'
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)

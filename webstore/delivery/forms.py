@@ -7,8 +7,11 @@ class ChooseDeliveryForm(forms.Form):
         choices=[],
     )
 
-    def __init__(self, order, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
+        self.order = kwargs.pop('order')
         self.delivery_options = []
         super().__init__(*args, **kwargs)
         self.fields['options'].choices = self.delivery_options
 
+    def add_delivery(self):
+        raise NotImplementedError

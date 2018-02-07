@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.views import View
 from django.views.generic import DetailView, FormView, ListView
 
@@ -17,7 +17,7 @@ class OrderCreateView(View):
         cart.delete()
 
         return redirect('order:order-detail', kwargs={'pk': order.id})
-    
+
 
 class OrderDetailView(DetailView):
     model = Order
@@ -27,6 +27,19 @@ class OrderDetailView(DetailView):
 class OrderConfirmView(FormView):
     form_class = ChooseDeliveryForm
     template_name = 'order/order_confirm.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        order_id = request.resolver_match.kwargs['pk']
+        self.order = get_object_or_404(Order, pk=order_id)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['order'] = self.order
+        return kwargs
+
+    def form_valid(self, form):
+        form.add_delivery()
+        return redirect('order:order-payment')
 
 
 class OrderListView(ListView):

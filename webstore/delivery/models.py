@@ -1,15 +1,15 @@
 from django.db import models
 
+from webstore.delivery.managers import AbstractDeliveryManager
 
-class DeliveryOption(models.Model):
+
+class AbstractDeliveryOption(models.Model):
     """
-    Each new delivery option should inherit from this class
+    Each new delivery option (courier pricing) should inherit from this class
     """
 
     name = None
-
-    def get_price(self, order_weight=None, order_cbm=None):
-        raise NotImplementedError
+    objects = AbstractDeliveryManager()
 
     class Meta:
         abstract = True
@@ -20,15 +20,12 @@ class DeliveryOption(models.Model):
         return self.name
 
 
-class SomeCourierPricing(DeliveryOption):
+class SomeCourierPricing(AbstractDeliveryOption):
     name = 'Some Courier'
 
-    def get_price(self, order_weight=None, order_cbm=None):
-        pass
 
 
-class AnotherCourier(DeliveryOption):
+class AnotherCourier(AbstractDeliveryOption):
     name = 'Another Courier'
 
-    def get_price(self, order_weight=None, order_cbm=None):
-        pass
+    

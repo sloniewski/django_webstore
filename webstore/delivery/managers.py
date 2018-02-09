@@ -27,7 +27,7 @@ class DeliveryManager(object):
         for name, klass in inspect.getmembers(deliver_models):
             try:
                 if issubclass(klass, (deliver_models.DeliveryOption,)):
-                    self._couriers.append()
+                    self._couriers.append(klass)
             except TypeError:
                 continue
 

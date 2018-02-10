@@ -14,13 +14,13 @@ class TestSomeCourierPricingModel(TestCase):
         ])
 
     def test_pricing_manager(self):
-        price = SomeCourierPricing.objects.get_price_for_order(order_weight=7.2, order_cbm=0.5)
+        price = SomeCourierPricing.objects.get_price_for_order(order_weight=7.2)
         self.assertEqual(price, Cash('18.51'))
         self.assertIsInstance(price, Cash)
 
     def test_pricing_manager_with_larger_weight(self):
-        price = SomeCourierPricing.objects.get_price_for_order(order_weight=20.2)
-        self.assertEqual(price, Cash('24.88'))
+        price = SomeCourierPricing.objects.get_price_for_order(order_weight=18.2)
+        self.assertEqual(price, Cash('36.9'))
         self.assertIsInstance(price, Cash)
 
 
@@ -36,6 +36,11 @@ class TestAnotherCourierPricing(TestCase):
     def test_pricing_manager(self):
         price = AnotherCourierPricing.objects.get_price_for_order(order_cbm=1.1)
         self.assertEqual(price, Cash('18.51'))
+        self.assertIsInstance(price, Cash)
+
+    def test_pricing_manager_with_larger_cbm(self):
+        price = AnotherCourierPricing.objects.get_price_for_order(order_cbm=2.5)
+        self.assertEqual(price, Cash('36.9'))
         self.assertIsInstance(price, Cash)
 
 

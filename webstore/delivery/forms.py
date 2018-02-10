@@ -11,7 +11,8 @@ class ChooseDeliveryForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.order = kwargs.pop('order')
-        self.delivery_options = DeliveryManager.get_form_choices(self.order)
+        delivery_manager = DeliveryManager()
+        self.delivery_options = delivery_manager.get_form_choices(self.order)
         super().__init__(*args, **kwargs)
         self.fields['options'].choices = self.delivery_options
 

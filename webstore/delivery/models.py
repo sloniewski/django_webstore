@@ -22,7 +22,10 @@ class AbstractDeliveryOption(models.Model):
     def __str__(self):
         if self.name is None:
             raise NotImplementedError('No name set for delivery option')
-        return self.name
+        return '{} - {}'.format(
+            self.name,
+            self.price,
+        )
 
 
 class SomeCourierPricing(AbstractDeliveryOption):

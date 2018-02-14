@@ -15,12 +15,11 @@ class DeliveryManager(object):
         self._couriers = self._get_delivery_options()
 
     def get_form_choices(self, order):
-        choices = []
-        for courier in self._couriers:
-            choices.append(
-                (courier.name, courier.objects.get_price_for_order(order_weight=order.weight, order_cbm=order.cbm))
-            )
-        return choices
+        options = []
+        for Courier in self._couriers:
+            if Courier._meta.abstract is False:
+                options.append(Courier.objects.get_price_for_order(order))
+        return options
             
     def _get_delivery_options(self):
         result = []
@@ -65,7 +64,7 @@ class SomeCourierManager(AbstractDeliveryManager):
     def get_price(self, weight):
         for tariff in self.get_queryset().all():
             if tariff.max_weight > weight:
-                return tariff.price
+                return tariff
         return None
 
 
@@ -78,5 +77,5 @@ class AnotherCourierManager(AbstractDeliveryManager):
     def get_price(self, cbm):
         for tariff in self.get_queryset().all():
             if tariff.max_cbm > cbm:
-                return tariff.price
+                return tariff
         return None

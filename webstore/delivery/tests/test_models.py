@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from webstore.order.models import Order
 from webstore.delivery.models import SomeCourierPricing, AnotherCourierPricing
 from webstore.cash.models import Cash
 
@@ -14,12 +15,16 @@ class TestSomeCourierPricingModel(TestCase):
         ])
 
     def test_pricing_manager(self):
-        price = SomeCourierPricing.objects.get_price_for_order(order_weight=7.2)
+        order = Order()
+        order.weight = 7.2
+        price = SomeCourierPricing.objects.get_price_for_order(order)
         self.assertEqual(price, Cash('18.51'))
         self.assertIsInstance(price, Cash)
 
     def test_pricing_manager_with_larger_weight(self):
-        price = SomeCourierPricing.objects.get_price_for_order(order_weight=18.2)
+        order = Order()
+        order.weight = 18.2
+        price = SomeCourierPricing.objects.get_price_for_order(order)
         self.assertEqual(price, Cash('36.9'))
         self.assertIsInstance(price, Cash)
 
@@ -34,12 +39,16 @@ class TestAnotherCourierPricing(TestCase):
         ])
 
     def test_pricing_manager(self):
-        price = AnotherCourierPricing.objects.get_price_for_order(order_cbm=1.1)
+        order = Order()
+        order.cbm = 1.1
+        price = AnotherCourierPricing.objects.get_price_for_order(order)
         self.assertEqual(price, Cash('18.51'))
         self.assertIsInstance(price, Cash)
 
     def test_pricing_manager_with_larger_cbm(self):
-        price = AnotherCourierPricing.objects.get_price_for_order(order_cbm=2.5)
+        order = Order()
+        order.cbm = 2.5
+        price = AnotherCourierPricing.objects.get_price_for_order(order)
         self.assertEqual(price, Cash('36.9'))
         self.assertIsInstance(price, Cash)
 

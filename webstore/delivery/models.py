@@ -53,10 +53,10 @@ class DeliveryPricing(models.Model):
             ('delivery_option', 'max_param')
         )
 
-    @property
-    def form_choice(self):
-        text = '{}-{}'.format(
+    def form_choice(self, delimiter='-'):
+        text = '{}{}{}'.format(
             self.delivery_option.name,
+            delimiter,
             str(self.price),
         )
         return text, text

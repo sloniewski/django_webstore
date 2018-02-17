@@ -26,6 +26,10 @@ class DeliveryOption(models.Model):
     class Meta:
         ordering = ['name']
 
+    @property
+    def max_param(self):
+        return self.deliverypricing_set.last().max_param
+
 
 class DeliveryPricing(models.Model):
     """
@@ -49,11 +53,24 @@ class DeliveryPricing(models.Model):
             ('delivery_option', 'max_param')
         )
 
+    @property
+    def form_choice(self):
+        text = '{}-{}'.format(
+            self.delivery_option.name,
+            str(self.price),
+        )
+        return text, text
+
+    @property
+    def param(self):
+        return self.delivery_option.param
+
     def __str__(self):
         return '{} {}'.format(
             self.delivery_option.name,
             self.price,
         )
+
 
 class Delivery(models.Model):
     """

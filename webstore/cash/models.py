@@ -32,3 +32,11 @@ class Cash(Decimal):
     def __repr__(self):
         """Represents the number as an instance of Cash."""
         return "Cash('{}')".format(str(self))
+
+    def __str__(self, *args):
+        text = super().__str__(*args)
+        return '{} {}'.format(
+            text,
+            self.currency,
+        )
+

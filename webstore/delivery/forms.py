@@ -1,20 +1,17 @@
 from django import forms
 
-from webstore.delivery.managers import DeliveryManager
+from webstore.delivery.models import DeliveryPricing
 
 
 class ChooseDeliveryForm(forms.Form):
 
     options = forms.ModelChoiceField(
         queryset=[],
+        required=True,
     )
 
-    def __init__(self, order=None, *args, **kwargs):
+    def __init__(self, order, *args, **kwargs):
         self.order = order
-        delivery_manager = DeliveryManager()
-        delivery_options = delivery_manager.get_form_choices(self.order)
+        delivery_options = []
         super().__init__(*args, **kwargs)
         self.fields['options'].queryset = delivery_options
-
-    def save(self):
-        raise NotImplementedError('this method was not implemented')

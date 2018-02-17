@@ -1,56 +1,70 @@
 from django.db import models
 
+from webstore.order.models import Order
 from webstore.cash.fields import CashField
 from webstore.delivery.managers import (
-    AbstractDeliveryManager,
-    SomeCourierManager,
-    AnotherCourierManager,
+    DeliveryPriceManager,
+    DeliveryManager,
 )
 
 
-class AbstractDeliveryOption(models.Model):
+class DeliveryOption(models.Model):
     """
-    Each new delivery option (courier pricing) should inherit from this class
+    Can represent a courier/post or other shipping
     """
+    objects = DeliveryManager()
 
-    name = None
-    objects = AbstractDeliveryManager()
+    name = models.CharField(
+        max_length=32,
+    )
+    active = models.BooleanField(default=True)
+
+    param = models.CharField(
+        max_length=32,
+    )
 
     class Meta:
-        abstract = True
+        ordering = ['name']
+
+
+class DeliveryPricing(models.Model):
+    """
+    Courier/post price list
+
+    """
+
+    objects = DeliveryPriceManager()
+
+    delivery_option = models.ForeignKey(
+        DeliveryOption,
+        on_delete=models.DO_NOTHING,
+    )
+
+    max_param = models.FloatField()
+    price = CashField()
+
+    class Meta:
+        ordering = ['delivery_option', 'max_param']
+        unique_together = (
+            ('delivery_option', 'max_param')
+        )
 
     def __str__(self):
-        if self.name is None:
-            raise NotImplementedError('No name set for delivery option')
-        return '{} - {}'.format(
-            self.name,
+        return '{} {}'.format(
+            self.delivery_option.name,
             self.price,
         )
 
-
-class SomeCourierPricing(AbstractDeliveryOption):
+class Delivery(models.Model):
     """
-    Example of weight based courier price list
+    Delivery price and option
     """
-    name = 'Some Courier'
-    objects = SomeCourierManager()
-
-    max_weight = models.FloatField(unique=True)
-    price = CashField()
-
-    class Meta:
-        ordering = ['max_weight']
-
-
-class AnotherCourierPricing(AbstractDeliveryOption):
-    """
-    Example of volume base price list
-    """
-    name = 'Another Courier'
-    objects = AnotherCourierManager()
-
-    max_cbm = models.FloatField()
-    price = CashField()
-
-    class Meta:
-        ordering = ['max_cbm']
+    order = models.OneToOneField(
+        Order,
+        on_delete=models.CASCADE,
+    )
+    delivery_option = models.ForeignKey(
+        DeliveryOption,
+        on_delete=models.SET(value='0'),
+    )
+    value = CashField()

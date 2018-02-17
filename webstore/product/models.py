@@ -29,6 +29,17 @@ class Product(models.Model):
         auto_now=True,
     )
 
+    weight = models.FloatField()
+    width = models.FloatField(
+        help_text='width in cm',
+    )
+    height = models.FloatField(
+        help_text='height in cm',
+    )
+    length = models.FloatField(
+        help_text='length in cm',
+    )
+
     def save(self, *args, **kwargs):
         if not all([self.slug, self.pk]):
             slug = slugify(self.name)
@@ -47,6 +58,13 @@ class Product(models.Model):
         if price is not None:
             return price.value
         return None
+
+    @property
+    def volume(self):
+        """
+        :return:product box volume in cubic meters
+        """
+        return (self.width * self.height * self.length)*(10**(-6))
 
     def __str__(self):
         return self.name

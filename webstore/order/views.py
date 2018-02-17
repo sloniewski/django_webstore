@@ -24,7 +24,7 @@ class OrderDetailView(DetailView):
     template_name = 'order/order_detail.html'
 
 
-class OrderConfirmView(FormView):
+class OrderAddDeliveryView(FormView):
     form_class = ChooseDeliveryForm
     template_name = 'order/order_confirm.html'
 

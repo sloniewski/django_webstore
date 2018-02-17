@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Sum
 
 from webstore.product.models import Product
 from webstore.cash.fields import CashField
@@ -88,3 +89,12 @@ class Order(models.Model):
         for item in self.orderitem_set.filter(quantity__gte=1):
             value += item.value
         return value
+
+    @property
+    def weight(self):
+        return self.orderitem_set.aggregate(Sum('weight'))['weight__sum']
+
+    @property
+    def volume(self):
+        volumes = [x.volume for x in self.orderitem_set.all()]
+        return sum(volumes)

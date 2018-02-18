@@ -29,15 +29,21 @@ class Product(models.Model):
         auto_now=True,
     )
 
-    weight = models.FloatField()
+    weight = models.FloatField(
+        help_text='weight in kg',
+        default=0,
+    )
     width = models.FloatField(
         help_text='width in cm',
+        default=0,
     )
     height = models.FloatField(
         help_text='height in cm',
+        default=0,
     )
     length = models.FloatField(
         help_text='length in cm',
+        default=0,
     )
 
     def save(self, *args, **kwargs):

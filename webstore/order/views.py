@@ -1,9 +1,11 @@
 from django.shortcuts import redirect, get_object_or_404
 from django.views import View
-from django.views.generic import DetailView, FormView, ListView
+from django.views.generic import DetailView, FormView, ListView, UpdateView
 
+from webstore.payment.forms import ChoosePaymentForm
 from webstore.cart.models import Cart
 from webstore.delivery.forms import ChooseDeliveryForm
+
 
 from .models import Order
 
@@ -26,7 +28,7 @@ class OrderDetailView(DetailView):
 
 class OrderAddDeliveryView(FormView):
     form_class = ChooseDeliveryForm
-    template_name = 'order/order_confirm.html'
+    template_name = 'order/order_add_delivery.html'
 
     def dispatch(self, request, *args, **kwargs):
         order_id = request.resolver_match.kwargs['pk']
@@ -40,6 +42,26 @@ class OrderAddDeliveryView(FormView):
     def form_valid(self, form):
         form.add_delivery()
         return redirect('order:order-payment')
+
+
+class OrderAddPaymentView(FormView):
+    form_class = ChoosePaymentForm
+    template_name = 'order/order_add_payment.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        order_id = request.resolver_match.kwargs['pk']
+        self.order = get_object_or_404(Order, pk=order_id)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['order'] = self.order
+        return kwargs
+
+    def form_valid(self, form):
+        form.add_payment()
+        self.order.status = self.order.CONFIRMED
+        self.order.save()
+        return redirect('order:order-list')
 
 
 class OrderListView(ListView):

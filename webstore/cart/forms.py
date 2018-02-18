@@ -19,3 +19,18 @@ class AddItemForm(forms.Form):
             validate_not_null,
         ]
     )
+
+
+class RemoveItemForm(forms.Form):
+    item = forms.IntegerField(
+        validators=[
+            validate_product_exits,
+            validate_not_null,
+        ]
+    )
+    qty = forms.IntegerField(
+        min_value=0,
+        validators=[
+            validate_not_null,
+        ]
+    )

@@ -18,4 +18,7 @@ urlpatterns = [
     path('confirm/<int:pk>', views.OrderAddDeliveryView.as_view(),
          name='order-confirm'),
 
+    path('payment/<int:pk>', views.OrderAddPaymentView.as_view(),
+         name='order-payment'),
+
 ]

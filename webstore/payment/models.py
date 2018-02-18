@@ -13,11 +13,13 @@ class Payment(TimeStampMixin, models.Model):
         on_delete=models.DO_NOTHING,
     ) 
     method = models.CharField(
-        choices = [
+        max_length=16,
+        choices=[
             ('cr', 'card'),
             ('tr', 'transfer'),
             ('ud', 'upon delivery'),
-        ]
+        ],
+        default='tr',
     )
 
     @property

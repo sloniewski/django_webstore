@@ -8,6 +8,7 @@ from webstore.order import views
 
 User = get_user_model()
 
+
 class TestOrderView(TestCase):
 
     def setUp(self):
@@ -31,7 +32,7 @@ class TestOrderView(TestCase):
         )
 
 
-class TestOrderConfirmView(TestCase):
+class TestAddDeliveryView(TestCase):
     
     def setUp(self):
         user = User.objects.create(username='test_user')
@@ -50,11 +51,11 @@ class TestOrderConfirmView(TestCase):
     def test_template_used(self):
         self.assertTemplateUsed(
             response=self.response,
-            template_name='order/order_confirm.html',
+            template_name='order/order_add_delivery.html',
         )
 
     def test_view_function(self):
-        self.assertEqual(views.OrderConfirmView.as_view().__name__, self.response.resolver_match.func.__name__)
+        self.assertEqual(views.OrderAddDeliveryView.as_view().__name__, self.response.resolver_match.func.__name__)
 
 
 class TestOrderListView(TestCase):
@@ -81,3 +82,29 @@ class TestOrderListView(TestCase):
 
     def test_view_function(self):
         self.assertEqual(views.OrderListView.as_view().__name__, self.response.resolver_match.func.__name__)
+
+
+class TestAddPaymentViw(TestCase):
+
+    def setUp(self):
+        user = User.objects.create(username='test_user')
+        order = Order.objects.create(user=user)
+        self.response = self.client.get(
+            reverse('order:order-payment', kwargs={'pk': order.id})
+        )
+
+    def test_http_status(self):
+        self.assertEqual(
+            first=self.response.status_code,
+            second=200,
+            msg='view returned {} code'.format(self.response.status_code),
+        )
+
+    def test_template_used(self):
+        self.assertTemplateUsed(
+            response=self.response,
+            template_name='order/order_add_payment.html',
+        )
+
+    def test_view_function(self):
+        self.assertEqual(views.OrderAddPaymentView.as_view().__name__, self.response.resolver_match.func.__name__)

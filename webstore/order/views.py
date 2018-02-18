@@ -33,6 +33,7 @@ class OrderAddDeliveryView(FormView):
     def dispatch(self, request, *args, **kwargs):
         order_id = request.resolver_match.kwargs['pk']
         self.order = get_object_or_404(Order, pk=order_id)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -51,6 +52,7 @@ class OrderAddPaymentView(FormView):
     def dispatch(self, request, *args, **kwargs):
         order_id = request.resolver_match.kwargs['pk']
         self.order = get_object_or_404(Order, pk=order_id)
+        return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

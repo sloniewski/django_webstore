@@ -8,6 +8,23 @@ from webstore.cash import fields
 from . import utils
 
 
+class Category(models.Model):
+    name = models.CharField(
+        max_length=32,
+    )
+    description = models.TextField()
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return '{}'.format(self.name)
+
+    @property
+    def form_choice(self):
+        return self.name, self.name
+
+
 class Product(models.Model):
 
     name = models.CharField(
@@ -21,6 +38,11 @@ class Product(models.Model):
     description = models.TextField(default='description not available')
 
     stock = models.PositiveIntegerField(default=0)
+
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.DO_NOTHING,
+    )
 
     created = models.DateTimeField(
         auto_now_add=True,
@@ -45,6 +67,9 @@ class Product(models.Model):
         help_text='length in cm',
         default=0,
     )
+
+    def __str__(self):
+        return self.name
 
     def save(self, *args, **kwargs):
         if not all([self.slug, self.pk]):
@@ -71,9 +96,6 @@ class Product(models.Model):
         :return:product box volume in cubic meters
         """
         return (self.width * self.height * self.length)*(10**(-6))
-
-    def __str__(self):
-        return self.name
 
 
 class Price(models.Model):

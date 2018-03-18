@@ -12,7 +12,6 @@ class ProductDetailView(DetailView):
 class ProductListView(ListView):
     model = Product
     template_name = 'product/product_list.html'
-    paginate_by = 10
     form_class = FilterProductsForm
 
     def get_context_data(self, *args, **kwargs):
@@ -22,8 +21,9 @@ class ProductListView(ListView):
 
     def get_queryset(self):
         form = self.form_class(self.request.GET)
-        if form.is_valid():
+        if form.is_valid:
             filters = form.get_filters()
-            return self.model.objects.filter(*filters)
-        else:
-            return self.model.objects.all()
+            if filters != []:
+                return self.model.objects.filter(*filters)
+
+        return Product.objects.all()

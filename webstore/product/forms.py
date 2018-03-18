@@ -18,8 +18,7 @@ class FilterProductsForm(forms.Form):
         :return: list of Q objects
         """
         filters = []
-
-        category = self.cleaned_data['category']
-
-        filters.append(Q(category__name=category))
+        category = self.data.get('category')
+        if category is not None:
+            filters.append(Q(category__name=category))
         return filters

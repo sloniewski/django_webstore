@@ -22,7 +22,11 @@ class CashField(CharField):
     def from_db_value(self, value, expression=None, connection=None):
         if value is None:
             return value
-        return self.parse_cash(value)
+        try:
+            value = Cash(value)
+        except ValueError:
+            raise ValidationError
+        return value
 
     def to_python(self, value):
         value = super().to_python(value)
@@ -31,4 +35,10 @@ class CashField(CharField):
         return self.parse_cash(value)
 
     def get_prep_value(self, value):
+        """
+        returns value to be passed for saving in db,
+        calls a to_db_value property from Cash model
+        """
+        if isinstance(value, Cash):
+            return value.to_db_value
         return str(value)

@@ -1,5 +1,6 @@
 from decimal import Decimal
-
+from django.db.models import Transform
+from django.db.models.fields import Field
 from django.conf import settings
 
 
@@ -40,3 +41,21 @@ class Cash(Decimal):
             self.currency,
         )
 
+    def __len__(self):
+        return len(super().__str__())
+
+    @property
+    def to_db_value(self):
+        return super().__str__()
+
+
+@Field.register_lookup
+class IntegerValue(Transform):
+    # Register this before you filter things, for example in models.py
+    lookup_name = 'float'  # Used as object.filter(LeftField__int__gte, "777")
+    bilateral = True  # To cast both left and right
+
+    def as_sql(self, compiler, connection, function=None, template=None, arg_joiner=None, **extra_context):
+        sql, params = compiler.compile(self.lhs)
+        sql = 'CAST(%s AS FLOAT)' % sql
+        return sql, params

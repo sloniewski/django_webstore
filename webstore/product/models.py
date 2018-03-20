@@ -3,6 +3,7 @@ from datetime import date
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
+from django.utils import timezone
 
 from webstore.cash import fields
 from . import utils
@@ -84,8 +85,17 @@ class Product(models.Model):
         return reverse('product:product-detail', kwargs={'slug': self.slug})
 
     @property
+    def price(self):
+        today = timezone.now()
+        price = self.price_set.filter(valid_from__lte=today).first()
+        if price is not None:
+            return price.value
+        return None
+
+    @property
     def get_price(self):
-        price = self.price_set.first()
+        today = timezone.now()
+        price = self.price_set.filter(valid_from__lte=today).first()
         if price is not None:
             return price.value
         return None
@@ -122,3 +132,6 @@ class Price(models.Model):
         ordering = [
             '-valid_from',
         ]
+
+    def __str__(self):
+        return str(self.value)

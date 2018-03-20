@@ -6,7 +6,7 @@
 {% endblock title %}
 
 {% block body %}
-    <div id="cart-item-count">0</div>
+    <div id="cart-item-count">{{ cart_items }}</div>
     <div class="product-card">
         <h2>{{ object.name }}</h2>
         <div class="product-description">{{ object.description }}</div>

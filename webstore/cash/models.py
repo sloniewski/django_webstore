@@ -51,7 +51,6 @@ class Cash(Decimal):
 
 @Field.register_lookup
 class IntegerValue(Transform):
-    # Register this before you filter things, for example in models.py
     lookup_name = 'float'  # Used as object.filter(LeftField__int__gte, "777")
     bilateral = True  # To cast both left and right
 

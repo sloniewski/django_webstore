@@ -1,6 +1,5 @@
 from django import forms
-from django.db.models import Q, F , FloatField, IntegerField
-from django.db.models.functions import Cast
+from django.db.models import Q
 
 from .models import Category
 

@@ -24,4 +24,7 @@ urlpatterns = [
     path('product/', include('webstore.product.urls')),
     path('cart/', include('webstore.cart.urls')),
     path('order/', include('webstore.order.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('users/', include('webstore.users.urls'))
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
+  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

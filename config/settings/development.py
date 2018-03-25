@@ -13,7 +13,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 DATABASES = {
     # 'staging': {
@@ -30,3 +29,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
 }
+
+MEDIA_URL = 'files/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'webstore/core/media')

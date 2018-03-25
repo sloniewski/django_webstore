@@ -1,5 +1,7 @@
+import os
 from datetime import date
 
+from django.conf import settings
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
@@ -7,6 +9,42 @@ from django.utils import timezone
 
 from webstore.cash import fields
 from . import utils
+
+
+class Picture(models.Model):
+    name = models.CharField(max_length=32)
+    data = models.ImageField(
+        upload_to='product_images/',
+    )
+
+    def __str__(self):
+        return self.data.name
+
+
+class Gallery(models.Model):
+    product = models.ForeignKey(
+        'Product',
+        on_delete=models.DO_NOTHING,
+    )
+    picture = models.ForeignKey(
+        Picture,
+        on_delete=models.DO_NOTHING,
+    )
+    number = models.PositiveIntegerField()
+
+    class Meta:
+        ordering = ['product', '-number']
+        verbose_name = "Gallery Image"
+        unique_together = (
+            ('product', 'number'),
+        )
+
+    def __str__(self):
+        return '{}. {} - {}'.format(
+            self.number,
+            self.product.name,
+            self.picture.data.name,
+        )
 
 
 class Category(models.Model):
@@ -31,6 +69,11 @@ class Product(models.Model):
     name = models.CharField(
         max_length=32,
     )
+    picture = models.ManyToManyField(
+        Picture,
+        through=Gallery,
+    )
+
     slug = models.SlugField(
         max_length=64,
         unique=True,
@@ -85,14 +128,6 @@ class Product(models.Model):
         return reverse('product:product-detail', kwargs={'slug': self.slug})
 
     @property
-    def price(self):
-        today = timezone.now()
-        price = self.price_set.filter(valid_from__lte=today).first()
-        if price is not None:
-            return price.value
-        return None
-
-    @property
     def get_price(self):
         today = timezone.now()
         price = self.price_set.filter(valid_from__lte=today).first()
@@ -103,9 +138,18 @@ class Product(models.Model):
     @property
     def volume(self):
         """
-        :return:product box volume in cubic meters
+        :return:float, product box volume in cubic meters
         """
         return (self.width * self.height * self.length)*(10**(-6))
+
+    @property
+    def gallery(self):
+        return Gallery.objects.filter(product_id=self.id)
+
+    @property
+    def image_url(self):
+        image = Gallery.objects.filter(product_id=self.id).first()
+        return image.picture.data.url
 
 
 class Price(models.Model):

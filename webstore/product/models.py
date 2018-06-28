@@ -1,7 +1,5 @@
-import os
 from datetime import date
 
-from django.conf import settings
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.text import slugify
@@ -55,6 +53,7 @@ class Category(models.Model):
 
     class Meta:
         ordering = ['name']
+        verbose_name_plural = 'Categories'
 
     def __str__(self):
         return '{}'.format(self.name)

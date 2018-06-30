@@ -6,7 +6,6 @@
 {% endblock title %}
 
 {% block body %}
-    <div id="cart-item-count">{{ cart_items }}</div>
     <img src="/{{ object.image }}" alt="">
     <div class="product-card">
         <h2>{{ object.name }}</h2>
@@ -24,6 +23,5 @@
 {% endblock body %}
 
 {% block scripts %}
-    <script src="{% static 'scripts/ajax-utils.js' %}"></script>
     <script src="{% static 'scripts/product-page.js' %}"></script>
 {% endblock scripts %}

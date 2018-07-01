@@ -15,7 +15,7 @@ class Delivery(models.Model):
     surname = models.CharField(max_length=64, null=True)
     street_name = models.CharField(max_length=64)
     street_number = models.CharField(max_length=16)
-    flat_number = models.CharField(max_length=16)
+    flat_number = models.CharField(max_length=16, null=True)
     price = CashField()
 
     order = models.OneToOneField(

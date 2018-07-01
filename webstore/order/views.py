@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404, reverse
-from django.views import View
-from django.views.generic import DetailView, FormView, ListView, UpdateView
+from django.views.generic import DetailView, FormView, ListView
 
 from webstore.payment.forms import ChoosePaymentForm
 from webstore.cart.models import Cart
@@ -33,10 +32,12 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         delivery = form.save(commit=False)
-        order = Order.objects.create_from_cart(cart=self.get_cart(), user=self.request.user)
+        cart= self.get_cart()
+        order = Order.objects.create_from_cart(cart=cart, user=self.request.user)
         delivery.order = order
         delivery.save()
-        return redirect('order:order-payment')
+        cart.delete()
+        return redirect(reverse('order:order-payment', {'id': order.pk}))
 
 
 class OrderAddPaymentView(FormView):

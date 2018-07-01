@@ -1,0 +1,23 @@
+<nav>
+    <div class="nav-wrapper">
+    <a href="{% url 'product:product-list' %}" class="brand-logo">Cheese shop</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="#">Categories</a></li>
+
+            <li>
+                <!-- fix needed -->
+                <a href="{% url 'cart:item-list' %}">
+                <i class="large material-icons">shopping_cart</i></a>
+            </li>
+            <li>
+                <a href="{% url 'cart:item-list' %}">
+                <span id="cart_item_count" class="new badge" data-badge-caption=''>
+                    {{ cart_items }}
+                </span>
+                </a>
+            </li>
+            </a>
+            <li><a href="#">My Account</a></li>
+        </ul>
+    </div>
+</nav>

@@ -8,23 +8,31 @@
 
 
 {% block body %}
+    <div class="row">
 
-    <form action="" method="get">
-        {{ form.as_p }}
-        <input type="submit" value="filter">
-    </form>
+    <div class="col s3">
+        <form action="" method="get">
+            {{ form.as_p }}
+            <input type="submit" value="filter">
+        </form>
+    </div>
 
-    <ul>
-    {% for object in object_list %}
-        <li>
-        {{ object.name }} {{ object.get_price }}
-        </li>
-    {% empty %}
-        <li>
-        No items found
-        </li>
-    {% endfor %}
-    </ul>
+    <div class="col s9">
 
+        <div class="row">
+        {% for object in object_list %}
+            <div class="col s3">
+            {% include 'product/product_list_item.html' with object=object %}
+            </div>
+        {% empty %}
+            No items found
+        {% endfor %}
+        </div>
+    </div>
 
+    </div>
 {% endblock body %}
+
+{% block scripts %}
+    <script src="{% static 'scripts/product-list.js' %}"></script>
+{% endblock scripts %}

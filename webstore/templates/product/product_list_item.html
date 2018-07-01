@@ -1,1 +1,17 @@
-{{ object.name }} {{ object.get_price }}
+{% load static %}
+<div class="card">
+    <div class="card-image">
+        <img src={% static 'images/default.png' %}>
+        <span class="card-title">{{object.name}}</span>
+        <a href="{% url 'cart:quick-add-item' object.id %}"
+           class="btn-floating halfway-fab waves-effect waves-light red quick-add-item">
+           <i class="material-icons">add_shopping_cart</i>
+        </a>
+    </div>
+    <div class="card-content">
+        <p>{{object.description}}</p>
+        <a href="{% url 'product:product-detail' object.slug %}">
+            <button class="btn small">details</button>
+        </a>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 import json
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.views import View
 from django.views.defaults import page_not_found, bad_request
 from django.views.generic import FormView, ListView
 
@@ -8,10 +9,25 @@ from .forms import AddItemForm, RemoveItemForm
 from .models import Cart
 
 
+class CartQuickAddItem(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.session.session_key is None:
+            request.session.modified = True
+            request.session.save()
+        return super().dispatch(request, args, kwargs)
+
+    def post(self, request, *args, **kwargs):
+        item_id = request.resolver_match.kwargs['item_id']
+        cart = Cart.objects.get_or_create(session_id=self.request.session.session_key)[0]
+        cart.add_item(item_id, 1)
+        return JsonResponse(data={'cart_items': cart.get_item_count()})
+
+
 class CartAddItem(FormView):
     form_class = AddItemForm
-    
-    def dispatch(self,request, *args, **kwargs):
+
+    def dispatch(self, request, *args, **kwargs):
         if request.session.session_key is None:
             request.session.modified = True
             request.session.save()

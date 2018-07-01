@@ -10,6 +10,8 @@ urlpatterns = [
          name='add-item'),
 
     path('list-item/', views.CartSummaryView.as_view(),
-         name='cart-item-list'),
+         name='item-list'),
 
+    path('quick-add-item/item/<int:item_id>', views.CartQuickAddItem.as_view(),
+         name='quick-add-item'),
 ]

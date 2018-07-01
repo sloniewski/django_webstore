@@ -6,19 +6,7 @@ from webstore.payment.forms import ChoosePaymentForm
 from webstore.cart.models import Cart
 from webstore.delivery.forms import ChooseDeliveryForm
 
-
 from .models import Order
-
-
-class OrderCreateView(View):
-
-    def get(self, request):
-
-        cart = Cart.objects.get(session_id=request.session.session_key)
-        order = Order.objects.create_from_cart(cart=cart, user=request.user)
-        cart.delete()
-
-        return redirect('order:order-detail', kwargs={'pk': order.id})
 
 
 class OrderDetailView(DetailView):
@@ -26,22 +14,24 @@ class OrderDetailView(DetailView):
     template_name = 'order/order_detail.html'
 
 
-class OrderAddDeliveryView(FormView):
+class OrderConfirmView(FormView):
     form_class = ChooseDeliveryForm
     template_name = 'order/order_add_delivery.html'
 
     def dispatch(self, request, *args, **kwargs):
-        order_id = request.resolver_match.kwargs['pk']
-        self.order = get_object_or_404(Order, pk=order_id)
+        self.cart = Cart.objects.get(session_id=request.session.session_key)
         return super().dispatch(request, *args, **kwargs)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['order'] = self.order
+        kwargs['cart'] = self.cart
         return kwargs
 
     def form_valid(self, form):
-        form.add_delivery()
+        delivery = form.save(commit=False)
+        order = Order.objects.create_from_cart(cart=self.cart, user=self.request.user)
+        delivery.order = order
+        delivery.save()
         return redirect('order:order-payment')
 
 

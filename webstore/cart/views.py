@@ -17,7 +17,7 @@ class CartQuickRemoveItem(View):
             request.session.save()
         return super().dispatch(request, args, kwargs)
 
-    def post(self, request,*args, **kwawrgs):
+    def post(self, request, *args, **kwawrgs):
         item_id = request.resolver_match.kwargs['item_id']
         cart = Cart.objects.get_or_create(
             session_id=self.request.session.session_key)[0]
@@ -25,7 +25,7 @@ class CartQuickRemoveItem(View):
 
         if item is None:
             return HttpResponse(status=204)
-        
+
         data = {
             'cart_items': cart.item_count,
             'cart_value': cart.value,
@@ -103,7 +103,7 @@ class CartRemoveItem(FormView):
         return bad_request(self.request, 'bad request')
 
 
-class CartSummaryView(ListView):
+class CartListView(ListView):
     template_name='cart/cart_list.html'
 
     def get_queryset(self):
@@ -116,4 +116,3 @@ class CartSummaryView(ListView):
         except Cart.DoesNotExist:
             return None
         return cart.get_items()
- 

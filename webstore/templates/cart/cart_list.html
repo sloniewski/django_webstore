@@ -20,6 +20,9 @@ cart summary
 ITEMS IN CART: <span id="cart_summary_item_count"> {{cart_item_count}} </span>
 <br>
 TOTAL VALUE: <span id="cart_summary_total_value">{{ cart_value }}</span>
+<a href="{% url 'order:order-confirm' %}">
+    <button class="btn">checkout</button>
+</a>
 {% endblock body %}
 
 {% block scripts %}

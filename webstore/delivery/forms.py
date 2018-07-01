@@ -1,29 +1,21 @@
 from django import forms
 
-from webstore.delivery.models import DeliveryPricing, Delivery, DeliveryOption
+from webstore.delivery.models import Delivery, DeliveryPricing
 
 
-class ChooseDeliveryForm(forms.Form):
-    delimiter = '-'
+class ChooseDeliveryForm(forms.ModelForm):
 
-    option = forms.ChoiceField(
+    price = forms.ChoiceField(
         choices=[],
+        widget=forms.Select(attrs={'class': 'browser-default'})
     )
 
-    def __init__(self, order, *args, **kwargs):
-        self.order = order
-        prices = DeliveryPricing.objects.get_prices_for_order(order)
-        delivery_options = [x.form_choice(self.delimiter) for x in prices]
+    def __init__(self, cart, *args, **kwargs):
+        self.cart = cart
+        delivery_options = DeliveryPricing.objects.get_prices_for_cart(cart)
         super().__init__(*args, **kwargs)
-        self.fields['option'].choices = delivery_options
+        self.fields['price'].choices = delivery_options
 
-    def add_delivery(self):
-        delivery_option_name, price_string = self.cleaned_data['option'].split(self.delimiter)
-        delivery_option = DeliveryOption.objects.get(name=delivery_option_name)
-        price, currency = price_string.split(' ')
-        delivery = Delivery.objects.create(
-            order=self.order,
-            delivery_option=delivery_option,
-            price=price,
-        )
-        return delivery
+    class Meta:
+        model = Delivery
+        fields = ['name', 'surname', 'street_name', 'street_number', 'flat_number', 'price']

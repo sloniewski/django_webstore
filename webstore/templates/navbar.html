@@ -16,7 +16,13 @@
                 </span>
                 </a>
             </li>
-            <li><a href="#">My Account</a></li>
+            <li>
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'users:logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'users:login' %}">Login</a>
+                {% endif %}
+            </li>
         </ul>
     </div>
 </nav>

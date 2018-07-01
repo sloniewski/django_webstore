@@ -11,7 +11,6 @@ class ChooseDeliveryForm(forms.ModelForm):
     )
 
     def __init__(self, cart, *args, **kwargs):
-        self.cart = cart
         delivery_options = DeliveryPricing.objects.get_prices_for_cart(cart)
         super().__init__(*args, **kwargs)
         self.fields['price'].choices = delivery_options

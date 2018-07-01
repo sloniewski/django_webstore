@@ -1,4 +1,5 @@
-from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect, get_object_or_404, reverse
 from django.views import View
 from django.views.generic import DetailView, FormView, ListView, UpdateView
 
@@ -14,22 +15,25 @@ class OrderDetailView(DetailView):
     template_name = 'order/order_detail.html'
 
 
-class OrderConfirmView(FormView):
+class OrderConfirmView(LoginRequiredMixin, FormView):
     form_class = ChooseDeliveryForm
     template_name = 'order/order_add_delivery.html'
 
-    def dispatch(self, request, *args, **kwargs):
-        self.cart = Cart.objects.get(session_id=request.session.session_key)
-        return super().dispatch(request, *args, **kwargs)
+    def get_login_url(self):
+        return reverse('users:login')
+
+    def get_cart(self):
+        cart = Cart.objects.get(session_id=self.request.session.session_key)
+        return cart
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['cart'] = self.cart
+        kwargs['cart'] = self.get_cart()
         return kwargs
 
     def form_valid(self, form):
         delivery = form.save(commit=False)
-        order = Order.objects.create_from_cart(cart=self.cart, user=self.request.user)
+        order = Order.objects.create_from_cart(cart=self.get_cart(), user=self.request.user)
         delivery.order = order
         delivery.save()
         return redirect('order:order-payment')

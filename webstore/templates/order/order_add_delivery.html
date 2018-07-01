@@ -2,9 +2,15 @@
 {% load static %}
 
 {% block body %}
-<div class="row">
-    <form class="col s8" action="#" method="post">
+<ul class="collection with-header">
+<li class="collection-header"><h4>Delivery Details</h4></li>
+<li class="collection-item">
+    <form class="delivery_form" action="#" method="post">
+    {% csrf_token %}
     {{ form.as_p }}
+        <input type="submit" value="Create Order" class="btn">
     </form>
-</div>
+</li>
+</ul>
+
 {% endblock body %}

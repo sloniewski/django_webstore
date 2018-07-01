@@ -14,4 +14,7 @@ urlpatterns = [
 
     path('quick-add-item/item/<int:item_id>', views.CartQuickAddItem.as_view(),
          name='quick-add-item'),
+
+    path('quick-remove-item/item/<int:item_id>', views.CartQuickRemoveItem.as_view(),
+         name='quick-remove-item'),
 ]

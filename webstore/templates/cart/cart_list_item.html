@@ -1,0 +1,18 @@
+{{object.product.name}}
+<span class="" data-badge-caption="EUR" id="item_value">{{object.item_value}}</span>
+
+<div class="secondary-content">
+    <a href="{% url 'cart:quick-add-item' object.product.id %}" class="add_one_item">
+        <i class="small material-icons">add_box</i>
+    </a>
+</div>
+
+<div class="secondary-content">
+    <span id="item_qty">{{object.quantity}}</span>
+</div>
+
+<div class="secondary-content">
+    <a href="{% url 'cart:quick-remove-item' object.product.id %}" class="remove_one_item">
+        <i class="small material-icons">indeterminate_check_box</i>
+    </a>
+</div>

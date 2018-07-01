@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
 cart summary
@@ -6,12 +7,21 @@ cart summary
 
 {% block body %}
 
-<ol>
+<ul class="collection with-header">
+    <li class="collection-header">
+        <h4>Your cart</h4>
+    </li>
 {% for object in object_list %}
-    <li>
-        <span class="cart-list-item">{{ object.product.name }}</span>, qty: {{ object.quantity }}, price {{ object.get_total_price }}
+    <li class="collection-item">
+        {% include 'cart/cart_list_item.html' with object=object %}
     </li>
 {% endfor %}
-</ol>
-TOTAL: <span id="cart-total-value">{{ object_list.0.cart.get_cart_value }}</span>
+</ul>
+ITEMS IN CART: <span id="cart_summary_item_count"> {{cart_item_count}} </span>
+<br>
+TOTAL VALUE: <span id="cart_summary_total_value">{{ cart_value }}</span>
 {% endblock body %}
+
+{% block scripts %}
+<script src="{% static 'scripts/cart-list.js' %}"></script>
+{% endblock scripts %}

@@ -9,6 +9,31 @@ from .forms import AddItemForm, RemoveItemForm
 from .models import Cart
 
 
+class CartQuickRemoveItem(View):
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.session.session_key is None:
+            request.session.modified = True
+            request.session.save()
+        return super().dispatch(request, args, kwargs)
+
+    def post(self, request,*args, **kwawrgs):
+        item_id = request.resolver_match.kwargs['item_id']
+        cart = Cart.objects.get_or_create(
+            session_id=self.request.session.session_key)[0]
+        item = cart.remove_item(item=item_id, qty=1)
+
+        if item is None:
+            return HttpResponse(status=204)
+        
+        data = {
+            'cart_items': cart.item_count,
+            'item_qty': item.quantity,
+            'item_value': item.item_value,
+        }
+        return JsonResponse(data=data, status=200)
+
+
 class CartQuickAddItem(View):
 
     def dispatch(self, request, *args, **kwargs):
@@ -20,8 +45,13 @@ class CartQuickAddItem(View):
     def post(self, request, *args, **kwargs):
         item_id = request.resolver_match.kwargs['item_id']
         cart = Cart.objects.get_or_create(session_id=self.request.session.session_key)[0]
-        cart.add_item(item_id, 1)
-        return JsonResponse(data={'cart_items': cart.get_item_count()})
+        item = cart.add_item(item_id, 1)
+        data = {
+            'cart_items': cart.item_count,
+            'item_qty': item.quantity,
+            'item_value': item.item_value,
+            }
+        return JsonResponse(data=data)
 
 
 class CartAddItem(FormView):
@@ -77,6 +107,11 @@ class CartSummaryView(ListView):
     def get_queryset(self):
         try:
             cart = Cart.objects.get(session_id=self.request.session.session_key)
+            self.extra_context = {
+                'cart_value': cart.value,
+                'cart_item_count': cart.item_count,
+            }
         except Cart.DoesNotExist:
             return None
         return cart.get_items()
+ 

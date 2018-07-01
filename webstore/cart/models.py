@@ -30,8 +30,17 @@ class CartItem(models.Model):
     def add_qty(self, qty):
         self.quantity += qty
         self.save()
+    
+    def remove_qty(self, qty):
+        if self.quantity <= qty:
+            self.delete()
+            return None
+        self.quantity -= qty
+        self.save()
+        return self
 
-    def get_item_value(self):
+    @property
+    def item_value(self):
         """
         Returns value of order-line.
 
@@ -68,13 +77,28 @@ class Cart(models.Model):
             )
             cart_item.add_qty(qty)
         except CartItem.DoesNotExist:
-            CartItem.objects.create(
+            cart_item = CartItem.objects.create(
                 product_id=item,
                 cart=self,
                 quantity=qty,
             )
+        return cart_item
+    
+    def remove_item(self, item, qty):
+        try:
+            cart_item = CartItem.objects.get(
+                product_id=item,
+                cart=self,
+            )
+            item = cart_item.remove_qty(qty)
+            if item is None:
+                return None
+            return item
+        except CartItem.DoesNotExist:
+            pass
 
-    def get_item_count(self):
+    @property
+    def item_count(self):
         return self.cartitem_set.aggregate(Sum('quantity'))['quantity__sum']
 
     def get_items(self):
@@ -83,6 +107,7 @@ class Cart(models.Model):
     @property
     def value(self):
         value = 0
+        # TODO should be aggregate
         for item in self.cartitem_set.filter(quantity__gte=1):
-            value += item.get_item_value()
+            value += item.item_value
         return value

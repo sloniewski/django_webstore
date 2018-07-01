@@ -28,6 +28,7 @@ class CartQuickRemoveItem(View):
         
         data = {
             'cart_items': cart.item_count,
+            'cart_value': cart.value,
             'item_qty': item.quantity,
             'item_value': item.item_value,
         }
@@ -48,6 +49,7 @@ class CartQuickAddItem(View):
         item = cart.add_item(item_id, 1)
         data = {
             'cart_items': cart.item_count,
+            'cart_value': cart.value,
             'item_qty': item.quantity,
             'item_value': item.item_value,
             }

@@ -37,7 +37,7 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         delivery.order = order
         delivery.save()
         cart.delete()
-        return redirect(reverse('order:order-payment', {'id': order.pk}))
+        return redirect('order:order-payment',pk=order.pk)
 
 
 class OrderAddPaymentView(FormView):

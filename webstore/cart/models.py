@@ -9,7 +9,9 @@ User = get_user_model()
 
 
 class CartManager(models.Manager):
-    pass
+
+    def get_for_session(request):
+        pass
 
 
 class CartItem(models.Model):
@@ -30,7 +32,7 @@ class CartItem(models.Model):
     def add_qty(self, qty):
         self.quantity += qty
         self.save()
-    
+
     def remove_qty(self, qty):
         if self.quantity <= qty:
             self.delete()
@@ -45,7 +47,7 @@ class CartItem(models.Model):
         Returns value of order-line.
 
         """
-        # Order of multiplication is important, we want to call __mul__ of Cash class
+        # Order of multiplication is important, to call __mul__ of Cash class
         return self.product.get_price * self.quantity
 
     class Meta:
@@ -55,10 +57,9 @@ class CartItem(models.Model):
 
 
 class Cart(models.Model):
-    session = models.OneToOneField(
-        Session,
-        on_delete=models.CASCADE,
-    )
+    objects = CartManager()
+
+    session = models.CharField(max_length=256, unique=True)
 
     product = models.ManyToManyField(
         Product,
@@ -83,7 +84,7 @@ class Cart(models.Model):
                 quantity=qty,
             )
         return cart_item
-    
+
     def remove_item(self, item, qty):
         try:
             cart_item = CartItem.objects.get(

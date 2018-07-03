@@ -20,7 +20,7 @@ class CartQuickRemoveItem(View):
     def post(self, request, *args, **kwawrgs):
         item_id = request.resolver_match.kwargs['item_id']
         cart = Cart.objects.get_or_create(
-            session_id=self.request.session.session_key)[0]
+            session=self.request.session.session_key)[0]
         item = cart.remove_item(item=item_id, qty=1)
 
         if item is None:
@@ -45,7 +45,8 @@ class CartQuickAddItem(View):
 
     def post(self, request, *args, **kwargs):
         item_id = request.resolver_match.kwargs['item_id']
-        cart = Cart.objects.get_or_create(session_id=self.request.session.session_key)[0]
+        cart = Cart.objects.get_or_create(
+            session=self.request.session.session_key)[0]
         item = cart.add_item(item_id, 1)
         data = {
             'cart_items': cart.item_count,
@@ -72,7 +73,8 @@ class CartAddItem(FormView):
 
         item = form.cleaned_data['item']
         qty = form.cleaned_data['qty']
-        cart = Cart.objects.get_or_create(session_id=self.request.session.session_key)[0]
+        cart = Cart.objects.get_or_create(
+            session=self.request.session.session_key)[0]
         cart.add_item(item, qty)
 
         data = json.dumps({
@@ -96,7 +98,7 @@ class CartRemoveItem(FormView):
 
     def form_valid(self, form):
 
-        cart = Cart.objects.get(session_id=self.request.session.session_key)
+        cart = Cart.objects.get(session=self.request.session.session_key)
         # TODO view not finished
 
     def form_invalid(self, form):
@@ -108,7 +110,7 @@ class CartListView(ListView):
 
     def get_queryset(self):
         try:
-            cart = Cart.objects.get(session_id=self.request.session.session_key)
+            cart = Cart.objects.get(session=self.request.session.session_key)
             self.extra_context = {
                 'cart_value': cart.value,
                 'cart_item_count': cart.item_count,

@@ -12,6 +12,7 @@
 
     <div class="col s3">
         <form action="" method="get">
+            {% csrf_token %}
             {{ form.as_p }}
             <input type="submit" value="filter">
         </form>

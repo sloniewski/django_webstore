@@ -22,7 +22,7 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         return reverse('users:login')
 
     def get_cart(self):
-        cart = Cart.objects.get(session_id=self.request.session.session_key)
+        cart = Cart.objects.get(session=self.request.session.session_key)
         return cart
 
     def get_form_kwargs(self):

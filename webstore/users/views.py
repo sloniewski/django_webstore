@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import FormView
@@ -19,6 +19,7 @@ class UsersLogoutView(LogoutView):
 class AuthenticateSession(FormView):
     form_class = AuthenticateSessionForm
     template_name = 'users/login.html'
+    redirect_field_name = 'next'
 
     def form_valid(self, form):
         username = form.cleaned_data['username']
@@ -34,7 +35,11 @@ class AuthenticateSession(FormView):
         if cart is not None:
             cart.session = self.request.session.session_key
             cart.save()
-        return HttpResponseRedirect('/product/list/')
+        return self.get_success_url()
 
     def get_success_url(self):
-        return '/product/list/'
+        redirect_url = self.request.GET.get(self.redirect_field_name)
+        if redirect_url is None:
+            return redirect('order:order-confirm')
+        else:
+            return redirect(redirect_url)

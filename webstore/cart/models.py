@@ -19,8 +19,11 @@ class CartManager(models.Manager):
             cart.save()
         return cart
 
-    def get_for_session(request):
-        pass
+    def get_for_session(self, request):
+        session = request.session.session_key
+        cart = self.get_queryset().filter(
+            session=session).first()
+        return cart
 
 
 class CartItem(models.Model):

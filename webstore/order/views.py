@@ -21,23 +21,19 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
     def get_login_url(self):
         return reverse('users:login')
 
-    def get_cart(self):
-        cart = Cart.objects.get(session=self.request.session.session_key)
-        return cart
-
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['cart'] = self.get_cart()
+        kwargs['cart'] = Cart.objects.get_for_session(self.request)
         return kwargs
 
     def form_valid(self, form):
         delivery = form.save(commit=False)
-        cart= self.get_cart()
+        cart = Cart.objects.get_for_session(self.request)
         order = Order.objects.create_from_cart(cart=cart, user=self.request.user)
         delivery.order = order
         delivery.save()
         cart.delete()
-        return redirect('order:order-payment',pk=order.pk)
+        return redirect('order:order-payment', pk=order.pk)
 
 
 class OrderAddPaymentView(FormView):

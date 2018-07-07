@@ -6,7 +6,7 @@ from webstore.payment.forms import ChoosePaymentForm
 from webstore.cart.models import Cart
 from webstore.delivery.forms import ChooseDeliveryForm
 
-from .models import Order
+from .models import Order, OrderItem
 
 
 class OrderDetailView(DetailView):
@@ -29,12 +29,14 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         delivery = form.save(commit=False)
-        cart = self.get_cart()
-        order = Order.objects.create_from_cart(cart=cart, user=self.request.user)
+        order = Order.objects.create_from_cart(
+            cart=self.get_cart(),
+            user=self.request.user
+            )
         delivery.order = order
         delivery.save()
-        cart.delete()
-        return redirect('order:order-payment', pk=order.pk)
+        self.get_cart().delete()
+        return redirect('order:order-summary', pk=order.pk)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -48,30 +50,16 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
     def get_cart(self):
         if self.cart is None:
             self.cart = Cart.objects.get_for_session(self.request)
-            return self.cart
-        else:
-            return self.cart
+        return self.cart
 
 
-class OrderSummary(FormView):
-    form_class = ChoosePaymentForm
-    template_name = 'order/order_add_payment.html'
+class OrderSummary(LoginRequiredMixin, ListView):
+    template_name = 'order/order_summary.html'
+    model = OrderItem
 
-    def dispatch(self, request, *args, **kwargs):
-        order_id = request.resolver_match.kwargs['pk']
-        self.order = get_object_or_404(Order, pk=order_id)
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['order'] = self.order
-        return kwargs
-
-    def form_valid(self, form):
-        form.add_payment()
-        self.order.status = self.order.CONFIRMED
-        self.order.save()
-        return redirect('order:order-list')
+    def get_queryset(self):
+        order_id = self.request.resolver_match.kwargs['pk']
+        return self.model.objects.filter(order_id=order_id)
 
 
 class OrderListView(ListView):

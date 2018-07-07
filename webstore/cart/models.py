@@ -1,7 +1,6 @@
 from django.db import models
 from django.db.models import Sum
 from django.contrib.auth import get_user_model
-from django.contrib.sessions.models import Session
 
 from webstore.product.models import Product
 
@@ -54,7 +53,7 @@ class CartItem(models.Model):
         return self
 
     @property
-    def item_value(self):
+    def value(self):
         """
         Returns value of order-line.
 
@@ -126,5 +125,5 @@ class Cart(models.Model):
         value = 0
         # TODO should be aggregate
         for item in self.cartitem_set.filter(quantity__gte=1):
-            value += item.item_value
+            value += item.value
         return value

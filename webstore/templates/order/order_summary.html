@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<div class="col s12 m6 cart_summary">
+  <ul class="collection with-header">
+    <li class="collection-header"><h4>You have placed an order</h4></li>
+    <li class="collection-item">Order summary</li>
+    {% for object in object_list %}
+      {% include "order/order_list_item.html" with item=object %}
+    {% endfor %}
+  </ul>
+  ITEMS IN ORDER: <span id="cart_summary_item_count"> {{cart_item_count}} </span>
+  <br>
+  ORDER VALUE: <span id="cart_summary_total_value">{{ cart_value }}</span>
+</div>
+{% endblock body %}

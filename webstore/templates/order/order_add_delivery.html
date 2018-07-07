@@ -23,7 +23,9 @@
         {% include "order/order_list_item.html" with item=item %}
       {% endfor %}
     </ul>
-
+    ITEMS IN CART: <span id="cart_summary_item_count"> {{cart_item_count}} </span>
+    <br>
+    TOTAL VALUE: <span id="cart_summary_total_value">{{ cart_value }}</span>
   </div>
 
 </div>

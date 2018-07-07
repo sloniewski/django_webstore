@@ -30,7 +30,7 @@ class CartQuickRemoveItem(View):
             'cart_items': cart.item_count,
             'cart_value': cart.value,
             'item_qty': item.quantity,
-            'item_value': item.item_value,
+            'item_value': item.value,
         }
         return JsonResponse(data=data, status=200)
 
@@ -51,7 +51,7 @@ class CartQuickAddItem(View):
             'cart_items': cart.item_count,
             'cart_value': cart.value,
             'item_qty': item.quantity,
-            'item_value': item.item_value,
+            'item_value': item.value,
             }
         return JsonResponse(data=data)
 

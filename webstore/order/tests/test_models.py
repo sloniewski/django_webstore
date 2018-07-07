@@ -24,6 +24,7 @@ def create_test_product(name=None, price=None):
     )
     return product
 
+
 class TestOrderModel(TestCase):
 
     def setUp(self):
@@ -61,9 +62,9 @@ class TestOrderItemModel(TestCase):
         product = create_test_product(name='test_product')
         order_item = OrderItem.objects.create(
             order=self.order,
-            product = product,
-            quantity = 2,
-            price = '11.11',
+            product=product,
+            quantity=2,
+            price='11.11',
         )
         self.assertIsInstance(order_item.price, Cash)
         self.assertEqual(order_item.value, Cash('22.22'))

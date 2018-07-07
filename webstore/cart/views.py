@@ -5,7 +5,7 @@ from django.views import View
 from django.views.defaults import page_not_found, bad_request
 from django.views.generic import FormView, ListView
 
-from .forms import AddItemForm, RemoveItemForm
+from .forms import ItemForm
 from .models import Cart
 
 
@@ -19,8 +19,7 @@ class CartQuickRemoveItem(View):
 
     def post(self, request, *args, **kwawrgs):
         item_id = request.resolver_match.kwargs['item_id']
-        cart = Cart.objects.get_or_create(
-            session=self.request.session.session_key)[0]
+        cart = Cart.objects.recive_or_create(self.request)
         item = cart.remove_item(item=item_id, qty=1)
 
         if item is None:
@@ -57,7 +56,7 @@ class CartQuickAddItem(View):
 
 
 class CartAddItem(FormView):
-    form_class = AddItemForm
+    form_class = ItemForm
 
     def dispatch(self, request, *args, **kwargs):
         if request.session.session_key is None:
@@ -83,21 +82,6 @@ class CartAddItem(FormView):
             'cart_items': cart.get_item_count(),
         })
         return HttpResponse(data)
-
-    def form_invalid(self, form):
-        return bad_request(self.request, 'bad request')
-
-
-class CartRemoveItem(FormView):
-    form_class = RemoveItemForm
-
-    def get(self, request, *args, **kwargs):
-        return page_not_found(request, 'page not found')
-
-    def form_valid(self, form):
-
-        cart = Cart.objects.get(session=self.request.session.session_key)
-        # TODO view not finished
 
     def form_invalid(self, form):
         return bad_request(self.request, 'bad request')

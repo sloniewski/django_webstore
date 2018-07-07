@@ -7,8 +7,5 @@ class DeliveryManager(models.Manager):
 
 class DeliveryPriceManager(models.Manager):
 
-    def get_queryset(self):
-        return DeliveryPriceQueryset(self.model, using=self._db)
-
     def get_prices_for_cart(self, cart):
         return [(x, x+2) for x in range(5)]

@@ -23,6 +23,7 @@ class Delivery(models.Model):
         on_delete=models.CASCADE,
     )
 
+
 class DeliveryPricing(models.Model):
     objects = DeliveryPriceManager()
 

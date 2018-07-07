@@ -32,13 +32,14 @@ class TestOrderView(TestCase):
         )
 
 
-class TestAddDeliveryView(TestCase):
-    
+class TestConfirmOrderView(TestCase):
+
     def setUp(self):
-        user = User.objects.create(username='test_user')
+        user = User.objects.create_user(username='test_user', password='123')
         order = Order.objects.create(user=user)
+        self.client.login(username='test_user', password='123')
         self.response = self.client.get(
-            reverse('order:order-confirm', kwargs={'pk': order.id})
+            reverse('order:order-confirm')
         )
 
     def test_http_status(self):
@@ -55,11 +56,14 @@ class TestAddDeliveryView(TestCase):
         )
 
     def test_view_function(self):
-        self.assertEqual(views.OrderAddDeliveryView.as_view().__name__, self.response.resolver_match.func.__name__)
+        self.assertEqual(
+            views.OrderConfirmView.as_view().__name__,
+            self.response.resolver_match.func.__name__
+        )
 
 
 class TestOrderListView(TestCase):
-    
+
     def setUp(self):
         user = User.objects.create(username='test_user')
         order = Order.objects.create(user=user)
@@ -81,16 +85,20 @@ class TestOrderListView(TestCase):
         )
 
     def test_view_function(self):
-        self.assertEqual(views.OrderListView.as_view().__name__, self.response.resolver_match.func.__name__)
+        self.assertEqual(
+            views.OrderListView.as_view().__name__,
+            self.response.resolver_match.func.__name__
+        )
 
 
-class TestAddPaymentViw(TestCase):
+class TestSummaryView(TestCase):
 
     def setUp(self):
-        user = User.objects.create(username='test_user')
+        user = User.objects.create_user(username='test_user', password='123')
         order = Order.objects.create(user=user)
+        self.client.login(username='test_user', password='123')
         self.response = self.client.get(
-            reverse('order:order-payment', kwargs={'pk': order.id})
+            reverse('order:order-summary', kwargs={'pk': order.id})
         )
 
     def test_http_status(self):
@@ -103,8 +111,11 @@ class TestAddPaymentViw(TestCase):
     def test_template_used(self):
         self.assertTemplateUsed(
             response=self.response,
-            template_name='order/order_add_payment.html',
+            template_name='order/order_summary.html',
         )
 
     def test_view_function(self):
-        self.assertEqual(views.OrderAddPaymentView.as_view().__name__, self.response.resolver_match.func.__name__)
+        self.assertEqual(
+            views.OrderSummary.as_view().__name__,
+            self.response.resolver_match.func.__name__
+        )

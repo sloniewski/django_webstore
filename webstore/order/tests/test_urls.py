@@ -18,47 +18,48 @@ class TestOrderDetailUrl(TestCase):
         self.assertEqual('order', resolver.namespace)
 
 
-class TestOrderCreateUrl(TestCase):
+class TestOrderConfirmUrl(TestCase):
 
     def test_reverse(self):
         self.assertEqual(
-            first='/order/create/',
-            second=reverse('order:order-create', kwargs={})
+            first='/order/confirm/',
+            second=reverse('order:order-confirm')
         )
 
     def test_resolve(self):
-        resolver = resolve(reverse('order:order-create', kwargs={}))
+        resolver = resolve(reverse('order:order-confirm'))
         self.assertEqual((), resolver.args)
         self.assertEqual({}, resolver.kwargs)
         self.assertEqual('order', resolver.app_name)
         self.assertEqual('order', resolver.namespace)
 
 
-class TestOrderCreateUrl(TestCase):
-    
+class TestOrderSummaryUrl(TestCase):
+
     def test_reverse(self):
         self.assertEqual(
-            first='/order/confirm/1',
-            second=reverse('order:order-confirm', kwargs={'pk': 1})
+            first='/order/summary/1',
+            second=reverse('order:order-summary', kwargs={'pk': 1})
         )
 
     def test_resolve(self):
-        resolver = resolve(reverse('order:order-confirm', kwargs={'pk': 1}))
+        resolver = resolve(reverse('order:order-summary', kwargs={'pk': 1}))
         self.assertEqual((), resolver.args)
         self.assertEqual({'pk': 1}, resolver.kwargs)
         self.assertEqual('order', resolver.app_name)
         self.assertEqual('order', resolver.namespace)
 
-class TestOrderCreateUrl(TestCase):
-    
+
+class TestOrderListUrl(TestCase):
+
     def test_reverse(self):
         self.assertEqual(
             first='/order/list/',
-            second=reverse('order:order-list', kwargs={})
+            second=reverse('order:order-list')
         )
 
     def test_resolve(self):
-        resolver = resolve(reverse('order:order-list', kwargs={}))
+        resolver = resolve(reverse('order:order-list'))
         self.assertEqual((), resolver.args)
         self.assertEqual({}, resolver.kwargs)
         self.assertEqual('order', resolver.app_name)

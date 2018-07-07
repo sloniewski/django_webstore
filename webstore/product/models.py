@@ -85,6 +85,7 @@ class Product(models.Model):
     category = models.ForeignKey(
         Category,
         on_delete=models.DO_NOTHING,
+        null=True,
     )
 
     created = models.DateTimeField(

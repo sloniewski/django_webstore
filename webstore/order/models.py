@@ -55,14 +55,14 @@ class Order(models.Model):
         (NEW, 'new'),
         (CONFIRMED, 'confirmed'),
         (PAID, 'paid'),
-        (SHIPPED, 'shipped'),    
+        (SHIPPED, 'shipped'),
     )
-    
+
     status = models.CharField(
         max_length=32,
         choices=ORDER_STATUS,
     )
-    
+
     objects = OrderManager()
 
     user = models.ForeignKey(
@@ -75,7 +75,7 @@ class Order(models.Model):
     )
 
     class Meta:
-        ordering= (
+        ordering = (
             '-created',
         )
 

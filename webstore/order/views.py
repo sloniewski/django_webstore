@@ -1,8 +1,8 @@
+from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404, reverse
 from django.views.generic import DetailView, FormView, ListView
 
-from webstore.payment.forms import ChoosePaymentForm
 from webstore.cart.models import Cart
 from webstore.delivery.forms import ChooseDeliveryForm
 
@@ -49,17 +49,23 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
 
     def get_cart(self):
         if self.cart is None:
-            self.cart = Cart.objects.get_for_session(self.request)
+            self.cart = Cart.objects.recive_or_create(self.request)
         return self.cart
 
 
-class OrderSummary(LoginRequiredMixin, ListView):
+class OrderSummary(ListView):
     template_name = 'order/order_summary.html'
     model = OrderItem
 
+    def get(self, request, *args, **kwargs):
+        order_id = request.resolver_match.kwargs['pk']
+        self.order = get_object_or_404(Order, pk=order_id)
+        if request.user != self.order.user:
+            raise Http404
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
-        order_id = self.request.resolver_match.kwargs['pk']
-        return self.model.objects.filter(order_id=order_id)
+        return self.model.objects.filter(order=self.order)
 
 
 class OrderListView(ListView):

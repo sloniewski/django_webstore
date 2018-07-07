@@ -127,3 +127,8 @@ class Cart(models.Model):
         for item in self.cartitem_set.filter(quantity__gte=1):
             value += item.value
         return value
+
+    @property
+    def weight(self):
+        # TODO implement cart weight property
+        return 1

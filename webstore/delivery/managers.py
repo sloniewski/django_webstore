@@ -8,4 +8,6 @@ class DeliveryManager(models.Manager):
 class DeliveryPriceManager(models.Manager):
 
     def get_prices_for_cart(self, cart):
-        return [(x, x+2) for x in range(5)]
+        prices = self.get_queryset().all()
+        weight = cart.weight
+        return [(str(x.cost_per_kg*weight), str(x.cost_per_kg*weight)) for x in prices]

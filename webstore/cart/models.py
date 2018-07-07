@@ -112,10 +112,14 @@ class Cart(models.Model):
 
     @property
     def item_count(self):
-        return self.cartitem_set.aggregate(Sum('quantity'))['quantity__sum']
+        item_count = self.cartitem_set.aggregate(
+            Sum('quantity'))['quantity__sum']
+        if item_count is None:
+            return 0
+        return item_count
 
     def get_items(self):
-        return self.cartitem_set.all()
+        return self.cartitem_set.all().select_related('product')
 
     @property
     def value(self):

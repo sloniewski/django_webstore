@@ -27,10 +27,8 @@ class AuthenticateSession(FormView):
 
         user = authenticate(self.request, username=username, password=password)
         retained_session_key = self.request.session.session_key
-        print(retained_session_key)
         if user is not None:
             login(self.request, user)
-        print(self.request.session.session_key)
         cart = Cart.objects.filter(session=retained_session_key).first()
         if cart is not None:
             cart.session = self.request.session.session_key

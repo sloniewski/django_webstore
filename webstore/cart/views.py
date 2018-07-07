@@ -104,7 +104,7 @@ class CartRemoveItem(FormView):
 
 
 class CartListView(ListView):
-    template_name='cart/cart_list.html'
+    template_name = 'cart/cart_list.html'
 
     def get_queryset(self):
         try:

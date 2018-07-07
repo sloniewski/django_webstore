@@ -17,26 +17,43 @@ class OrderDetailView(DetailView):
 class OrderConfirmView(LoginRequiredMixin, FormView):
     form_class = ChooseDeliveryForm
     template_name = 'order/order_add_delivery.html'
+    cart = None
 
     def get_login_url(self):
         return reverse('users:login')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['cart'] = Cart.objects.get_for_session(self.request)
+        kwargs['cart'] = self.get_cart()
         return kwargs
 
     def form_valid(self, form):
         delivery = form.save(commit=False)
-        cart = Cart.objects.get_for_session(self.request)
+        cart = self.get_cart()
         order = Order.objects.create_from_cart(cart=cart, user=self.request.user)
         delivery.order = order
         delivery.save()
         cart.delete()
         return redirect('order:order-payment', pk=order.pk)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'cart_item_count': self.get_cart().item_count,
+            'cart_value': self.get_cart().value,
+            'cart_items_list': self.get_cart().get_items(),
+        })
+        return context
 
-class OrderAddPaymentView(FormView):
+    def get_cart(self):
+        if self.cart is None:
+            self.cart = Cart.objects.get_for_session(self.request)
+            return self.cart
+        else:
+            return self.cart
+
+
+class OrderSummary(FormView):
     form_class = ChoosePaymentForm
     template_name = 'order/order_add_payment.html'
 

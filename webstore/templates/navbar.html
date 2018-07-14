@@ -1,6 +1,6 @@
 <nav>
-    <div class="nav-wrapper">
-    <a href="{% url 'product:product-list' %}" class="brand-logo">Cheese shop</a>
+    <div class="nav-wrapper amber">
+    <a href="{% url 'product:product-list' %}" class="brand-logo black-text">Cheese shop</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="#">Categories</a></li>
 
@@ -18,7 +18,15 @@
             </li>
             <li>
                 {% if request.user.is_authenticated %}
-                    <a href="{% url 'users:logout' %}">Logout</a>
+                    <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>
+                      My account
+                    </a>
+                    <ul id='dropdown1' class='dropdown-content'>
+                      <li><a href="{% url 'order:order-list' %}">Orders</a></li>
+                      <li><a href="#">Payments</a></li>
+                      <li><a href="#">Settings</a></li>
+                      <li><a href="{% url 'users:logout' %}" >Logout</a></li>
+                    </ul>
                 {% else %}
                     <a href="{% url 'users:login' %}">Login</a>
                 {% endif %}

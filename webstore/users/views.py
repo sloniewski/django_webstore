@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, reverse
 from django.contrib.auth import login
-from django.contrib.auth.forms import UsernameField, AuthenticationForm
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LogoutView
 from django.views.generic import FormView
 
 from webstore.cart.models import Cart
@@ -9,12 +9,8 @@ from webstore.cart.models import Cart
 from .forms import UserCreationForm
 
 
-class UsersLoginView(LoginView):
-    template_name = 'users/login.html'
-
-
 class UsersLogoutView(LogoutView):
-    pass
+    next_page = 'product:product-list'
 
 
 class LoginRegisterBaseView():
@@ -38,7 +34,7 @@ class LoginRegisterBaseView():
     def get_success_url(self):
         redirect_url = self.request.GET.get(self.redirect_field_name)
         if redirect_url is None:
-            return reverse('order:order-confirm')
+            return reverse('product:product-list')
         else:
             return reverse(redirect_url)
 

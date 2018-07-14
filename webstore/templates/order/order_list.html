@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+  <ul class="collection with-header">
+       <li class="collection-header"><h4>Your orders</h4></li>
+
+  {% for object in object_list %}
+    <a href="{% url 'order:order-detail' pk=object.pk %}">
+    <li class="collection-item">
+      Items: {{object.item_count }}, Value {{object.value}},
+      Created: {{object.created}}, Status: {{object.status}}
+    </li>
+    </a>
+  {% endfor %}
+  </ul>
+{% endblock body %}
+
+{% block scripts %}
+    <script src="{% static 'scripts/order-list.js' %}"></script>
+{% endblock scripts %}

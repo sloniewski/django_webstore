@@ -84,6 +84,14 @@ class Order(models.Model):
         return self.orderitem_set.all()
 
     @property
+    def item_count(self):
+        item_count = self.orderitem_set.aggregate(
+            Sum('quantity'))['quantity__sum']
+        if item_count is None:
+            return 0
+        return item_count
+
+    @property
     def value(self):
         value = Cash('0')
         for item in self.orderitem_set.filter(quantity__gte=1):

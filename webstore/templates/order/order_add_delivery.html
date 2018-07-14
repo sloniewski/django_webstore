@@ -20,7 +20,7 @@
     <ul class="collection with-header">
       <li class="collection-header"><h4>Order items</h4></li>
       {% for item in cart_items_list %}
-        {% include "order/order_list_item.html" with item=item %}
+        {% include "order/order_item_list_item.html" with item=item %}
       {% endfor %}
     </ul>
     ITEMS IN CART: <span id="cart_summary_item_count"> {{cart_item_count}} </span>

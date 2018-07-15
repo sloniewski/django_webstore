@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView
 
-# Create your views here.
+
+class DashboardWelcomeView(TemplateView):
+    """
+    Generic TemplateView,
+    **Template:**
+    :template:`dasboard/base_dashboard.html`
+    """
+    template_name = 'dashboard/base_dashboard.html'

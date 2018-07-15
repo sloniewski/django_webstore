@@ -11,6 +11,7 @@ class CartManager(models.Manager):
 
     def recive_or_create(self, request):
         session = request.session.session_key
+        # TODO prefetch cart_items and products
         cart = self.get_queryset().filter(
             session=session).first()
         if cart is None:
@@ -26,6 +27,10 @@ class CartManager(models.Manager):
 
 
 class CartItem(models.Model):
+    """
+    Reference table for m2m relation cart -> product.
+    Stores additional information about quantity.
+    """
     cart = models.ForeignKey(
         'Cart',
         on_delete=models.CASCADE,
@@ -56,7 +61,6 @@ class CartItem(models.Model):
     def value(self):
         """
         Returns value of order-line.
-
         """
         # Order of multiplication is important, to call __mul__ of Cash class
         return self.product.get_price * self.quantity
@@ -68,6 +72,11 @@ class CartItem(models.Model):
 
 
 class Cart(models.Model):
+    """
+    Cart represetation, has unique refrence to session_key.
+    Does not store items, cart items are m2m relation to cart & product
+    """
+
     objects = CartManager()
 
     session = models.CharField(max_length=256, unique=True)

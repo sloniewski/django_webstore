@@ -10,6 +10,7 @@ from .models import Cart
 
 
 class CartQuickRemoveItem(View):
+    http_method_names = ['post']
 
     def dispatch(self, request, *args, **kwargs):
         if request.session.session_key is None:
@@ -35,6 +36,7 @@ class CartQuickRemoveItem(View):
 
 
 class CartQuickAddItem(View):
+    http_method_names = ['post']
 
     def dispatch(self, request, *args, **kwargs):
         if request.session.session_key is None:
@@ -51,6 +53,21 @@ class CartQuickAddItem(View):
             'cart_value': cart.value,
             'item_qty': item.quantity,
             'item_value': item.value,
+            }
+        return JsonResponse(data=data)
+
+
+class CartDeleteItem(View):
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs):
+        item_id = request.resolver_match.kwargs['item_id']
+        cart = Cart.objects.recive_or_create(self.request)
+        item = cart.cartitem_set.filter(pk=item_id)
+        item.delete()
+        data = {
+            'cart_items': cart.item_count,
+            'cart_value': cart.value,
             }
         return JsonResponse(data=data)
 

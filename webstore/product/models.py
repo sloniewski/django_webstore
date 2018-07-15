@@ -20,6 +20,11 @@ class Picture(models.Model):
 
 
 class Gallery(models.Model):
+    """
+    Reference table for m2m relation product -> picture.
+    Additional information is the picture order.
+    """
+
     product = models.ForeignKey(
         'Product',
         on_delete=models.DO_NOTHING,
@@ -64,6 +69,10 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    """
+    Represents product resource, stores basic information.
+    Prices, Pictures and Categories are m2m relations to Product.
+    """
 
     name = models.CharField(
         max_length=32,
@@ -163,7 +172,7 @@ class Price(models.Model):
     )
     valid_from = models.DateField(
         default=date.today,
-        help_text="helps to determine which price is valid at moment of runtime"
+        help_text="helps to determine which price is valid at moment of runtime",
     )
     created = models.DateTimeField(
         auto_now_add=True,

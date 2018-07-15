@@ -21,6 +21,23 @@
     </head>
   </head>
   <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="dashboard_nav col s2">
+          {% include 'dashboard/navbar.html' %}
 
+        </div>
+
+        <div class="card content col s10">
+            test
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+    <script src="{% static 'scripts/ajax-utils.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/base_dashboard.js' %}">
+
+  </script>
   </body>
 </html>

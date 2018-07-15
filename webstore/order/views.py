@@ -15,6 +15,8 @@ class OrderDetailView(DetailView):
 
 
 class OrderConfirmView(LoginRequiredMixin, FormView):
+    """ view that removes cart and creates order in place """
+
     form_class = ChooseDeliveryForm
     template_name = 'order/order_add_delivery.html'
     cart = None
@@ -28,6 +30,7 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
+        # TODO bug - you can create an order with no items
         delivery = form.save(commit=False)
         order = Order.objects.create_from_cart(
             cart=self.get_cart(),
@@ -36,6 +39,8 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         delivery.order = order
         delivery.save()
         self.get_cart().delete()
+        # TODO sent mail
+        # TODO update order staus
         return redirect('order:order-summary', pk=order.pk)
 
     def get_context_data(self, **kwargs):

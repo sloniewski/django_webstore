@@ -2,18 +2,15 @@
 {% load static %}
 
 {% block body %}
-  <ul class="collection with-header">
-       <li class="collection-header"><h4>Your orders</h4></li>
-
+  <div class="collection with-header">
+    <div class="collection-header"><h4>Your orders</h4></div>
   {% for object in object_list %}
-    <a href="{% url 'order:order-detail' pk=object.pk %}">
-    <li class="collection-item">
+    <a class="collection-item" href="{% url 'order:order-detail' pk=object.pk %}">
       Items: {{object.item_count }}, Value {{object.value}},
       Created: {{object.created}}, Status: {{object.status}}
-    </li>
     </a>
   {% endfor %}
-  </ul>
+</div>
 {% endblock body %}
 
 {% block scripts %}

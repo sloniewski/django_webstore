@@ -35,8 +35,12 @@ class OrderItem(models.Model):
 class OrderManager(models.Manager):
 
     def create_from_cart(self, cart, user):
-        order = self.model.objects.create(user=user)
+        order = self.model.objects.create(
+            user=user,
+            status=Order.CONFIRMED,
+        )
         for cart_item in cart.cartitem_set.all():
+            # TODO should be single query - hit databese one time
             OrderItem.objects.create(
                 order=order,
                 price=cart_item.price,

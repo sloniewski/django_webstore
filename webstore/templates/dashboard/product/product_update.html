@@ -1,0 +1,7 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+    last updated: {{object.edited }} <br>
+    created: {{object.created }}
+    {% include 'dashboard/product/generic_form.html' %}
+{% endblock content %}

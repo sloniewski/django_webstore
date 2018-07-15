@@ -4,8 +4,8 @@
           <i class="material-icons">view_list</i>Products</div>
       <div class="collapsible-body">
           <div class="collection">
-              <a href="#!" class="collection-item">List all products</a>
-              <a href="#!" class="collection-item">Add product</a>
+              <a href="{% url 'dashboard:product-list' %}" class="collection-item">List all products</a>
+              <a href="{% url 'dashboard:product-create' %}" class="collection-item">Add product</a>
           </div>
       </div>
     </li>

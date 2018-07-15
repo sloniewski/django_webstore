@@ -1,0 +1,6 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+    <h4>Your are about to delete {{object.name}}</h4>
+    {% include 'dashboard/product/generic_form.html' %}
+{% endblock content %}

@@ -1,0 +1,24 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+    <ul class="collection with-header">
+        <li class="collection-header"><h4>Products List</h4></li>
+        {% for object in object_list %}
+        <li class="collection-item">{{object}}
+            <a href="{% url 'dashboard:product-update' pk=object.id %}" class="secondary-content tooltipped"
+               data-position="left" data-tooltip="edit">
+                <i class="material-icons" >create</i>
+            </a>
+            <a href="{% url 'dashboard:product-delete' pk=object.id %}" class="secondary-content tooltipped"
+               data-position="left" data-tooltip="delete">
+                <i class="material-icons">delete</i>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'scripts/dashboard/product-list.js' %}"></script>
+{% endblock scripts %}

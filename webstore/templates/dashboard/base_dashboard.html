@@ -28,16 +28,17 @@
 
         </div>
 
-        <div class="card content col s10">
-            test
+        <div class="content col s10">
+        {% block content %}
+        {% endblock content %}
         </div>
       </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
     <script src="{% static 'scripts/ajax-utils.js' %}"></script>
-    <script type="text/javascript" src="{% static 'scripts/base_dashboard.js' %}">
-
-  </script>
+    <script type="text/javascript" src="{% static 'scripts/base_dashboard.js' %}"></script>
+    {% block scripts %}
+    {% endblock scripts %}
   </body>
 </html>

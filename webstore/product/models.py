@@ -77,6 +77,11 @@ class Product(models.Model):
     name = models.CharField(
         max_length=32,
     )
+
+    active = models.BooleanField(
+        default=False,
+    )
+
     picture = models.ManyToManyField(
         Picture,
         through=Gallery,
@@ -137,7 +142,7 @@ class Product(models.Model):
         return reverse('product:product-detail', kwargs={'slug': self.slug})
 
     @property
-    def get_price(self):
+    def price(self):
         today = timezone.now()
         price = self.price_set.filter(valid_from__lte=today).first()
         if price is not None:

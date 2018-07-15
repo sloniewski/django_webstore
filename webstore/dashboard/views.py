@@ -1,4 +1,4 @@
-from django.shortcuts import reverse
+from django.shortcuts import reverse, get_object_or_404
 from django.views.generic import (
     TemplateView,
     ListView,
@@ -7,7 +7,7 @@ from django.views.generic import (
     CreateView,
 )
 
-from webstore.product.models import Product
+from webstore.product.models import Product, Price
 
 class DashboardWelcomeView(TemplateView):
     """
@@ -23,6 +23,7 @@ class ProductCreateView(CreateView):
     template_name = 'dashboard/product/product_create.html'
     fields = [
         'name',
+        'active',
         'slug',
         'description',
         'weight',
@@ -42,6 +43,7 @@ class ProductUpdateView(UpdateView):
     template_name = 'dashboard/product/product_update.html'
     fields = [
         'name',
+        'active',
         'slug',
         'description',
         'weight',
@@ -51,3 +53,20 @@ class ProductUpdateView(UpdateView):
 class ProductDeleteView(DeleteView):
     model = Product
     template_name = 'dashboard/product/product_delete.html'
+
+
+class ProductPriceListView(ListView):
+    model = Price
+    template_name = 'dashboard/product/product_price_list.html'
+
+    def get_queryset(self):
+        pk = self.request.resolver_match.kwargs['pk']
+        product = get_object_or_404(Product, pk=pk)
+        self.update_context({'product':product})
+        return Price.objects.filter(product=product)
+
+    def update_context(self, data_dict):
+        if self.extra_context is None:
+            self.extra_context = data_dict
+        else:
+            self.extra_context.update(data_dict)

@@ -3,23 +3,20 @@
 
 {% block content %}
     <ul class="collection with-header">
-        <li class="collection-header lime lighten-3"><h4>Products List</h4></li>
+        <li class="collection-header lime lighten-3"><h4>Price list for product: {{product.name}}</h4></li>
         {% for object in object_list %}
         <li class="collection-item">{{object}}
-            <a href="{% url 'dashboard:product-update' pk=object.id %}" class="secondary-content tooltipped"
+            <a href="#" class="secondary-content tooltipped"
                data-position="left" data-tooltip="edit">
                 <i class="material-icons" >create</i>
             </a>
-            <a href="{% url 'dashboard:product-delete' pk=object.id %}" class="secondary-content tooltipped"
+            <a href="#" class="secondary-content tooltipped"
                data-position="left" data-tooltip="delete">
                 <i class="material-icons">delete</i>
             </a>
-
-            <a href="{% url 'dashboard:product-price-list' pk=object.id %}" class="secondary-content tooltipped"
-               data-position="left" data-tooltip="prices">
-                <i class="material-icons">monetization_on</i>
-            </a>
         </li>
+        {% empty %}
+        There are not proces for this product, <a href="">create one</a>
         {% endfor %}
     </ul>
 {% endblock content %}

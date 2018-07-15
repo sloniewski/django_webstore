@@ -73,13 +73,13 @@ class CartItem(models.Model):
 
 class Cart(models.Model):
     """
-    Cart represetation, has unique refrence to session_key.
+    Cart representation, has unique reference to session_key.
     Does not store items, cart items are m2m relation to cart & product
     """
 
     objects = CartManager()
 
-    session = models.CharField(max_length=256, unique=True)
+    session = models.CharField(max_length=255, unique=True)
 
     product = models.ManyToManyField(
         Product,

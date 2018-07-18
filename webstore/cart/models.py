@@ -43,7 +43,7 @@ class CartItem(models.Model):
 
     @property
     def price(self):
-        return self.product.get_price
+        return self.product.price
 
     def add_qty(self, qty):
         self.quantity += qty
@@ -63,7 +63,7 @@ class CartItem(models.Model):
         Returns value of order-line.
         """
         # Order of multiplication is important, to call __mul__ of Cash class
-        return self.product.get_price * self.quantity
+        return self.product.price * self.quantity
 
     class Meta:
         unique_together = [

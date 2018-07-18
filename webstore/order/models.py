@@ -83,6 +83,12 @@ class Order(models.Model):
             '-created',
         )
 
+    def __str__(self):
+        return 'order id: {}, value: {};'.format(self.id, self.value)
+
+    def __repr__(self):
+        return self.__str__()
+
     @property
     def items(self):
         return self.orderitem_set.all()

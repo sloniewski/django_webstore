@@ -5,6 +5,7 @@ from django.views.generic import DetailView, FormView, ListView
 
 from webstore.cart.models import Cart
 from webstore.delivery.forms import ChooseDeliveryForm
+from webstore.payment.models import Payment
 
 from .models import Order, OrderItem
 
@@ -36,12 +37,17 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
             cart=self.get_cart(),
             user=self.request.user
             )
-        # create from cart implcitly sets order status
+        # create from cart sets status for order
 
         delivery.order = order
         delivery.save()
         self.get_cart().delete()
         # TODO sent mail
+        print(order)
+        Payment.objects.create_for_order(
+            order=order,
+            delivery=delivery,
+        )
         return redirect('order:order-summary', pk=order.pk)
 
     def get_context_data(self, **kwargs):

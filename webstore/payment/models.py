@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 from webstore.cash.fields import CashField
 from webstore.core.mixins import TimeStampMixin
@@ -19,7 +20,7 @@ class PaymentManager(models.Manager):
 
 
 class Payment(TimeStampMixin, models.Model):
-    objects= PaymentManager()
+    objects = PaymentManager()
 
     payed = models.BooleanField(
         default=False,
@@ -60,3 +61,8 @@ class Payment(TimeStampMixin, models.Model):
     @property
     def user(self):
         return self.order.user
+
+    @property
+    def days_outstanding(self):
+        now = timezone.now()
+        return (now - self.created).days

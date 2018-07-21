@@ -55,5 +55,5 @@ class IntegerValue(Transform):
 
     def as_sql(self, compiler, connection, function=None, template=None, arg_joiner=None, **extra_context):
         sql, params = compiler.compile(self.lhs)
-        sql = 'CAST(%s AS FLOAT)' % sql
+        sql = 'CAST(%s AS DECIMAL(9,3))' % sql
         return sql, params

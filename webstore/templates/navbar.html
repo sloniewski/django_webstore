@@ -23,7 +23,7 @@
                     </a>
                     <ul id='dropdown1' class='dropdown-content'>
                       <li><a href="{% url 'order:order-list' %}">Orders</a></li>
-                      <li><a href="#">Payments</a></li>
+                      <li><a href="{% url 'payment:user-list' %}">Payments</a></li>
                       <li><a href="#">Settings</a></li>
                       <li><a href="{% url 'users:logout' %}" >Logout</a></li>
                     </ul>

@@ -43,7 +43,6 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         delivery.save()
         self.get_cart().delete()
         # TODO sent mail
-        print(order)
         Payment.objects.create_for_order(
             order=order,
             delivery=delivery,

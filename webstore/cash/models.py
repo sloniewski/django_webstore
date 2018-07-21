@@ -36,9 +36,8 @@ class Cash(Decimal):
 
     def __str__(self, *args):
         text = super().__str__(*args)
-        return '{} {}'.format(
+        return '{}'.format(
             text,
-            self.currency,
         )
 
     def __len__(self):
@@ -46,7 +45,7 @@ class Cash(Decimal):
 
     @property
     def to_db_value(self):
-        return super().__str__()
+        return self.__str__()
 
 
 @Field.register_lookup

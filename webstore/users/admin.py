@@ -20,6 +20,7 @@ class CustomUserAdmin(admin.ModelAdmin):
         'is_staff',
         'is_active',
     ]
+    list_filter = ('is_staff', 'is_active')
     actions = [
         deactivate,
         activate

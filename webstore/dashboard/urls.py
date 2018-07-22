@@ -23,7 +23,7 @@ urlpatterns = [
          name='product-create'),
 
 
-    path('payment/list', views.PaymentListView.as_view(),
+    path('payment/list/<status>', views.PaymentListView.as_view(),
          name='payment-list'),
 
     path('payment/update/<pk>', views.PaymentUpdateView.as_view(),

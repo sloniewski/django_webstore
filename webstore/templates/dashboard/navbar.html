@@ -37,7 +37,11 @@
       <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
           <i class="material-icons">monetization_on</i>Payments</div>
       <div class="collapsible-body">
-          <a href="{% url 'dashboard:payment-list' %}" class="collection-item">List Payments</a>
+          <div class="collection">
+              <a href="{% url 'dashboard:payment-list' status='ne' %}" class="collection-item">New</a>
+              <a href="{% url 'dashboard:payment-list' status='dl' %}" class="collection-item">Delayed</a>
+              <a href="{% url 'dashboard:payment-list' status='cl' %}" class="collection-item">Closed</a>
+          </div>
       </div>
     </li>
     <li>

@@ -6,7 +6,7 @@ class FilterView(ListView):
     model = None
     template_name = None
     filter_form_class = None
-    # paginate_by = 10
+    paginate_by = 10
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

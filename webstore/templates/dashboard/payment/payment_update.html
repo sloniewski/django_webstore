@@ -2,5 +2,37 @@
 {% load static %}
 
 {% block content %}
-    {% include 'generic_form.html' with form=form %}
+    <div class="card col s12 m6">
+    <span class="card-title">Related order details</span>
+
+        <div class="card-content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Item Qty</th>
+                    <th>Item Price</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for item in order.items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price }}</td>
+                </tr>
+            {% endfor %}
+            <tbody>
+        </table>
+        </div>
+    </div>
+    <div class="card col s12 m6">
+        <p>Changing the payments status will trigger message for the client</p>
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="submit" class="btn">
+        </form>
+    </div>
 {% endblock content %}

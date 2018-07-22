@@ -12,9 +12,11 @@ class FilterPaymentsForm(FilterForm):
 
     date_to = forms.DateField(
         required=False,
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
     )
     date_from = forms.DateField(
         required=False,
+        widget=forms.DateInput(attrs={'class': 'datepicker'}),
     )
     value_from = forms.FloatField(
         required=False,

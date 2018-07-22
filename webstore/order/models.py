@@ -14,6 +14,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(
         'Order',
         on_delete=models.CASCADE,
+        related_name='orderitems',
     )
     product = models.ForeignKey(
         Product,
@@ -91,11 +92,11 @@ class Order(models.Model):
 
     @property
     def items(self):
-        return self.orderitem_set.all()
+        return self.orderitems.all().select_related('product')
 
     @property
     def item_count(self):
-        item_count = self.orderitem_set.aggregate(
+        item_count = self.orderitems.aggregate(
             Sum('quantity'))['quantity__sum']
         if item_count is None:
             return 0
@@ -104,13 +105,18 @@ class Order(models.Model):
     @property
     def value(self):
         value = Cash('0')
-        for item in self.orderitem_set.filter(quantity__gte=1):
+        for item in self.orderitems.filter(quantity__gte=1):
             value += item.value
         return value
 
     @property
     def weight(self):
-        return self.orderitem_set.aggregate(Sum('weight'))['weight__sum']
+        order_items = OrderItem.objects.filter(order_id=self.pk)\
+            .select_related('product')
+        weight = 0
+        for item in order_items:
+            weight += (item.quantity * item.product.weight)
+        return weight
 
     @property
     def volume(self):

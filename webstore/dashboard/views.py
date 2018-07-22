@@ -10,6 +10,7 @@ from django.views.generic import (
 from webstore.core.views import FilterView
 from webstore.product.models import Product, Price
 from webstore.payment.models import Payment
+from webstore.order.models import Order
 
 from .forms import FilterPaymentsForm
 
@@ -82,6 +83,16 @@ class PaymentListView(FilterView):
     template_name = 'dashboard/payment/payment_list.html'
     filter_form_class = FilterPaymentsForm
 
+    def get_queryset(self, *args, **kwargs):
+        status = self.request.resolver_match.kwargs.get('status')
+        # TODO validate status
+        if status is not None:
+            queryset = super().get_queryset(*args, **kwargs)
+            queryset = queryset.filter(status=status)
+            return queryset
+        else:
+            return super().get_queryset(*args, **kwargs)
+
 
 class PaymentUpdateView(UpdateView):
     model = Payment
@@ -89,3 +100,12 @@ class PaymentUpdateView(UpdateView):
     fields = [
         'status',
     ]
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        order = Order.objects.filter(payment__pk=pk)\
+            .prefetch_related('orderitems')\
+            .first()
+        context_data.update({'order': order})
+        return context_data

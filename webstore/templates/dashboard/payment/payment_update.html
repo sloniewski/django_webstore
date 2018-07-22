@@ -12,6 +12,7 @@
                     <th>Item Name</th>
                     <th>Item Qty</th>
                     <th>Item Price</th>
+                    <th>Item Value</th>
                 </tr>
             </thead>
 
@@ -21,18 +22,43 @@
                     <td>{{ item.product.name }}</td>
                     <td>{{ item.quantity }}</td>
                     <td>{{ item.price }}</td>
+                    <td>{{ item.value }}</td>
                 </tr>
             {% endfor %}
+                <tr>
+                    <td>Delivery</td>
+                    <td>1</td>
+                    <td>n/a</td>
+                    <td>{{ order.delivery.cost }}</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td>n/a</td>
+                    <td>n/a</td>
+                    <td>{{ object.value }}</td>
+                </tr>
             <tbody>
         </table>
         </div>
     </div>
     <div class="card col s12 m6">
-        <p>Changing the payments status will trigger message for the client</p>
+        <p>Changing the payments status will trigger message for the client. {{ form.non_field_errors }}</p>
+
         <form action="" method="POST">
             {% csrf_token %}
-            {{form.as_p}}
+            <p><label for="{{ form.send_mail.id_for_label }}">
+                {{ form.send_mail.errors }}
+                {{ form.send_mail }}
+                <span >{{form.send_mail.label_tag }}</span>
+            </label></p>
+            <p><label for="{{ form.status.id_for_label }}">
+                <span >{{form.status.label_tag }}</span>
+                {{ form.status.errors }}
+                {{ form.status }}
+            </p></label>
             <input type="submit" value="submit" class="btn">
         </form>
+        <br>
+
     </div>
 {% endblock content %}

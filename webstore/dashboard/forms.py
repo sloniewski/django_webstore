@@ -1,5 +1,8 @@
 from django import forms
+from django.core.mail import send_mail
+
 from webstore.core.forms import FilterForm
+from webstore.payment.models import Payment
 
 
 class FilterPaymentsForm(FilterForm):
@@ -26,3 +29,34 @@ class FilterPaymentsForm(FilterForm):
         required=False,
         min_value=0,
     )
+
+
+class UpdatePaymentForm(forms.ModelForm):
+    send_mail = forms.BooleanField(
+        label='send mail to client',
+        widget=forms.CheckboxInput(
+            attrs={
+                'class': 'filled-in',
+                'checked': 'checked',
+            }
+        )
+    )
+
+    def save(self, commit=True):
+        object = super().save(commit)
+        send_mail_flag = self.cleaned_data.get('send_mail')
+        if send_mail_flag is True:
+            send_mail(
+                subject='Payment status for order: {}'.format(object.order.id),
+                message='Payment status was updated to: {}'.format(object.status),
+                from_email='placeholder@test.com',
+                recipient_list=[object.order.user.email],
+                fail_silently=False,
+            )
+        return object
+
+    class Meta:
+        model = Payment
+        fields = [
+            'status',
+        ]

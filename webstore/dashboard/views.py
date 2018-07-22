@@ -12,7 +12,10 @@ from webstore.product.models import Product, Price
 from webstore.payment.models import Payment
 from webstore.order.models import Order
 
-from .forms import FilterPaymentsForm
+from .forms import (
+    FilterPaymentsForm,
+    UpdatePaymentForm,
+)
 
 
 class DashboardWelcomeView(TemplateView):
@@ -97,15 +100,12 @@ class PaymentListView(FilterView):
 class PaymentUpdateView(UpdateView):
     model = Payment
     template_name = 'dashboard/payment/payment_update.html'
-    fields = [
-        'status',
-    ]
+    form_class = UpdatePaymentForm
+    success_url = '/dashboard/payment/list/ne'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         pk = self.kwargs.get(self.pk_url_kwarg)
-        order = Order.objects.filter(payment__pk=pk)\
-            .prefetch_related('orderitems')\
-            .first()
+        order = Order.objects.filter(payment__pk=pk).first()
         context_data.update({'order': order})
         return context_data

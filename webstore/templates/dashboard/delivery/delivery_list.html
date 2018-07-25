@@ -1,0 +1,24 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <!-- filter form -->
+    <div class="col s3">
+        <h4>Filter delivieres</h4>
+        <form action="" method="GET">
+            {{filter_form.as_p}}
+            <input type="submit" value="submit" class="btn">
+        </form>
+    </div>
+
+    <!-- delivieries list -->
+    <ul class="collection with-header col s9">
+        <li class="collection-header"><h4>Deliveries list</h4></li>
+
+        {%for object in object_list %}
+        <li class="collection-item">{{ object }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

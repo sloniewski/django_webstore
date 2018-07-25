@@ -1,14 +1,27 @@
+from enum import Enum
+
 from django.db import models
 
 from webstore.order.models import Order
 from webstore.cash.fields import CashField
+from webstore.core.mixins import TimeStampMixin
 from webstore.delivery.managers import (
     DeliveryPriceManager,
     DeliveryManager,
 )
 
 
-class Delivery(models.Model):
+class DeliveryStatus(Enum):
+    AWAITING_PAYMENT = 'awaiting payment'
+    READY_FOR_SHIPPING = 'ready for shipping'
+    SHIPPED = 'shipped'
+
+    @classmethod
+    def choices(cls):
+        return [(x.name, x.value) for x in cls]
+
+
+class Delivery(TimeStampMixin, models.Model):
     objects = DeliveryManager()
 
     name = models.CharField(max_length=64, null=True)
@@ -17,6 +30,11 @@ class Delivery(models.Model):
     street_number = models.CharField(max_length=16)
     flat_number = models.CharField(max_length=16, null=True)
     cost = CashField()
+    status = models.CharField(
+        max_length=32,
+        choices=DeliveryStatus.choices(),
+        default=DeliveryStatus.AWAITING_PAYMENT.name,
+    )
 
     order = models.OneToOneField(
         Order,
@@ -28,6 +46,9 @@ class Delivery(models.Model):
 
     def __repr__(self):
         return self.__str__()
+
+    class Meta:
+        ordering = ('created',)
 
 
 class DeliveryPricing(models.Model):

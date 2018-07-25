@@ -29,8 +29,12 @@ urlpatterns = [
     path('payment/update/<pk>', views.PaymentUpdateView.as_view(),
          name='payment-update'),
 
+    path('delivery/list/<status>', views.DeliveryListView.as_view(),
+         name='delivery-list'),
+
+
 
     path('', views.DashboardWelcomeView.as_view(),
-             name='dashboard-main'),
+        name='dashboard-main'),
 
 ]

@@ -10,9 +10,11 @@ from django.views.generic import (
 from webstore.core.views import FilterView
 from webstore.product.models import Product, Price
 from webstore.payment.models import Payment
+from webstore.delivery.models import Delivery
 from webstore.order.models import Order
 
 from .forms import (
+    FilterDelieriesForm,
     FilterPaymentsForm,
     UpdatePaymentForm,
 )
@@ -109,3 +111,19 @@ class PaymentUpdateView(UpdateView):
         order = Order.objects.filter(payment__pk=pk).first()
         context_data.update({'order': order})
         return context_data
+
+
+class DeliveryListView(FilterView):
+    model = Delivery
+    template_name = 'dashboard/delivery/delivery_list.html'
+    filter_form_class = FilterDelieriesForm
+
+    def get_queryset(self, *args, **kwargs):
+        status = self.request.resolver_match.kwargs.get('status').upper()
+        # TODO validate status
+        if status is not None:
+            queryset = super().get_queryset(*args, **kwargs)
+            queryset = queryset.filter(status=status)
+            return queryset
+        else:
+            return super().get_queryset(*args, **kwargs)

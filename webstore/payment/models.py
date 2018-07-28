@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.db import models
 from django.utils import timezone
 
@@ -6,10 +8,18 @@ from webstore.core.mixins import TimeStampMixin
 from webstore.order.models import Order
 
 
+class PaymentStatus(Enum):
+    OPEN = 'open'
+    DELAYED = 'delayed'
+    CLOSED = 'closed'
+
+    @classmethod
+    def choices(cls):
+        return [(x.name, x.value) for x in cls]
+
+
 class PaymentManager(models.Manager):
     def create_for_order(self, order, delivery=None):
-        print(order.value)
-        print(delivery.cost)
         value = order.value + delivery.cost
         payment = self.model(
             order=order,
@@ -41,13 +51,8 @@ class Payment(TimeStampMixin, models.Model):
 
     status = models.CharField(
         max_length=16,
-        choices=[
-            ('ne', 'new'),
-            ('op', 'open'),
-            ('cl', 'closed'),
-            ('dl', 'delayed'),
-        ],
-        default='ne',
+        choices=PaymentStatus.choices(),
+        default=PaymentStatus.OPEN.name,
     )
 
     value = CashField()

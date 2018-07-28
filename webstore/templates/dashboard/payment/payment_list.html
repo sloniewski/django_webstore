@@ -19,9 +19,9 @@
         {%for object in object_list %}
         <li class="collection-item">User: {{ object.user }}, Value: {{ object.value }}, Days outstainding: {{object.days_outstanding}}
 
-            <a href="{% url 'dashboard:payment-update' pk=object.id %}" class="secondary-content tooltipped"
-               data-position="left" data-tooltip="change status">
-                <i class="material-icons" >create</i>
+            <a href="{% url 'dashboard:payment-update' pk=object.id %}" class="secondary-content tooltipped btn-small"
+               data-position="left" data-tooltip="change status of this payment">
+                change status
             </a>
 
         </li>

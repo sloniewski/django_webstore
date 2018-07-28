@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Sum
@@ -33,12 +35,22 @@ class OrderItem(models.Model):
         ]
 
 
+class OrderStatus(Enum):
+    AWAITING_PAYMENT = 'awaiting payment'
+    PREPADING_SHIPMENT = 'preparing shipment'
+    CLOSED = 'closed'
+
+    @classmethod
+    def choices(cls):
+        return [(x.name, x.value) for x in cls]
+
+
 class OrderManager(models.Manager):
 
     def create_from_cart(self, cart, user):
         order = self.model.objects.create(
             user=user,
-            status=Order.CONFIRMED,
+            status=OrderStatus.AWAITING_PAYMENT.name,
         )
         for cart_item in cart.cartitem_set.all():
             # TODO should be single query - hit databese one time
@@ -52,23 +64,14 @@ class OrderManager(models.Manager):
 
 
 class Order(models.Model):
-    NEW = 'new'
-    CONFIRMED = 'confirmed'
-    PAID = 'paid'
-    SHIPPED = 'shipped'
-    ORDER_STATUS = (
-        (NEW, 'new'),
-        (CONFIRMED, 'confirmed'),
-        (PAID, 'paid'),
-        (SHIPPED, 'shipped'),
-    )
+
+    objects = OrderManager()
 
     status = models.CharField(
         max_length=32,
-        choices=ORDER_STATUS,
+        choices=OrderStatus.choices(),
+        default=OrderStatus.AWAITING_PAYMENT.name,
     )
-
-    objects = OrderManager()
 
     user = models.ForeignKey(
         User,

@@ -2,7 +2,9 @@ from django import forms
 from django.core.mail import send_mail
 
 from webstore.core.forms import FilterForm
-from webstore.payment.models import Payment
+from webstore.order.models import OrderStatus
+from webstore.payment.models import Payment, PaymentStatus
+from webstore.delivery.models import DeliveryStatus
 
 
 class FilterDelieriesForm(FilterForm):
@@ -60,6 +62,24 @@ class UpdatePaymentForm(forms.ModelForm):
 
     def save(self, commit=True):
         object = super().save(commit)
+        if object.status == PaymentStatus.CLOSED.name:
+            delivery = object.order.delivery
+            delivery.status = DeliveryStatus.READY_FOR_SHIPPING.name
+            delivery.save()
+
+            order = object.order
+            order.status = OrderStatus.PREPARING_SHIPMENT.name
+            order.save()
+
+        if object.status in [PaymentStatus.OPEN.name, PaymentStatus.DELAYED.name]:
+            delivery = object.order.delivery
+            delivery.status = DeliveryStatus.AWAITING_PAYMENT.name
+            delivery.save()
+
+            order = object.order
+            order.status = OrderStatus.AWAITING_PAYMENT.name
+            order.save()
+
         send_mail_flag = self.cleaned_data.get('send_mail')
         if send_mail_flag is True:
             send_mail(

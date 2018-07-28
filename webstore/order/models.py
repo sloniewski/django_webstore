@@ -37,7 +37,7 @@ class OrderItem(models.Model):
 
 class OrderStatus(Enum):
     AWAITING_PAYMENT = 'awaiting payment'
-    PREPADING_SHIPMENT = 'preparing shipment'
+    PREPARING_SHIPMENT = 'preparing shipment'
     CLOSED = 'closed'
 
     @classmethod

@@ -9,8 +9,8 @@ from django.views.generic import (
 
 from webstore.core.views import FilterView
 from webstore.product.models import Product, Price
-from webstore.payment.models import Payment
-from webstore.delivery.models import Delivery
+from webstore.payment.models import Payment, PaymentStatus
+from webstore.delivery.models import Delivery, DeliveryStatus
 from webstore.order.models import Order
 
 from .forms import (
@@ -89,8 +89,8 @@ class PaymentListView(FilterView):
     filter_form_class = FilterPaymentsForm
 
     def get_queryset(self, *args, **kwargs):
-        status = self.request.resolver_match.kwargs.get('status')
-        # TODO validate status
+        status = self.request.resolver_match.kwargs.get('status').upper()
+        status = PaymentStatus[status].name
         if status is not None:
             queryset = super().get_queryset(*args, **kwargs)
             queryset = queryset.filter(status=status)
@@ -103,7 +103,7 @@ class PaymentUpdateView(UpdateView):
     model = Payment
     template_name = 'dashboard/payment/payment_update.html'
     form_class = UpdatePaymentForm
-    success_url = '/dashboard/payment/list/ne'
+    success_url = '/dashboard/payment/list/open'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -120,7 +120,7 @@ class DeliveryListView(FilterView):
 
     def get_queryset(self, *args, **kwargs):
         status = self.request.resolver_match.kwargs.get('status').upper()
-        # TODO validate status
+        status = DeliveryStatus[status].name
         if status is not None:
             queryset = super().get_queryset(*args, **kwargs)
             queryset = queryset.filter(status=status)

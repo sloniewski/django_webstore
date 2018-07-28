@@ -39,6 +39,7 @@ class Delivery(TimeStampMixin, models.Model):
     order = models.OneToOneField(
         Order,
         on_delete=models.CASCADE,
+        related_name='delivery',
     )
 
     def __str__(self):

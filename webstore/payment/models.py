@@ -38,6 +38,7 @@ class Payment(TimeStampMixin, models.Model):
     order = models.OneToOneField(
         Order,
         on_delete=models.DO_NOTHING,
+        related_name='payment',
     )
     method = models.CharField(
         max_length=16,

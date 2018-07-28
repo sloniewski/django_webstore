@@ -38,9 +38,9 @@
           <i class="material-icons">monetization_on</i>Payments</div>
       <div class="collapsible-body">
           <div class="collection">
-              <a href="{% url 'dashboard:payment-list' status='ne' %}" class="collection-item">New</a>
-              <a href="{% url 'dashboard:payment-list' status='dl' %}" class="collection-item">Delayed</a>
-              <a href="{% url 'dashboard:payment-list' status='cl' %}" class="collection-item">Closed</a>
+              <a href="{% url 'dashboard:payment-list' status='open' %}" class="collection-item">New</a>
+              <a href="{% url 'dashboard:payment-list' status='delayed' %}" class="collection-item">Delayed</a>
+              <a href="{% url 'dashboard:payment-list' status='closed' %}" class="collection-item">Closed</a>
           </div>
       </div>
     </li>

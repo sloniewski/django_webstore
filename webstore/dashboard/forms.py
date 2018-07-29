@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from webstore.core.forms import FilterForm
 from webstore.order.models import OrderStatus
 from webstore.payment.models import Payment, PaymentStatus
-from webstore.delivery.models import DeliveryStatus
+from webstore.delivery.models import Delivery, DeliveryStatus
 
 
 class FilterDelieriesForm(FilterForm):
@@ -93,6 +93,15 @@ class UpdatePaymentForm(forms.ModelForm):
 
     class Meta:
         model = Payment
+        fields = [
+            'status',
+        ]
+
+
+class DeliveryUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = Delivery
         fields = [
             'status',
         ]

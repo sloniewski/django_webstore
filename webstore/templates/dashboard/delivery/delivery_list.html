@@ -17,7 +17,9 @@
         <li class="collection-header"><h4>Deliveries list</h4></li>
 
         {%for object in object_list %}
-        <li class="collection-item">{{ object }}</li>
+        <li class="collection-item">{{ object }}
+            <a href="{% url 'dashboard:delivery-update' pk=object.pk %}" class="btn-small">change status</a>
+        </li>
         {% endfor %}
     </ul>
 </div>

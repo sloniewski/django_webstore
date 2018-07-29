@@ -11,12 +11,13 @@ from webstore.core.views import FilterView
 from webstore.product.models import Product, Price
 from webstore.payment.models import Payment, PaymentStatus
 from webstore.delivery.models import Delivery, DeliveryStatus
-from webstore.order.models import Order
+from webstore.order.models import Order, OrderStatus
 
 from .forms import (
     FilterDelieriesForm,
     FilterPaymentsForm,
     UpdatePaymentForm,
+    DeliveryUpdateForm,
 )
 
 
@@ -127,3 +128,17 @@ class DeliveryListView(FilterView):
             return queryset
         else:
             return super().get_queryset(*args, **kwargs)
+
+
+class DeliveryUpdateView(UpdateView):
+    model = Delivery
+    template_name = 'generic_form.html'
+    form_class = DeliveryUpdateForm
+    success_url = '/dashboard/delivery/list/awating_payment'
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        order = Order.objects.filter(delivery__pk=pk).first()
+        context_data.update({'order': order})
+        return context_data

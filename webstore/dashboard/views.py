@@ -1,4 +1,5 @@
 from django.shortcuts import reverse, get_object_or_404
+from django.views import View
 from django.views.generic import (
     TemplateView,
     ListView,
@@ -16,6 +17,7 @@ from webstore.order.models import Order, OrderStatus
 from .forms import (
     FilterDelieriesForm,
     FilterPaymentsForm,
+    FilterOrdersForm,
     UpdatePaymentForm,
     DeliveryUpdateForm,
 )
@@ -142,3 +144,27 @@ class DeliveryUpdateView(UpdateView):
         order = Order.objects.filter(delivery__pk=pk).first()
         context_data.update({'order': order})
         return context_data
+
+
+class OrderListView(FilterView):
+    model = Order
+    template_name = 'dashboard/order/order_list.html'
+    filter_form_class = FilterOrdersForm
+
+    def get_queryset(self, *args, **kwargs):
+        status = self.request.resolver_match.kwargs.get('status').upper()
+        status = OrderStatus[status].name
+        if status is not None:
+            queryset = super().get_queryset(*args, **kwargs)
+            queryset = queryset.filter(status=status)
+            return queryset
+        else:
+            return super().get_queryset(*args, **kwargs)
+
+
+class OrderUpdateView(View):
+    pass
+
+
+class OrderDetailView(View):
+    pass

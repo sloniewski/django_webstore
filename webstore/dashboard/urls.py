@@ -23,6 +23,16 @@ urlpatterns = [
          name='product-create'),
 
 
+    path('order/<pk>', views.OrderDetailView.as_view(),
+         name='order-detail'),
+
+    path('order/list/<status>', views.OrderListView.as_view(),
+         name='order-list'),
+
+    path('order/update/<pk>', views.OrderUpdateView.as_view(),
+         name='order-update'),
+
+
     path('payment/list/<status>', views.PaymentListView.as_view(),
          name='payment-list'),
 

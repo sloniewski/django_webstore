@@ -1,0 +1,55 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="card col s12 m6">
+    <span class="card-title">Related order details</span>
+
+        <div class="card-content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Item Qty</th>
+                    <th>Item Price</th>
+                    <th>Item Value</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for item in order.items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.value }}</td>
+                </tr>
+            {% endfor %}
+                <tr>
+                    <td>Delivery</td>
+                    <td>1</td>
+                    <td>n/a</td>
+                    <td>{{ order.delivery.cost }}</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td>n/a</td>
+                    <td>n/a</td>
+                    <td>{{ object.value }}</td>
+                </tr>
+            <tbody>
+        </table>
+        </div>
+    </div>
+    <div class="card col s12 m6">
+        <p>Changing the delivery status will trigger message for the client. {{ form.non_field_errors }}</p>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="submit" class="btn">
+        </form>
+        <br>
+
+    </div>
+{% endblock content %}

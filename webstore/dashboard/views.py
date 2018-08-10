@@ -132,9 +132,9 @@ class DeliveryListView(FilterView):
 
 class DeliveryUpdateView(UpdateView):
     model = Delivery
-    template_name = 'generic_form.html'
+    template_name = 'dashboard/delivery/delivery_update.html'
     form_class = DeliveryUpdateForm
-    success_url = '/dashboard/delivery/list/awating_payment'
+    success_url = '/dashboard/delivery/list/shipped'
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)

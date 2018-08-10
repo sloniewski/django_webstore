@@ -18,7 +18,7 @@ class DeliveryStatus(Enum):
 
     @classmethod
     def choices(cls):
-        return [(x.name, x.value) for x in cls]
+        return [(x.name, x.value) for x in cls if x.name != 'AWAITING_PAYMENT']
 
 
 class Delivery(TimeStampMixin, models.Model):

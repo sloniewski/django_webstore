@@ -18,7 +18,9 @@
 
         {%for object in object_list %}
         <li class="collection-item">{{ object }}
-            <a href="{% url 'dashboard:delivery-update' pk=object.pk %}" class="btn-small">change status</a>
+            {% if object.status != 'AWAITING_PAYMENT' %}
+                <a href="{% url 'dashboard:delivery-update' pk=object.pk %}" class="btn-small">change status</a>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>

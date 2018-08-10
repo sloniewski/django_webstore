@@ -52,6 +52,7 @@ class FilterPaymentsForm(FilterForm):
 class UpdatePaymentForm(forms.ModelForm):
     send_mail = forms.BooleanField(
         label='send mail to client',
+        required=False,
         widget=forms.CheckboxInput(
             attrs={
                 'class': 'filled-in',
@@ -68,7 +69,7 @@ class UpdatePaymentForm(forms.ModelForm):
             delivery.save()
 
             order = object.order
-            order.status = OrderStatus.PREPARING_SHIPMENT.name
+            order.status = OrderStatus.SHIPPING.name
             order.save()
 
         if object.status in [PaymentStatus.OPEN.name, PaymentStatus.DELAYED.name]:
@@ -99,6 +100,20 @@ class UpdatePaymentForm(forms.ModelForm):
 
 
 class DeliveryUpdateForm(forms.ModelForm):
+
+    status = forms.ChoiceField(
+        choices=DeliveryStatus.choices(),
+    )
+
+    def save(self, commit=True):
+        object = super().save(commit)
+
+        if object.status == DeliveryStatus.SHIPPED.name:
+            order = object.order
+            order.status = OrderStatus.CLOSED.name
+            order.save()
+
+        return object
 
     class Meta:
         model = Delivery

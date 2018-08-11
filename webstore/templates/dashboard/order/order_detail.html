@@ -1,0 +1,14 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <!-- payment list -->
+    <ul class="collection with-header col s12">
+        <li class="collection-header"><h4>Order details</h4></li>
+        {% for item in object.items %}
+        <li class="collection-item">{{item.product.name}}, {{item.quantity}} pcs, {{item.value}} </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock content %}

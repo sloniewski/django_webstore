@@ -6,13 +6,14 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
     CreateView,
+    DetailView,
 )
 
 from webstore.core.views import FilterView
 from webstore.product.models import Product, Price
 from webstore.payment.models import Payment, PaymentStatus
 from webstore.delivery.models import Delivery, DeliveryStatus
-from webstore.order.models import Order, OrderStatus
+from webstore.order.models import Order, OrderItem, OrderStatus
 
 from .forms import (
     FilterDelieriesForm,
@@ -166,5 +167,16 @@ class OrderUpdateView(View):
     pass
 
 
-class OrderDetailView(View):
-    pass
+class OrderDetailView(DetailView):
+    model = Order
+    template_name = 'dashboard/order/order_detail.html'
+
+
+class OrderItemUpdateView(UpdateView):
+    model = OrderItem
+    template_name = 'dashboard/order/order_item_update.html'
+
+
+class OrderItemDeleteView(UpdateView):
+    model = OrderItem
+    template_name = 'dashboard/order/order_item_delete.html'

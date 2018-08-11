@@ -14,13 +14,13 @@
 
     <!-- payment list -->
     <ul class="collection with-header col s9">
-        <li class="collection-header"><h4>Order list</h4></li>
-
+        <li class="collection-header"><h4>Order list, status: {{ object_list.0.get_status_display }} </h4></li>
         {%for object in object_list %}
-        <li class="collection-item">
-            {{object}} status: {{object.get_status_display}}
-        </li>
+        <a href="{% url 'dashboard:order-detail' pk=object.pk %}" class="collection-item">
+            {{object}}
+        </a>
         {% endfor %}
     </ul>
+
 </div>
 {% endblock content %}

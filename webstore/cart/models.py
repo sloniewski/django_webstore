@@ -41,9 +41,18 @@ class CartItem(models.Model):
     )
     quantity = models.PositiveIntegerField()
 
+    class Meta:
+        unique_together = [
+            ('cart', 'product')
+        ]
+
     @property
     def price(self):
         return self.product.price
+
+    @property
+    def weight(self):
+        return self.quantity * self.product.weight
 
     def add_qty(self, qty):
         self.quantity += qty
@@ -64,11 +73,6 @@ class CartItem(models.Model):
         """
         # Order of multiplication is important, to call __mul__ of Cash class
         return self.product.price * self.quantity
-
-    class Meta:
-        unique_together = [
-            ('cart', 'product')
-        ]
 
 
 class Cart(models.Model):
@@ -138,6 +142,12 @@ class Cart(models.Model):
         return value
 
     @property
+    def items(self):
+        return self.cartitem_set.all().select_related('product')
+
+    @property
     def weight(self):
-        # TODO implement cart weight property
-        return 1
+        weight = 0
+        for item in self.items:
+            weight += (item.product.weight * item.quantity)
+        return weight

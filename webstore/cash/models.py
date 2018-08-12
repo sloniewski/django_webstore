@@ -1,9 +1,9 @@
-from decimal import Decimal
+from decimal import Decimal, getcontext
 from django.db.models import Transform
 from django.db.models.fields import Field
 from django.conf import settings
 
-
+getcontext().prec = 2
 class Cash(Decimal):
     """
     Intended as a representation as any amount of monetary value
@@ -25,10 +25,11 @@ class Cash(Decimal):
         Implements multiplications for Cash class, multiplication is limited only to integers.
         Multiplying Cash, as it is used to represent price, by something else does not make sense.
         """
-
-        if not isinstance(other, (int,)):
-            raise ValueError('operation might be performed only with other Integer instance')
-        return Cash(super().__mul__(other))
+        if isinstance(other, (int, Decimal)):
+            return Cash(super().__mul__(other))
+            # raise ValueError('operation might be performed only with other Integer instance')
+        elif isinstance(other, (float, str)):
+            return Cash(super().__mul__(Decimal(other)))
 
     def __repr__(self):
         """Represents the number as an instance of Cash."""

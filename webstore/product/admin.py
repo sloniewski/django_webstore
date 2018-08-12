@@ -4,10 +4,6 @@ from django.utils.safestring import mark_safe
 from . import models
 
 
-def price(product):
-    return product.price
-
-
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
 
@@ -24,7 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
         'name',
         'category',
         'stock',
-        price,
+        'price',
     )
 
 

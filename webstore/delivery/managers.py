@@ -11,6 +11,7 @@ class DeliveryPriceManager(models.Manager):
         prices = self.get_queryset().all()
         weight = cart.weight
         return [
-            (str(x.cost_per_kg*weight).split(' ')[0], str(x.cost_per_kg*weight))
+            (str(x.cost_per_kg*weight).split(' ')[0],
+             x.name + ': ' + str(x.cost_per_kg*weight))
             for x in prices
         ]

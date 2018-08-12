@@ -19,7 +19,7 @@ DATABASES = {
         'NAME': 'webshop',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
-        'PASSWORD': 'coderslab',
+        'PASSWORD': 'kalafior01',
         'OPTIONS': {
             'autocommit': True,
         },

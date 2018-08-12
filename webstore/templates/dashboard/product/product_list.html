@@ -6,21 +6,17 @@
         <li class="collection-header lime lighten-3"><h4>Products List</h4></li>
         {% for object in object_list %}
         <li class="collection-item">
-            <span class="title">{{ object.name }}</span>
-                Actual price: {{ object.price }}
+            <span class="title">{{ object.name }}</span>,
+                    Actual price: {{ object.price }}
             <div class="secondary-content">
-                <a href="{% url 'dashboard:product-update' pk=object.id %}" class="tooltipped"
-                   data-position="left" data-tooltip="edit">
-                    <i class="material-icons" >create</i>
-                </a>
-                <a href="{% url 'dashboard:product-delete' pk=object.id %}" class="tooltipped"
-                   data-position="left" data-tooltip="delete">
-                    <i class="material-icons">delete</i>
-                </a>
-
-                <a href="{% url 'dashboard:product-price-list' pk=object.id %}" class="tooltipped"
-                   data-position="left" data-tooltip="prices">
-                    <i class="material-icons">monetization_on</i>
+                <a href="{% url 'dashboard:product-update' pk=object.id %}">
+                    EDIT
+                </a>|
+                <a href="{% url 'dashboard:product-delete' pk=object.id %}">
+                    DELETE
+                </a>|
+                <a href="{% url 'dashboard:product-price-list' pk=object.id %}">
+                    PRICING
                 </a>
             </div>
         </li>

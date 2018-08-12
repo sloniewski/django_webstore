@@ -1,0 +1,24 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col m12 l8">
+      <div class="card-panel">
+        <span>
+            Product: {{ object.product.name }}<br>
+            Order: {{ object.order.id }}<br>
+            Quantity: {{ object.quantity }}<br>
+            Price: {{ object.price }} <br>
+            Value: {{ object.value }}
+        </span>
+      </div>
+    </div>
+    <div class="col m12 l8">
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" name="submit" value="update" class='btn'>
+        </form>
+    </div>
+</div>
+{% endblock content %}

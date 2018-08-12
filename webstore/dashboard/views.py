@@ -175,8 +175,18 @@ class OrderDetailView(DetailView):
 class OrderItemUpdateView(UpdateView):
     model = OrderItem
     template_name = 'dashboard/order/order_item_update.html'
+    fields = [
+        'quantity',
+        'price',
+    ]
+
+    def get_success_url(self):
+        return reverse('dashboard:order-detail', kwargs={'pk': self.object.order.id})
 
 
-class OrderItemDeleteView(UpdateView):
+class OrderItemDeleteView(DeleteView):
     model = OrderItem
     template_name = 'dashboard/order/order_item_delete.html'
+
+    def get_success_url(self):
+        return reverse('dashboard:order-detail', kwargs={'pk': self.object.order.id})

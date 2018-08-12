@@ -56,6 +56,6 @@ urlpatterns = [
 
     # general
     path('', views.DashboardWelcomeView.as_view(),
-        name='dashboard-main'),
+         name='dashboard-main'),
 
 ]

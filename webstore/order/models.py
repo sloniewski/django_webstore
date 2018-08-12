@@ -34,6 +34,13 @@ class OrderItem(models.Model):
             ('order', 'product')
         ]
 
+    def __str__(self):
+        return 'product: {}, qty: {}, price: {};'.format(
+            self.product.name,
+            self.quantity,
+            self.price,
+        )
+
 
 class OrderStatus(Enum):
     AWAITING_PAYMENT = 'awaiting payment'

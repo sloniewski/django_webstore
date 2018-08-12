@@ -5,7 +5,7 @@ from . import models
 
 
 def price(product):
-    return product.get_price
+    return product.price
 
 
 @admin.register(models.Product)

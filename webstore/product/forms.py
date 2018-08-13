@@ -1,6 +1,7 @@
 from django import forms
 
 from webstore.core.forms import FilterForm
+from webstore.core.widgets import MaterializeSelectMultiple
 from .models import Category
 
 
@@ -11,5 +12,7 @@ class FilterProductsForm(FilterForm):
     categories = forms.MultipleChoiceField(
         choices=Category.objects.form_choices,
         required=False,
-        widget=forms.SelectMultiple(attrs={'class': 'browser-default'}),
+        widget=MaterializeSelectMultiple(
+            attrs={'class': 'browser-default'}
+        ),
     )

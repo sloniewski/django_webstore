@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'webstore.delivery',
     'webstore.payment',
     'django.contrib.admindocs',
+    'django.forms',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +51,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

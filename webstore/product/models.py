@@ -6,6 +6,7 @@ from django.utils.text import slugify
 from django.utils import timezone
 
 from webstore.cash import fields
+from .managers import CategoryManager
 from . import utils
 
 
@@ -51,6 +52,8 @@ class Gallery(models.Model):
 
 
 class Category(models.Model):
+    objects = CategoryManager()
+
     name = models.CharField(
         max_length=32,
     )
@@ -63,9 +66,12 @@ class Category(models.Model):
     def __str__(self):
         return '{}'.format(self.name)
 
+    def __repr__(self):
+        return 'id: {}, {}'.format(self.pk, self.name)
+
     @property
     def form_choice(self):
-        return self.name, self.name
+        return self.pk, self.name
 
 
 class Product(models.Model):
@@ -96,10 +102,8 @@ class Product(models.Model):
 
     stock = models.PositiveIntegerField(default=0)
 
-    category = models.ForeignKey(
+    categories = models.ManyToManyField(
         Category,
-        on_delete=models.DO_NOTHING,
-        null=True,
     )
 
     created = models.DateTimeField(

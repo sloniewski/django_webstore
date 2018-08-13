@@ -164,7 +164,7 @@ class OrderListView(FilterView):
 
 
 class OrderUpdateView(View):
-    pass
+    template_name = 'dashboard/order/order_update.html'
 
 
 class OrderDetailView(DetailView):

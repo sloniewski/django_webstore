@@ -1,5 +1,4 @@
 from django.views.generic import ListView
-from django.contrib import messages
 
 
 class FilterView(ListView):

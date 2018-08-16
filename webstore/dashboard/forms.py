@@ -2,13 +2,14 @@ from django import forms
 from django.core.mail import send_mail
 
 from webstore.core.forms import FilterForm
+from webstore.core.widgets import MaterializeCheckboxInput
 from webstore.order.models import OrderStatus
 from webstore.payment.models import Payment, PaymentStatus
 from webstore.delivery.models import Delivery, DeliveryStatus
 
 
 class FilterDelieriesForm(FilterForm):
-    #TODO add relevant filters
+    # TODO add relevant filters
     filter_field_list = [
         ('created', 'lt', 'date_to'),
         ('created', 'gt', 'date_from'),
@@ -25,7 +26,7 @@ class FilterDelieriesForm(FilterForm):
 
 
 class FilterOrdersForm(FilterForm):
-    #TODO add relevant filters
+    # TODO add relevant filters
     filter_field_list = [
         ('created', 'lt', 'date_to'),
         ('created', 'gt', 'date_from'),
@@ -71,7 +72,7 @@ class UpdatePaymentForm(forms.ModelForm):
     send_mail = forms.BooleanField(
         label='send mail to client',
         required=False,
-        widget=forms.CheckboxInput(
+        widget=MaterializeCheckboxInput(
             attrs={
                 'class': 'filled-in',
                 'checked': 'checked',

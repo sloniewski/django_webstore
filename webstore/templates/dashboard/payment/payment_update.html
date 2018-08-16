@@ -46,16 +46,7 @@
 
         <form action="" method="POST">
             {% csrf_token %}
-            <p><label for="{{ form.send_mail.id_for_label }}">
-                {{ form.send_mail.errors }}
-                {{ form.send_mail }}
-                <span >{{form.send_mail.label_tag }}</span>
-            </label></p>
-            <p><label for="{{ form.status.id_for_label }}">
-                <span >{{form.status.label_tag }}</span>
-                {{ form.status.errors }}
-                {{ form.status }}
-            </p></label>
+            {{ form.as_p }}
             <input type="submit" value="submit" class="btn">
         </form>
         <br>

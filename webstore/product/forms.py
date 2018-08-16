@@ -12,7 +12,5 @@ class FilterProductsForm(FilterForm):
     categories = forms.MultipleChoiceField(
         choices=Category.objects.form_choices,
         required=False,
-        widget=MaterializeSelectMultiple(
-            attrs={'class': 'browser-default'}
-        ),
+        widget=MaterializeSelectMultiple(),
     )

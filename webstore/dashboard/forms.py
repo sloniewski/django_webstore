@@ -6,6 +6,23 @@ from webstore.core.widgets import MaterializeCheckboxInput
 from webstore.order.models import OrderStatus
 from webstore.payment.models import Payment, PaymentStatus
 from webstore.delivery.models import Delivery, DeliveryStatus
+from webstore.product.models import Product
+
+
+class AddProductForm(forms.ModelForm):
+    active = forms.BooleanField(
+        widget=MaterializeCheckboxInput(),
+    )
+
+    class Meta:
+        model = Product
+        fields = [
+            'name',
+            'active',
+            'slug',
+            'description',
+            'weight',
+        ]
 
 
 class FilterDelieriesForm(FilterForm):

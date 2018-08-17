@@ -16,6 +16,7 @@ from webstore.delivery.models import Delivery, DeliveryStatus
 from webstore.order.models import Order, OrderItem, OrderStatus
 
 from .forms import (
+    AddProductForm,
     FilterDelieriesForm,
     FilterPaymentsForm,
     FilterOrdersForm,
@@ -34,15 +35,8 @@ class DashboardWelcomeView(TemplateView):
 
 
 class ProductCreateView(CreateView):
-    model = Product
     template_name = 'dashboard/product/product_create.html'
-    fields = [
-        'name',
-        'active',
-        'slug',
-        'description',
-        'weight',
-    ]
+    form_class = AddProductForm
 
     def get_success_url(self):
         return reverse('dashboard:product-list')

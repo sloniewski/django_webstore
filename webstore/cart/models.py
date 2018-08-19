@@ -72,7 +72,10 @@ class CartItem(models.Model):
         Returns value of order-line.
         """
         # Order of multiplication is important, to call __mul__ of Cash class
-        return self.product.price * self.quantity
+        price = self.product.price
+        if price:
+            return price * self.quantity
+        return 0
 
 
 class Cart(models.Model):

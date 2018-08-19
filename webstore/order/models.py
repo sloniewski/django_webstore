@@ -3,12 +3,11 @@ from enum import Enum
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Sum
-from django.db.models.signals import pre_save
+from django.shortcuts import reverse
 
 from webstore.product.models import Product
 from webstore.cash.fields import CashField
 from webstore.cash.models import Cash
-from webstore.core.utils import random_string, unique_id_generator
 
 
 User = get_user_model()
@@ -108,6 +107,9 @@ class Order(models.Model):
     def __repr__(self):
         return self.__str__()
 
+    def get_absolute_url(self):
+        return reverse('order:order-detail', kwargs={'uuid': self.uuid})
+
     @property
     def items(self):
         return self.orderitems.all().select_related('product')
@@ -140,11 +142,3 @@ class Order(models.Model):
     def volume(self):
         volumes = [x.volume for x in self.orderitem_set.all()]
         return sum(volumes)
-
-
-def pre_save_create_order_id(sender, instance, *args, **kwargs):
-    if not instance.uuid:
-        instance.uuid = unique_id_generator(instance, random_string)
-
-
-pre_save.connect(pre_save_create_order_id, sender=Order)

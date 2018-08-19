@@ -9,13 +9,13 @@ urlpatterns = [
     path('list/', views.OrderListView.as_view(),
          name='order-list'),
 
-    path('detail/<int:pk>', views.OrderDetailView.as_view(),
+    path('detail/<uuid>', views.OrderDetailView.as_view(),
          name='order-detail'),
 
     path('confirm/', views.OrderConfirmView.as_view(),
          name='order-confirm'),
 
-    path('summary/<int:pk>', views.OrderSummary.as_view(),
+    path('summary/<uuid>', views.OrderSummary.as_view(),
          name='order-summary'),
 
 ]

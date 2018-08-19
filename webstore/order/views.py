@@ -13,6 +13,14 @@ from .models import Order, OrderItem
 class OrderDetailView(DetailView):
     model = Order
     template_name = 'order/order_detail.html'
+    pk_url_kwarg = 'uuid'
+    http_method_names = ['get', 'head', 'options']
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            klass=self.model,
+            uuid=self.kwargs.get(self.pk_url_kwarg)
+        )
 
 
 class OrderConfirmView(LoginRequiredMixin, FormView):
@@ -42,12 +50,13 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         delivery.order = order
         delivery.save()
         self.get_cart().delete()
-        # TODO sent mail
+
         Payment.objects.create_for_order(
             order=order,
             delivery=delivery,
         )
-        return redirect('order:order-summary', pk=order.pk)
+
+        return redirect('order:order-summary', uuid=order.uuid)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -67,10 +76,11 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
 class OrderSummary(ListView):
     template_name = 'order/order_summary.html'
     model = OrderItem
+    pk_url_kwarg = 'uuid'
 
     def get(self, request, *args, **kwargs):
-        order_id = request.resolver_match.kwargs['pk']
-        self.order = get_object_or_404(Order, pk=order_id)
+        order_id = request.resolver_match.kwargs[self.pk_url_kwarg]
+        self.order = get_object_or_404(Order, uuid=order_id)
         if request.user != self.order.user:
             raise Http404
         return super().get(request, *args, **kwargs)

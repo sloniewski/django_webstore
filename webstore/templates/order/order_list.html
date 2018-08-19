@@ -5,7 +5,7 @@
   <div class="collection with-header">
     <div class="collection-header"><h4>Your orders</h4></div>
   {% for object in object_list %}
-    <a class="collection-item" href="{% url 'order:order-detail' pk=object.pk %}">
+    <a class="collection-item" href="{% url 'order:order-detail' uuid=object.uuid %}">
       Items: {{ object.item_count }}, Value {{ object.value }},
       Created: {{ object.created }}, Status: {{ object.get_status_display }}
     </a>

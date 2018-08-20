@@ -6,7 +6,7 @@ from django.utils.text import slugify
 from django.utils import timezone
 
 from webstore.cash import fields
-from .managers import CategoryManager
+from .managers import CategoryManager, ProductManager
 from . import utils
 
 
@@ -79,6 +79,8 @@ class Product(models.Model):
     Represents product resource, stores basic information.
     Prices, Pictures and Categories are m2m relations to Product.
     """
+
+    objects = ProductManager()
 
     name = models.CharField(
         max_length=32,

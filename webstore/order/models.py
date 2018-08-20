@@ -47,6 +47,7 @@ class OrderStatus(Enum):
     AWAITING_PAYMENT = 'awaiting payment'
     SHIPPING = 'shipping'
     CLOSED = 'closed'
+    CANCELLED = 'cancelled'
 
     @classmethod
     def choices(cls):

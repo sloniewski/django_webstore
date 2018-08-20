@@ -40,15 +40,15 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
 
     def form_valid(self, form):
         # TODO bug - you can create an order with no items
-        delivery = form.save(commit=False)
         order = Order.objects.create_from_cart(
             cart=self.get_cart(),
             user=self.request.user
             )
         # create from cart sets status for order
-
+        delivery = form.save(commit=False)
         delivery.order = order
         delivery.save()
+
         self.get_cart().delete()
 
         Payment.objects.create_for_order(

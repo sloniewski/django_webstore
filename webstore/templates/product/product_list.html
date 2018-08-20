@@ -12,7 +12,6 @@
 
     <div class="col s3">
         <form action="" method="get">
-            {% csrf_token %}
             {{ filter_form.as_p }}
             <input type="submit" value="filter" class="btn">
         </form>

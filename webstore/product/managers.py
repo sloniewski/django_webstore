@@ -11,7 +11,7 @@ from django.utils import timezone
 class ProductQuerySet(models.QuerySet):
 
     def with_prices(self):
-        # TODO circular import workaround needed
+        # TODO circular import workaround
         from .models import Price
         prices = Price.objects\
             .filter(product=OuterRef('pk'), valid_from__lte=timezone.now())\

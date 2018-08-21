@@ -17,6 +17,10 @@ class PaymentStatus(Enum):
     def choices(cls):
         return [(x.name, x.value) for x in cls]
 
+    @classmethod
+    def active(cls):
+        return [x.name for x in cls if x.name != 'CLOSED']
+
 
 class PaymentManager(models.Manager):
     def create_for_order(self, order, delivery=None):

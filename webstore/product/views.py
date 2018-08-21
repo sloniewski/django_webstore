@@ -14,3 +14,4 @@ class ProductListView(FilterView):
     model = Product
     template_name = 'product/product_list.html'
     filter_form_class = FilterProductsForm
+    queryset = Product.objects.with_prices()

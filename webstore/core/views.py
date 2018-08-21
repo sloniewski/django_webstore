@@ -20,7 +20,7 @@ class FilterView(ListView):
         return context
 
     def get_queryset(self):
-        queryset = self.model.objects.all()
+        queryset = super().get_queryset()
         filter_form = self.filter_form_class(self.request.GET)
         if filter_form.is_valid():
             filters = filter_form.get_filters()

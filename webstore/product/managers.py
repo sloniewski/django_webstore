@@ -1,10 +1,27 @@
 from django.db import models
+from django.db.models import OuterRef, Subquery
+from django.utils import timezone
+
+
+# from django.apps import apps
+# Price = apps.get_model('webstore.product', 'Price')
+# raises django.core.exceptions.AppRegistryNotReady: Models aren't loaded yet.
 
 
 class ProductQuerySet(models.QuerySet):
 
     def with_prices(self):
-        pass
+        # TODO circular import workaround needed
+        from .models import Price
+        prices = Price.objects\
+            .filter(product=OuterRef('pk'), valid_from__lte=timezone.now())\
+            .order_by('-valid_from')
+        products = self.annotate(
+            actual_price=Subquery(
+                queryset=prices.values('value')[:1],
+                output_field=models.FloatField(),
+            ))
+        return products
 
 
 class ProductManager(models.Manager):
@@ -13,14 +30,7 @@ class ProductManager(models.Manager):
         return ProductQuerySet(self.model, using=self.db)
 
     def with_prices(self):
-        return self.raw(
-            'SELECT *,'
-                '(SELECT value FROM product_price '
-                'where product_price.valid_from <= now() '
-                'and  product_price.product_id = product_product.id '
-                'order by product_price.valid_from desc limit 1) as this_price '
-            'from product_product;'
-        )
+        return self.get_queryset().with_prices()
 
 
 class CategoryManager(models.Manager):

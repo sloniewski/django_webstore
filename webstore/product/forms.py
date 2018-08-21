@@ -12,6 +12,8 @@ class FilterProductsForm(FilterForm):
         ('categories', 'id__in', 'categories'),
         ('weight', 'gte', 'weight_min'),
         ('weight', 'lte', 'weight_max'),
+        ('actual_price', 'gte', 'price_min'),
+        ('actual_price', 'lte', 'price_max'),
     ]
 
     name = forms.CharField(
@@ -30,5 +32,11 @@ class FilterProductsForm(FilterForm):
         required=False,
     )
     weight_max = forms.FloatField(
+        required=False,
+    )
+    price_min = forms.FloatField(
+        required=False,
+    )
+    price_max = forms.FloatField(
         required=False,
     )

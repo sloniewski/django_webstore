@@ -96,7 +96,7 @@ class CartAddItem(FormView):
                 'item': item,
                 'qty': qty,
             },
-            'cart_items': cart.get_item_count(),
+            'cart_items': cart.item_count,
         })
         return HttpResponse(data)
 

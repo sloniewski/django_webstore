@@ -164,12 +164,20 @@ class Product(models.Model):
 
     @property
     def gallery(self):
-        return Gallery.objects.filter(product_id=self.id)
+        return Gallery.objects\
+            .select_related('picture')\
+            .filter(product_id=self.id)
 
     @property
-    def image_url(self):
-        image = Gallery.objects.filter(product_id=self.id).first()
-        return image.picture.data.url
+    def image(self):
+        image = Gallery.objects\
+            .filter(product_id=self.id)\
+            .select_related('picture')\
+            .order_by('number')\
+            .first()
+        if image:
+            return image.picture.data.url
+        return None
 
 
 class Price(models.Model):

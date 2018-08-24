@@ -9,7 +9,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     def product_image_tag(self, obj):
         return mark_safe('<img src="/{}" />'.format(
-            obj.image_url
+            obj.image
         ))
 
     product_image_tag.short_description = 'Image'

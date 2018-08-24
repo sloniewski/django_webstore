@@ -6,18 +6,27 @@
 {% endblock title %}
 
 {% block body %}
-    <img src="/{{ object.image }}" alt="">
+    {% if object.image %}
+        <img src="/{{ object.image }}">
+    {% else %}
+        <img src={% static 'images/default.png' %}>
+    {% endif %}
     <div class="product-card">
         <h2>{{ object.name }}</h2>
         <div class="product-description">{{ object.description }}</div>
-        <div class="product-price">{{ object.get_price }}</div>
-        <form id="add-item-form" action="{% url 'cart:add-item' %}">
+        <div class="product-price">{{ object.price }}</div>
+        <p>
+        {% for image in product.gallery %}
+            <img src="/{{ image.picture.data.url }}" alt="" width="100">
+        {% endfor %}
+        </p>
+        <form id="add-item-form" action="{% url 'cart:add-item' %}" method="GET">
             {% csrf_token %}
             <input id="product-id" type="hidden" value="{{ object.id }}">
             <label>qty.
                 <input type="number" id="item-quantity">
             </label>
-            <input type="submit" id="add-to-cart">
+            <input type="submit" id="add-to-cart" class="btn">
         </form>
     </div>
 {% endblock body %}

@@ -1,7 +1,11 @@
 {% load static %}
 <div class="card">
     <div class="card-image">
-        <img src={% static 'images/default.png' %}>
+        {% if object.image %}
+            <img src="/{{ object.image }}">
+        {% else %}
+            <img src={% static 'images/default.png' %}>
+        {% endif %}
         <span class="card-title">{{object.name}}</span>
         <a href="{% url 'cart:quick-add-item' object.id %}"
            class="btn-floating halfway-fab waves-effect waves-light red quick-add-item">

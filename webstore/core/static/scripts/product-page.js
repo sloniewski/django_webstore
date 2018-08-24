@@ -2,7 +2,7 @@ $( document ).ready( function(){
 
 	$('#add-item-form').on('submit', function(event) {
 		event.preventDefault();
-		$('#cart-item-count').text(function(event){
+		$('#cart_item_count').text(function(event){
 			var form_action_url = $('#add-item-form').attr('action');
 			var item_num = $('#product-id').val();
 			var item_qty = $('#item-quantity').val();

@@ -69,8 +69,8 @@ class ProductPriceListView(ListView):
     template_name = 'dashboard/product/product_price_list.html'
 
     def get_queryset(self):
-        pk = self.request.resolver_match.kwargs['pk']
-        product = get_object_or_404(Product, pk=pk)
+        number = self.request.resolver_match.kwargs['number']
+        product = get_object_or_404(Product, number=number)
         self.update_context({'product': product})
         return Price.objects.filter(product=product)
 

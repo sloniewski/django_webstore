@@ -11,13 +11,13 @@ urlpatterns = [
     path('product/list', views.ProductListView.as_view(),
          name='product-list'),
 
-    path('product/update/<int:pk>', views.ProductUpdateView.as_view(),
+    path('product/update/<slug>', views.ProductUpdateView.as_view(),
          name='product-update'),
 
-    path('product/delete/<int:pk>', views.ProductDeleteView.as_view(),
+    path('product/delete/<slug>', views.ProductDeleteView.as_view(),
          name='product-delete'),
 
-    path('product/price-list/<int:pk>', views.ProductPriceListView.as_view(),
+    path('product/price-list/<int:number>', views.ProductPriceListView.as_view(),
          name='product-price-list'),
 
     path('product/create', views.ProductCreateView.as_view(),
@@ -30,7 +30,7 @@ urlpatterns = [
     path('order/list/<status>', views.OrderListView.as_view(),
          name='order-list'),
 
-    path('order/update/<pk>', views.OrderUpdateView.as_view(),
+    path('order/update/<uuid>', views.OrderUpdateView.as_view(),
          name='order-update'),
 
     # OrderItem

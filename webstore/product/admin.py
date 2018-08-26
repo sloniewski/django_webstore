@@ -6,6 +6,7 @@ from . import models
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
+    exclude = ('number', 'slug')
 
     def product_image_tag(self, obj):
         return mark_safe('<img src="/{}" />'.format(
@@ -18,6 +19,7 @@ class ProductAdmin(admin.ModelAdmin):
     )
     list_display = (
         'name',
+        'number',
         'stock',
         'price',
     )

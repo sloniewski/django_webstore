@@ -2,12 +2,10 @@ from datetime import date
 
 from django.db import models
 from django.shortcuts import reverse
-from django.utils.text import slugify
 from django.utils import timezone
 
 from webstore.cash import fields
 from .managers import CategoryManager, ProductManager
-from . import utils
 
 
 class Picture(models.Model):
@@ -98,7 +96,10 @@ class Product(models.Model):
     slug = models.SlugField(
         max_length=64,
         unique=True,
+        null=True,
     )
+
+    number = models.PositiveIntegerField(null=True)
 
     description = models.TextField(default='description not available')
 
@@ -134,15 +135,6 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        if not all([self.slug, self.pk]):
-            slug = slugify(self.name)
-            if not Product.objects.filter(slug=slug).exists():
-                self.slug = slug
-            else:
-                self.slug = slugify(self.name+' '+utils.random_string(4))
-        super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('product:product-detail', kwargs={'slug': self.slug})

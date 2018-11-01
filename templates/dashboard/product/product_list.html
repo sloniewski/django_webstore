@@ -2,26 +2,54 @@
 {% load static %}
 
 {% block content %}
-    <ul class="collection with-header">
-        <li class="collection-header lime lighten-3"><h4>Products List</h4></li>
-        {% for object in object_list %}
-        <li class="collection-item">
-            <span class="title">{{ object.name }}</span>,
-                    Actual price: {{ object.price }}
-            <div class="secondary-content">
-                <a href="{% url 'product_panel:product-update' slug=object.slug %}">
-                    EDIT
-                </a>|
-                <a href="{% url 'product_panel:product-delete' slug=object.slug %}">
-                    DELETE
-                </a>|
-                <a href="{% url 'product_panel:product-price-list' number=object.number %}">
-                    PRICING
-                </a>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
+<div class="row">
+    <div class="col s12">
+        <ul class="collapsible">
+            <li>
+                <div class="collapsible-header"><i class="material-icons">keyboard_arrow_down</i>Filtruj wyniki</div>
+                <div class="collapsible-body">
+                    <form class="" action="" method="get">
+                        <div class="row">
+                            {% for field in filter.form %}
+                                <div class="col s4">
+                                    {{ field.errors }}
+                                    <label for="{{ field.id_for_label }}">{{ field.name }}</label>
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    <input type="submit" name="submit" value="Submit" class="">
+                    </form>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12">
+        <ul class="collection with-header">
+            <li class="collection-header lime lighten-3"><h4>Products List</h4></li>
+            {% for object in object_list %}
+            <li class="collection-item">
+                <span class="title">{{ object.name }}</span>,
+                        Actual price: {{ object.price }}
+                <div class="secondary-content">
+                    <a href="{% url 'product_panel:product-update' slug=object.slug %}">
+                        EDIT
+                    </a>|
+                    <a href="{% url 'product_panel:product-delete' slug=object.slug %}">
+                        DELETE
+                    </a>|
+                    <a href="{% url 'product_panel:product-price-list' number=object.number %}">
+                        PRICING
+                    </a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endblock content %}
 
 {% block scripts %}

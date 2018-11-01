@@ -5,11 +5,14 @@ from webstore.product.models import Product, Price
 from django_filters.views import FilterView
 from django.views import generic
 
+from .forms import ProductFilterForm
+
 
 class ProductListView(FilterView):
     model = Product
     template_name = 'dashboard/product/product_list.html'
     strict = False
+    filterset_class = ProductFilterForm
 
 
 class ProductCreateView(generic.CreateView):

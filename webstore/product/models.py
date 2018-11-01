@@ -140,7 +140,7 @@ class Product(models.Model):
         return reverse('product:product-detail', kwargs={'slug': self.slug})
 
     @property
-    def price(self):
+    def actual_price(self):
         today = timezone.now()
         price = self.price_set.filter(valid_from__lte=today).first()
         if price is not None:
@@ -174,12 +174,15 @@ class Product(models.Model):
 
 class Price(models.Model):
 
-    value = fields.CashField(
+    value = models.DecimalField(
+        decimal_places=2,
+        max_digits=8,
         help_text="returns instance of Cash"
     )
     product = models.ForeignKey(
         Product,
         on_delete=models.DO_NOTHING,
+        related_name='prices'
     )
     valid_from = models.DateField(
         default=date.today,

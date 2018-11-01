@@ -9,7 +9,7 @@ from django.views.generic import (
     DetailView,
 )
 
-from webstore.core.views import FilterView
+from django_filters.views import FilterView
 from webstore.product.models import Product, Price
 from webstore.payment.models import Payment, PaymentStatus
 from webstore.delivery.models import Delivery, DeliveryStatus

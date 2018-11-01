@@ -21,7 +21,7 @@ class ProductAdmin(admin.ModelAdmin):
         'name',
         'number',
         'slug',
-        'price',
+        'actual_price',
     )
 
 

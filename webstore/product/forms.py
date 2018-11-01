@@ -1,42 +1,22 @@
-from django import forms
+import django_filters
 
-from webstore.core.forms import FilterForm
 from webstore.core.widgets import MaterializeSelectMultiple
-from .models import Category
+from .models import Product
 
 
-class FilterProductsForm(FilterForm):
-    filter_field_list = [
-        ('name', 'icontains', 'name'),
-        ('description', 'icontains', 'description'),
-        ('categories', 'id__in', 'categories'),
-        ('weight', 'gte', 'weight_min'),
-        ('weight', 'lte', 'weight_max'),
-        ('actual_price', 'gte', 'price_min'),
-        ('actual_price', 'lte', 'price_max'),
-    ]
-
-    name = forms.CharField(
-        required=False,
+class FilterProductsForm(django_filters.FilterSet):
+    name = django_filters.CharFilter(
+        lookup_expr='icontains',
+        field_name='name',
+    )
+    price__lte = django_filters.NumberFilter(
+        lookup_expr='lte',
+        field_name='price',
+        label='Price less than'
     )
 
-    categories = forms.MultipleChoiceField(
-        choices=Category.objects.form_choices,
-        required=False,
-        widget=MaterializeSelectMultiple(),
-    )
-    description = forms.CharField(
-        required=False,
-    )
-    weight_min = forms.FloatField(
-        required=False,
-    )
-    weight_max = forms.FloatField(
-        required=False,
-    )
-    price_min = forms.FloatField(
-        required=False,
-    )
-    price_max = forms.FloatField(
-        required=False,
-    )
+    class Meta:
+        model = Product
+        fields = (
+            'name',
+        )

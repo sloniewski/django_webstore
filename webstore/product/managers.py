@@ -16,11 +16,14 @@ class ProductQuerySet(models.QuerySet):
         prices = Price.objects\
             .filter(product=OuterRef('pk'), valid_from__lte=timezone.now())\
             .order_by('-valid_from')
-        products = self.annotate(
-            actual_price=Subquery(
-                queryset=prices.values('value')[:1],
-                output_field=models.FloatField(),
-            ))
+        products = self\
+            .annotate(
+                price=Subquery(
+                    queryset=prices.values('value')[:1],
+                    output_field=models.DecimalField(),
+                )
+            )\
+            .filter(price__isnull=False)
         return products
 
 

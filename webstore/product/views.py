@@ -1,7 +1,8 @@
 from django.views.generic import DetailView
 from django.core.paginator import Paginator
 
-from webstore.core.views import FilterView
+from django_filters.views import FilterView
+
 from .models import Product
 from .forms import FilterProductsForm
 
@@ -11,7 +12,7 @@ class ProductDetailView(DetailView):
 
 
 class ProductListView(FilterView):
-    model = Product
     template_name = 'product/product_list.html'
-    filter_form_class = FilterProductsForm
+    filterset_class = FilterProductsForm
+    strict = False
     queryset = Product.objects.with_prices()

@@ -1,62 +1,65 @@
-<ul class="collapsible">
-    <li>
-      <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
-          <i class="material-icons">view_list</i>Products</div>
-      <div class="collapsible-body">
-          <div class="collection">
-              <a href="{% url 'dashboard:product-list' %}" class="collection-item">List all products</a>
-              <a href="{% url 'dashboard:product-create' %}" class="collection-item">Add product</a>
+<!-- # TODO move style to css sheet -->
+<div style="  min-height: 100vh;width: 100%;">
+    <ul class='collapsible blue-grey darken-4 yellow-text text-lighten-5' style="border: 0px; box-shadow: 0px">
+        <li>
+          <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
+              <i class="material-icons">view_list</i>Products</div>
+          <div class="collapsible-body">
+              <div class="collection">
+                  <a href="{% url 'product_panel:product-list' %}" class="collection-item">List all products</a>
+                  <a href="{% url 'product_panel:product-create' %}" class="collection-item">Add product</a>
+              </div>
           </div>
-      </div>
-    </li>
-    <li>
-      <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
-          <i class="material-icons">attach_money</i>Prices</div>
-      <div class="collapsible-body">
-          <div class="collection">
-              <a href="#!" class="collection-item">Review prices</a>
-              <a href="#!" class="collection-item">List for product</a>
-              <a href="#!" class="collection-item">Add price</a>
-              <a href="#!" class="collection-item">Price report</a>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
-          <i class="material-icons">shopping_basket</i>Orders</div>
-      <div class="collapsible-body">
-          <div class="collection">
-              <a href="{% url 'dashboard:order-list' status='awaiting_payment' %}" class="collection-item">Awaiting payment</a>
-              <a href="{% url 'dashboard:order-list' status='shipping' %}" class="collection-item">Ready for shipping</a>
-              <a href="{% url 'dashboard:order-list' status='closed' %}" class="collection-item">Closed orders</a>
-        </div>
-      </div>
-    </li>
-    <li>
-      <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
-          <i class="material-icons">monetization_on</i>Payments</div>
-      <div class="collapsible-body">
-          <div class="collection">
-              <a href="{% url 'dashboard:payment-list' status='open' %}" class="collection-item">New</a>
-              <a href="{% url 'dashboard:payment-list' status='delayed' %}" class="collection-item">Delayed</a>
-              <a href="{% url 'dashboard:payment-list' status='closed' %}" class="collection-item">Closed</a>
+        </li>
+        <li>
+          <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
+              <i class="material-icons">attach_money</i>Prices</div>
+          <div class="collapsible-body">
+              <div class="collection">
+                  <a href="#!" class="collection-item">Review prices</a>
+                  <a href="#!" class="collection-item">List for product</a>
+                  <a href="#!" class="collection-item">Add price</a>
+                  <a href="#!" class="collection-item">Price report</a>
+            </div>
           </div>
-      </div>
-    </li>
-    <li>
-      <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
-          <i class="material-icons">airport_shuttle</i>Deliveries</div>
-      <div class="collapsible-body">
-          <div class="collection">
-              <a href="{% url 'dashboard:delivery-list' status='awaiting_payment' %}" class="collection-item">Awating payment</a>
-              <a href="{% url 'dashboard:delivery-list' status='ready_for_shipping' %}" class="collection-item">Ready for shipping</a>
-              <a href="{% url 'dashboard:delivery-list' status='shipped' %}" class="collection-item">Shipped</a>
+        </li>
+        <li>
+          <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
+              <i class="material-icons">shopping_basket</i>Orders</div>
+          <div class="collapsible-body">
+              <div class="collection">
+                  <a href="{% url 'dashboard:order-list' status='awaiting_payment' %}" class="collection-item">Awaiting payment</a>
+                  <a href="{% url 'dashboard:order-list' status='shipping' %}" class="collection-item">Ready for shipping</a>
+                  <a href="{% url 'dashboard:order-list' status='closed' %}" class="collection-item">Closed orders</a>
+            </div>
           </div>
-      </div>
-    </li>
-    <li>
-      <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
-          <i class="material-icons">multiline_chart</i>Reports</div>
-      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
-    </li>
-  </ul>
+        </li>
+        <li>
+          <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
+              <i class="material-icons">monetization_on</i>Payments</div>
+          <div class="collapsible-body">
+              <div class="collection">
+                  <a href="{% url 'dashboard:payment-list' status='open' %}" class="collection-item">New</a>
+                  <a href="{% url 'dashboard:payment-list' status='delayed' %}" class="collection-item">Delayed</a>
+                  <a href="{% url 'dashboard:payment-list' status='closed' %}" class="collection-item">Closed</a>
+              </div>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
+              <i class="material-icons">airport_shuttle</i>Deliveries</div>
+          <div class="collapsible-body">
+              <div class="collection">
+                  <a href="{% url 'dashboard:delivery-list' status='awaiting_payment' %}" class="collection-item">Awating payment</a>
+                  <a href="{% url 'dashboard:delivery-list' status='ready_for_shipping' %}" class="collection-item">Ready for shipping</a>
+                  <a href="{% url 'dashboard:delivery-list' status='shipped' %}" class="collection-item">Shipped</a>
+              </div>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
+              <i class="material-icons">multiline_chart</i>Reports</div>
+          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+        </li>
+    </ul>
+</div>

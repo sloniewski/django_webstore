@@ -34,53 +34,6 @@ class DashboardWelcomeView(TemplateView):
     template_name = 'dashboard/base_dashboard.html'
 
 
-class ProductCreateView(CreateView):
-    template_name = 'dashboard/product/product_create.html'
-    form_class = AddProductForm
-
-    def get_success_url(self):
-        return reverse('dashboard:product-list')
-
-
-class ProductListView(ListView):
-    model = Product
-    template_name = 'dashboard/product/product_list.html'
-
-
-class ProductUpdateView(UpdateView):
-    model = Product
-    template_name = 'dashboard/product/product_update.html'
-    fields = [
-        'name',
-        'active',
-        'slug',
-        'description',
-        'weight',
-    ]
-
-
-class ProductDeleteView(DeleteView):
-    model = Product
-    template_name = 'dashboard/product/product_delete.html'
-
-
-class ProductPriceListView(ListView):
-    model = Price
-    template_name = 'dashboard/product/product_price_list.html'
-
-    def get_queryset(self):
-        number = self.request.resolver_match.kwargs['number']
-        product = get_object_or_404(Product, number=number)
-        self.update_context({'product': product})
-        return Price.objects.filter(product=product)
-
-    def update_context(self, data_dict):
-        if self.extra_context is None:
-            self.extra_context = data_dict
-        else:
-            self.extra_context.update(data_dict)
-
-
 class PaymentListView(FilterView):
     model = Payment
     template_name = 'dashboard/payment/payment_list.html'

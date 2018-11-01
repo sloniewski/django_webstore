@@ -6,16 +6,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'webstore.users',
     'webstore.product',
     'webstore.cart',
     'webstore.order',
     'webstore.core',
-    'webstore.dashboard',
     'webstore.functional_tests',
     'webstore.cash',
     'webstore.delivery',
     'webstore.payment',
+    'webstore.dashboard',
+
+    'dashboard.product_panel',
+
     'django.contrib.admindocs',
     'django.forms',
 ]
@@ -35,7 +39,10 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['webstore/templates'],
+        'DIRS': [
+            'webstore/templates',
+            'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

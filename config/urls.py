@@ -21,13 +21,16 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
+
     path('product/', include('webstore.product.urls')),
     path('cart/', include('webstore.cart.urls')),
     path('order/', include('webstore.order.urls')),
     path('users/', include('webstore.users.urls')),
     path('payment/', include('webstore.payment.urls')),
+
     path('dashboard/product_panel/', include('dashboard.product_panel.urls')),
     path('dashboard/order_panel/', include('dashboard.order_panel.urls')),
+    path('dashboard/payment_panel/', include('dashboard.payment_panel.urls')),
 
     path('dashboard/', include('webstore.dashboard.urls')),
 

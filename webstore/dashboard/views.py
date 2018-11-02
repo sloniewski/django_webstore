@@ -17,8 +17,6 @@ from webstore.delivery.models import Delivery, DeliveryStatus
 from .forms import (
     AddProductForm,
     FilterDelieriesForm,
-    FilterPaymentsForm,
-    UpdatePaymentForm,
     DeliveryUpdateForm,
 )
 
@@ -30,36 +28,6 @@ class DashboardWelcomeView(TemplateView):
     :template:`dasboard/base_dashboard.html`
     """
     template_name = 'dashboard/base_dashboard.html'
-
-
-class PaymentListView(FilterView):
-    model = Payment
-    template_name = 'dashboard/payment/payment_list.html'
-    filter_form_class = FilterPaymentsForm
-
-    def get_queryset(self, *args, **kwargs):
-        status = self.request.resolver_match.kwargs.get('status').upper()
-        status = PaymentStatus[status].name
-        if status is not None:
-            queryset = super().get_queryset(*args, **kwargs)
-            queryset = queryset.filter(status=status)
-            return queryset
-        else:
-            return super().get_queryset(*args, **kwargs)
-
-
-class PaymentUpdateView(UpdateView):
-    model = Payment
-    template_name = 'dashboard/payment/payment_update.html'
-    form_class = UpdatePaymentForm
-    success_url = '/dashboard/payment/list/open'
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        pk = self.kwargs.get(self.pk_url_kwarg)
-        order = Order.objects.filter(payment__pk=pk).first()
-        context_data.update({'order': order})
-        return context_data
 
 
 class DeliveryListView(FilterView):

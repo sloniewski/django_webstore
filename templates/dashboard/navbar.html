@@ -39,9 +39,9 @@
               <i class="material-icons">monetization_on</i>Payments</div>
           <div class="collapsible-body">
               <div class="collection">
-                  <a href="{% url 'dashboard:payment-list' status='open' %}" class="collection-item">New</a>
-                  <a href="{% url 'dashboard:payment-list' status='delayed' %}" class="collection-item">Delayed</a>
-                  <a href="{% url 'dashboard:payment-list' status='closed' %}" class="collection-item">Closed</a>
+                  <a href="{% url 'payment_panel:payment-list' status='open' %}" class="collection-item">New</a>
+                  <a href="{% url 'payment_panel:payment-list' status='delayed' %}" class="collection-item">Delayed</a>
+                  <a href="{% url 'payment_panel:payment-list' status='closed' %}" class="collection-item">Closed</a>
               </div>
           </div>
         </li>
@@ -50,9 +50,9 @@
               <i class="material-icons">airport_shuttle</i>Deliveries</div>
           <div class="collapsible-body">
               <div class="collection">
-                  <a href="{% url 'dashboard:delivery-list' status='awaiting_payment' %}" class="collection-item">Awating payment</a>
-                  <a href="{% url 'dashboard:delivery-list' status='ready_for_shipping' %}" class="collection-item">Ready for shipping</a>
-                  <a href="{% url 'dashboard:delivery-list' status='shipped' %}" class="collection-item">Shipped</a>
+                  <a href="{% url 'delivery_panel:delivery-list' status='awaiting_payment' %}" class="collection-item">Awating payment</a>
+                  <a href="{% url 'delivery_panel:delivery-list' status='ready_for_shipping' %}" class="collection-item">Ready for shipping</a>
+                  <a href="{% url 'delivery_panel:delivery-list' status='shipped' %}" class="collection-item">Shipped</a>
               </div>
           </div>
         </li>

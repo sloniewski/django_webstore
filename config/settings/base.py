@@ -16,9 +16,11 @@ INSTALLED_APPS = [
     'webstore.cash',
     'webstore.delivery',
     'webstore.payment',
-    'webstore.dashboard',
 
     'dashboard.product_panel',
+    'dashboard.delivery_panel',
+    'dashboard.order_panel',
+    'dashboard.payment_panel',
 
     'django.contrib.admindocs',
     'django.forms',

@@ -13,13 +13,11 @@ from django_filters.views import FilterView
 from webstore.product.models import Product, Price
 from webstore.payment.models import Payment, PaymentStatus
 from webstore.delivery.models import Delivery, DeliveryStatus
-from webstore.order.models import Order, OrderItem, OrderStatus
 
 from .forms import (
     AddProductForm,
     FilterDelieriesForm,
     FilterPaymentsForm,
-    FilterOrdersForm,
     UpdatePaymentForm,
     DeliveryUpdateForm,
 )
@@ -93,47 +91,3 @@ class DeliveryUpdateView(UpdateView):
         context_data.update({'order': order})
         return context_data
 
-
-class OrderListView(FilterView):
-    model = Order
-    template_name = 'dashboard/order/order_list.html'
-    filter_form_class = FilterOrdersForm
-
-    def get_queryset(self, *args, **kwargs):
-        status = self.request.resolver_match.kwargs.get('status').upper()
-        status = OrderStatus[status].name
-        if status is not None:
-            queryset = super().get_queryset(*args, **kwargs)
-            queryset = queryset.filter(status=status)
-            return queryset
-        else:
-            return super().get_queryset(*args, **kwargs)
-
-
-class OrderUpdateView(View):
-    template_name = 'dashboard/order/order_update.html'
-
-
-class OrderDetailView(DetailView):
-    model = Order
-    template_name = 'dashboard/order/order_detail.html'
-
-
-class OrderItemUpdateView(UpdateView):
-    model = OrderItem
-    template_name = 'dashboard/order/order_item_update.html'
-    fields = [
-        'quantity',
-        'price',
-    ]
-
-    def get_success_url(self):
-        return reverse('dashboard:order-detail', kwargs={'pk': self.object.order.id})
-
-
-class OrderItemDeleteView(DeleteView):
-    model = OrderItem
-    template_name = 'dashboard/order/order_item_delete.html'
-
-    def get_success_url(self):
-        return reverse('dashboard:order-detail', kwargs={'pk': self.object.order.id})

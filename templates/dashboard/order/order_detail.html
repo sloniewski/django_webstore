@@ -11,8 +11,8 @@
             {{item.product.name}}, {{item.quantity}} pcs, {{item.value}}
             <div class="secondary-content">
                 <a href="#">ADD PRODUCT</a>|
-                <a href="{% url 'dashboard:order-item-update' pk=item.pk %}">EDIT</a>|
-                <a href="{% url 'dashboard:order-item-delete' pk=item.pk %}">DELETE</a>
+                <a href="{% url 'order_panel:order-item-update' pk=item.pk %}">EDIT</a>|
+                <a href="{% url 'order_panel:order-item-delete' pk=item.pk %}">DELETE</a>
             </div>
         </li>
         {% endfor %}

@@ -27,6 +27,7 @@ urlpatterns = [
     path('users/', include('webstore.users.urls')),
     path('payment/', include('webstore.payment.urls')),
     path('dashboard/product_panel/', include('dashboard.product_panel.urls')),
+    path('dashboard/order_panel/', include('dashboard.order_panel.urls')),
 
     path('dashboard/', include('webstore.dashboard.urls')),
 

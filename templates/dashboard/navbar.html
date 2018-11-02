@@ -28,9 +28,9 @@
               <i class="material-icons">shopping_basket</i>Orders</div>
           <div class="collapsible-body">
               <div class="collection">
-                  <a href="{% url 'dashboard:order-list' status='awaiting_payment' %}" class="collection-item">Awaiting payment</a>
-                  <a href="{% url 'dashboard:order-list' status='shipping' %}" class="collection-item">Ready for shipping</a>
-                  <a href="{% url 'dashboard:order-list' status='closed' %}" class="collection-item">Closed orders</a>
+                  <a href="{% url 'order_panel:order-list' status='awaiting_payment' %}" class="collection-item">Awaiting payment</a>
+                  <a href="{% url 'order_panel:order-list' status='shipping' %}" class="collection-item">Ready for shipping</a>
+                  <a href="{% url 'order_panel:order-list' status='closed' %}" class="collection-item">Closed orders</a>
             </div>
           </div>
         </li>

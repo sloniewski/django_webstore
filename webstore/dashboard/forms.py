@@ -42,23 +42,6 @@ class FilterDelieriesForm(FilterForm):
     )
 
 
-class FilterOrdersForm(FilterForm):
-    # TODO add relevant filters
-    filter_field_list = [
-        ('created', 'lt', 'date_to'),
-        ('created', 'gt', 'date_from'),
-    ]
-
-    date_to = forms.DateField(
-        required=False,
-        widget=forms.DateInput(attrs={'class': 'datepicker'}),
-    )
-    date_from = forms.DateField(
-        required=False,
-        widget=forms.DateInput(attrs={'class': 'datepicker'}),
-    )
-
-
 class FilterPaymentsForm(FilterForm):
     filter_field_list = [
         ('created', 'lt', 'date_to'),

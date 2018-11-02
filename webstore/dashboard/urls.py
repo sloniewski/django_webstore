@@ -7,23 +7,6 @@ app_name = 'dashboard'
 
 urlpatterns = [
 
-    # Order
-    path('order/<pk>', views.OrderDetailView.as_view(),
-         name='order-detail'),
-
-    path('order/list/<status>', views.OrderListView.as_view(),
-         name='order-list'),
-
-    path('order/update/<uuid>', views.OrderUpdateView.as_view(),
-         name='order-update'),
-
-    # OrderItem
-    path('order/update/item/<pk>', views.OrderItemUpdateView.as_view(),
-         name='order-item-update'),
-
-    path('order/delete/item/<pk>', views.OrderItemDeleteView.as_view(),
-         name='order-item-delete'),
-
     # Payment
     path('payment/list/<status>', views.PaymentListView.as_view(),
          name='payment-list'),

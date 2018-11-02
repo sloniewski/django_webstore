@@ -12,6 +12,7 @@ class DeliveryListView(FilterView):
     model = Delivery
     template_name = 'dashboard/delivery/delivery_list.html'
     filterset_class = FilterDelieriesForm
+    strict = False
 
 
 class DeliveryUpdateView(generic.UpdateView):

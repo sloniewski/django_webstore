@@ -28,9 +28,7 @@
               <i class="material-icons">shopping_basket</i>Orders</div>
           <div class="collapsible-body">
               <div class="collection">
-                  <a href="{% url 'order_panel:order-list' status='awaiting_payment' %}" class="collection-item">Awaiting payment</a>
-                  <a href="{% url 'order_panel:order-list' status='shipping' %}" class="collection-item">Ready for shipping</a>
-                  <a href="{% url 'order_panel:order-list' status='closed' %}" class="collection-item">Closed orders</a>
+                  <a href="{% url 'order_panel:order-list' %}" class="collection-item">Awaiting payment</a>
             </div>
           </div>
         </li>
@@ -50,9 +48,7 @@
               <i class="material-icons">airport_shuttle</i>Deliveries</div>
           <div class="collapsible-body">
               <div class="collection">
-                  <a href="{% url 'delivery_panel:delivery-list' status='awaiting_payment' %}" class="collection-item">Awating payment</a>
-                  <a href="{% url 'delivery_panel:delivery-list' status='ready_for_shipping' %}" class="collection-item">Ready for shipping</a>
-                  <a href="{% url 'delivery_panel:delivery-list' status='shipped' %}" class="collection-item">Shipped</a>
+                  <a href="{% url 'delivery_panel:delivery-list' %}" class="collection-item">Delivery list</a>
               </div>
           </div>
         </li>

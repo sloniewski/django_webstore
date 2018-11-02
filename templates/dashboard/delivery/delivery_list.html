@@ -7,7 +7,7 @@
     <div class="col s3">
         <h4>Filter delivieres</h4>
         <form action="" method="GET">
-            {{filter_form.as_p}}
+            {{filter.form.as_p}}
             <input type="submit" value="submit" class="btn">
         </form>
     </div>
@@ -19,7 +19,7 @@
         {%for object in object_list %}
         <li class="collection-item">{{ object }}
             {% if object.status != 'AWAITING_PAYMENT' %}
-                <a href="{% url 'dashboard:delivery-update' pk=object.pk %}" class="btn-small">change status</a>
+                <a href="{% url 'delivery_panel:delivery-update' pk=object.pk %}" class="btn-small">change status</a>
             {% endif %}
         </li>
         {% endfor %}

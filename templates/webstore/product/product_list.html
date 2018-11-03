@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'webstore/base.html' %}
 {% load static %}
 
 
@@ -22,7 +22,7 @@
         <div class="row">
         {% for object in object_list %}
             <div class="col s3">
-            {% include 'product/product_list_item.html' with object=object %}
+            {% include 'webstore/product/product_list_item.html' with object=object %}
             </div>
         {% empty %}
             No items found

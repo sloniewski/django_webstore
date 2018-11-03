@@ -12,7 +12,7 @@ from .models import Order, OrderItem
 
 class OrderDetailView(DetailView):
     model = Order
-    template_name = 'order/order_detail.html'
+    template_name = 'webstore/order/order_detail.html'
     pk_url_kwarg = 'uuid'
     http_method_names = ['get', 'head', 'options']
 
@@ -27,7 +27,7 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
     """ view that removes cart and creates order in place """
 
     form_class = ChooseDeliveryForm
-    template_name = 'order/order_add_delivery.html'
+    template_name = 'webstore/order/order_add_delivery.html'
     cart = None
 
     def get_login_url(self):
@@ -74,7 +74,7 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
 
 
 class OrderSummary(ListView):
-    template_name = 'order/order_summary.html'
+    template_name = 'webstore/order/order_summary.html'
     model = OrderItem
     pk_url_kwarg = 'uuid'
 
@@ -91,7 +91,7 @@ class OrderSummary(ListView):
 
 class OrderListView(ListView):
     model = Order
-    template_name = 'order/order_list.html'
+    template_name = 'webstore/order/order_list.html'
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)

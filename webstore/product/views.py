@@ -9,10 +9,11 @@ from .forms import FilterProductsForm
 
 class ProductDetailView(DetailView):
     model = Product
+    template_name = 'webstore/product/product_detail.html'
 
 
 class ProductListView(FilterView):
-    template_name = 'product/product_list.html'
+    template_name = 'webstore/product/product_list.html'
     filterset_class = FilterProductsForm
     strict = False
     queryset = Product.objects.with_prices()

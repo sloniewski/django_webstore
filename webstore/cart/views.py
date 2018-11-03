@@ -105,7 +105,7 @@ class CartAddItem(FormView):
 
 
 class CartListView(ListView):
-    template_name = 'cart/cart_list.html'
+    template_name = 'webstore/cart/cart_list.html'
 
     def get_queryset(self):
         try:

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'webstore/base.html' %}
 {% load static %}
 
 {% block title %}
@@ -13,7 +13,7 @@ cart summary
     </li>
 {% for object in object_list %}
     <li class="collection-item">
-        {% include 'cart/cart_list_item.html' with object=object %}
+        {% include 'webstore/cart/cart_list_item.html' with object=object %}
     </li>
 {% endfor %}
 </ul>

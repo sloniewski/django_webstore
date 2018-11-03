@@ -6,7 +6,7 @@ from .models import Payment, PaymentStatus
 
 class UserOutstandingPaymentsView(LoginRequiredMixin, ListView):
     model = Payment
-    template_name = 'payment/user_payment_list.html'
+    template_name = 'webstore/payment/user_payment_list.html'
 
     def get_queryset(self):
         return super().get_queryset()\

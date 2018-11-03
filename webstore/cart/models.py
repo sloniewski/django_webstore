@@ -48,7 +48,7 @@ class CartItem(models.Model):
 
     @property
     def price(self):
-        return self.product.price
+        return self.product.actual_price
 
     @property
     def weight(self):
@@ -72,7 +72,7 @@ class CartItem(models.Model):
         Returns value of order-line.
         """
         # Order of multiplication is important, to call __mul__ of Cash class
-        price = self.product.price
+        price = self.product.actual_price
         if price:
             return price * self.quantity
         return 0

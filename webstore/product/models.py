@@ -142,7 +142,7 @@ class Product(models.Model):
     @property
     def actual_price(self):
         today = timezone.now()
-        price = self.price_set.filter(valid_from__lte=today).first()
+        price = self.prices.filter(valid_from__lte=today).first()
         if price is not None:
             return price.value
         return None

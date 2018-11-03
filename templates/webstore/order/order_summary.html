@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'webstore/base.html' %}
 {% load static %}
 
 {% block title %}
@@ -11,7 +11,7 @@ Order summary
   <ul class="collection with-header">
     <li class="collection-header"><h4>Order summary</h4></li>
     {% for object in object_list %}
-      {% include "order/order_item_list_item.html" with item=object %}
+      {% include "webstore/order/order_item_list_item.html" with item=object %}
     {% endfor %}
   </ul>
   ITEMS IN ORDER: <span id="cart_summary_item_count"> {{cart_item_count}} </span>

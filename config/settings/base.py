@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'webstore.delivery',
     'webstore.payment',
 
+    'dashboard.main',
     'dashboard.product_panel',
     'dashboard.delivery_panel',
     'dashboard.order_panel',

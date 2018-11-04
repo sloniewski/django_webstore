@@ -1,3 +1,5 @@
+from decimal import Decimal, getcontext
+
 from django.test import TestCase
 from importlib import import_module
 from django.conf import settings
@@ -6,7 +8,7 @@ from django.contrib.sessions.models import Session
 from webstore.cart.models import Cart, CartItem
 from webstore.cash.models import Cash
 from webstore.product.models import Product, Price
-from webstore.product.utils import random_string
+from webstore.core.utils import random_string
 
 
 class TestCartModel(TestCase):
@@ -45,7 +47,7 @@ class TestCartModel(TestCase):
         cart.add_item(prod_B.id, 7)
         cart.add_item(prod_A.id, 19)
 
-        self.assertEqual(cart.get_item_count(), 32)
+        self.assertEqual(cart.item_count, 32)
         self.assertEqual(
             first=CartItem.objects.get(
                         product=prod_A,
@@ -63,28 +65,32 @@ class TestCartModel(TestCase):
 
     def test_get_or_create_cart(self):
         # Create a few sessions to test if get_or_create is idempotent due to issues with MySql
-        cart_A = Cart.objects.get_or_create(session_id=self.session.session_key)[0]
-        cart_B = Cart.objects.get_or_create(session_id=self.session.session_key)[0]
+        cart_A = Cart.objects.get_or_create(session=self.session.session_key)[0]
+        cart_B = Cart.objects.get_or_create(session=self.session.session_key)[0]
         self.session.create()
-        cart_C = Cart.objects.get_or_create(session_id=self.session.session_key)[0]
-
-        self.assertEqual(cart_A.session.session_key, cart_B.session.session_key)
-        self.assertNotEqual(cart_A.session.session_key, cart_C.session.session_key)
+        cart_C = Cart.objects.get_or_create(session=self.session.session_key)[0]
+        
+        self.assertEqual(
+            cart_A.session,
+            cart_B.session,
+        )
+        self.assertNotEqual(cart_A.session, cart_C.session)
 
     def test_cart_and_cartitem_total(self):
-        cart = Cart.objects.get_or_create(session_id=self.session.session_key)[0]
-        prod_A = self.create_test_product(price=2.71)
-        prod_B = self.create_test_product(price=6.02)
+        getcontext().prec = 4
+        cart = Cart.objects.get_or_create(session=self.session.session_key)[0]
+        prod_A = self.create_test_product(price='2.71')
+        prod_B = self.create_test_product(price='6.02')
         cart.add_item(prod_A.id, 6)
         cart.add_item(prod_B.id, 7)
 
         value = cart.value
-        self.assertEqual(value, Cash('58.40'))
+        self.assertEqual(value, Decimal('58.40'))
 
         item_A = cart.cartitem_set.get(product=prod_A)
-        self.assertEqual(item_A.get_item_value(), Cash('16.26'))
-        self.assertIsInstance(item_A.get_item_value(), Cash)
+        self.assertEqual(item_A.value, Decimal('16.26'))
+        self.assertIsInstance(item_A.value, Decimal)
 
         item_B = cart.cartitem_set.get(product=prod_B)
-        self.assertEqual(item_B.get_item_value(), Cash('42.14'))
-        self.assertIsInstance(item_B.get_item_value(), Cash)
+        self.assertEqual(item_B.value, Decimal('42.14'))
+        self.assertIsInstance(item_B.value, Decimal)

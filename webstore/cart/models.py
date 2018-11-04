@@ -1,3 +1,5 @@
+from decimal import Decimal, getcontext
+
 from django.db import models
 from django.db.models import Sum
 from django.contrib.auth import get_user_model
@@ -71,6 +73,7 @@ class CartItem(models.Model):
         """
         Returns value of order-line.
         """
+        getcontext().prec = 4
         # Order of multiplication is important, to call __mul__ of Cash class
         price = self.product.actual_price
         if price:

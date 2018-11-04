@@ -9,27 +9,24 @@
 
 {% block body %}
     <div class="row">
-
-    <div class="col s3">
-        <form action="" method="get">
-            {{ filter.form.as_p }}
-            <input type="submit" value="filter" class="btn">
-        </form>
-    </div>
-
-    <div class="col s9">
-
-        <div class="row">
-        {% for object in object_list %}
-            <div class="col s3">
-            {% include 'webstore/product/product_list_item.html' with object=object %}
-            </div>
-        {% empty %}
-            No items found
-        {% endfor %}
+        <div class="col s12 m3">
+            <form action="" method="get">
+                {{ filter.form.as_p }}
+                <input type="submit" value="filter" class="btn">
+            </form>
         </div>
-    </div>
 
+        <div class="col s9">
+            <div class="row">
+            {% for object in object_list %}
+                <div class="col s12 m4">
+                {% include 'webstore/product/product_list_item.html' with object=object %}
+                </div>
+            {% empty %}
+                No items found
+            {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock body %}
 

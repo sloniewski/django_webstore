@@ -6,7 +6,7 @@ from django.views.defaults import page_not_found, bad_request
 from django.views.generic import FormView, ListView
 
 from .forms import ItemForm
-from .models import Cart
+from .models import Cart, CartItem
 
 
 class CartQuickRemoveItem(View):
@@ -106,8 +106,12 @@ class CartAddItem(FormView):
 
 class CartListView(ListView):
     template_name = 'webstore/cart/cart_list.html'
+    model = CartItem
 
     def get_queryset(self):
+        queryset = CartItem.objects\
+            .filter(cart__session=self.request.session.session_key)\
+            .select_related('product')
         try:
             cart = Cart.objects.get(session=self.request.session.session_key)
             self.extra_context = {
@@ -115,5 +119,5 @@ class CartListView(ListView):
                 'cart_item_count': cart.item_count,
             }
         except Cart.DoesNotExist:
-            return None
-        return cart.get_items()
+            return []
+        return queryset

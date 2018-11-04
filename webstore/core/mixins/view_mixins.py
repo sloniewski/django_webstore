@@ -1,8 +1,6 @@
-from django.views import View
 from django.http import JsonResponse
 
-class AjaxResponseMixin(View):
-    http_method_names = ['post', 'head', 'options', 'trace']
+class AjaxResponseMixin:
 
     def form_invalid(self, form):
         response = super().form_invalid(form)
@@ -19,4 +17,12 @@ class AjaxResponseMixin(View):
             return response
 
     def get_response_data(self):
+        raise NotImplementedError('You need to provide this method')
 
+class ForceSessionMixin:
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.session.session_key is None:
+            request.session.modified = True
+            request.session.save()
+        return super().dispatch(request, args, kwargs)

@@ -5,18 +5,14 @@ from django.views import View
 from django.views.defaults import page_not_found, bad_request
 from django.views.generic import FormView, ListView
 
+from webstore.core.mixins import ForceSessionMixin
+
 from .forms import ItemForm
 from .models import Cart, CartItem
 
 
-class CartQuickRemoveItem(View):
+class CartQuickRemoveItem(ForceSessionMixin, View):
     http_method_names = ['post']
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.session.session_key is None:
-            request.session.modified = True
-            request.session.save()
-        return super().dispatch(request, args, kwargs)
 
     def post(self, request, *args, **kwawrgs):
         item_id = request.resolver_match.kwargs['item_id']
@@ -35,14 +31,8 @@ class CartQuickRemoveItem(View):
         return JsonResponse(data=data, status=200)
 
 
-class CartQuickAddItem(View):
+class CartQuickAddItem(ForceSessionMixin, View):
     http_method_names = ['post']
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.session.session_key is None:
-            request.session.modified = True
-            request.session.save()
-        return super().dispatch(request, args, kwargs)
 
     def post(self, request, *args, **kwargs):
         item_id = request.resolver_match.kwargs['item_id']
@@ -72,14 +62,8 @@ class CartDeleteItem(View):
         return JsonResponse(data=data)
 
 
-class CartAddItem(FormView):
+class CartAddItem(ForceSessionMixin, FormView):
     form_class = ItemForm
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.session.session_key is None:
-            request.session.modified = True
-            request.session.save()
-        return super().dispatch(request, args, kwargs)
 
     def get(self, request, *args, **kwargs):
         return page_not_found(request, 'page not found')
@@ -104,7 +88,7 @@ class CartAddItem(FormView):
         return bad_request(self.request, 'bad request')
 
 
-class CartListView(ListView):
+class CartListView(ForceSessionMixin, ListView):
     template_name = 'webstore/cart/cart_list.html'
     model = CartItem
 
@@ -112,12 +96,14 @@ class CartListView(ListView):
         queryset = CartItem.objects\
             .filter(cart__session=self.request.session.session_key)\
             .select_related('product')
-        try:
-            cart = Cart.objects.get(session=self.request.session.session_key)
-            self.extra_context = {
+        return queryset
+    
+    def get_context_data(self):
+        context = super().get_context_data()
+        cart = Cart.objects.recive_or_create(self.request)
+        context.update({
                 'cart_value': cart.value,
                 'cart_item_count': cart.item_count,
-            }
-        except Cart.DoesNotExist:
-            return []
-        return queryset
+            })
+        return context
+

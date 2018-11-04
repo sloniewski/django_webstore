@@ -13,6 +13,10 @@ class ProductListView(FilterView):
     template_name = 'dashboard/product/product_list.html'
     strict = False
     filterset_class = ProductFilterForm
+    paginate_by = 20
+
+    def get_queryset(self):
+        return self.model.objects.with_prices()
 
 
 class ProductCreateView(generic.CreateView):

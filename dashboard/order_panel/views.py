@@ -12,6 +12,7 @@ class OrderListView(FilterView):
     template_name = 'dashboard/order/order_list.html'
     filterset_class = FilterOrdersForm
     strict = False
+    paginate_by = 10
 
 
 class OrderUpdateView(generic.View):

@@ -11,3 +11,12 @@
     color: #fffde7;
     background-color: #263238 ;
 }
+
+.active_page_num {
+    background-color: #ffc400;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -2,23 +2,35 @@
 {% load static %}
 
 {% block content %}
-    <ul class="collection with-header">
-        <li class="collection-header lime lighten-3"><h4>Price list for product: {{product.name}}</h4></li>
-        {% for object in object_list %}
-        <li class="collection-item">{{object}}
-            <a href="#" class="secondary-content tooltipped"
-               data-position="left" data-tooltip="edit">
-                <i class="material-icons" >create</i>
-            </a>
-            <a href="#" class="secondary-content tooltipped"
-               data-position="left" data-tooltip="delete">
-                <i class="material-icons">delete</i>
-            </a>
-        </li>
-        {% empty %}
-        There are not proces for this product, <a href="">create one</a>
-        {% endfor %}
-    </ul>
+<div class='card-panel'>
+    <h4>Price list for product: <b>{{ product.name }}</b></h4>
+    <a href="" class="btn">Add price</a>
+    <table class="highlight">
+        <thead>
+            <th>#</th>
+            <th>Value</th>
+            <th>valid_from</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for object in object_list %}
+            <tr>
+                <td>{{ object.id }}</td>
+                <td>{{ object.name }}</td>
+                <td>{{ object.valid_from }}</td>
+                <td>
+                    <a href="">EDIT</a>|
+                    <a href="">DELETE</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="col s12">
+    {% include 'dashboard/paginator.html' %}
+</div>
 {% endblock content %}
 
 {% block scripts %}

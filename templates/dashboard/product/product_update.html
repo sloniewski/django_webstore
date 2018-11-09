@@ -9,8 +9,9 @@
                 created: {{object.created }}
             </small>
         </div>
-        <form class="" action="" method="post">
+        <form action="" method="post">
             {% csrf_token %}
+            {{ form.errors }}
             <div class="cart-content ">
                 <div class="row">
                     <div class="input-field col m6 s12 xs12">

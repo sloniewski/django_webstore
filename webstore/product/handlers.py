@@ -12,7 +12,7 @@ def generate_slug(instance, model):
     if not instance.slug:
         slug = slugify(instance.name)
         if model.objects.filter(slug=slug).exists():
-            slug = slug + random_string(4)
+            slug = slug + '-' + random_string(4)
         instance.slug = slug
 
 

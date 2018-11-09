@@ -1,0 +1,37 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class='card-panel'>
+	<h4>Category List</h4>
+	<a href="{% url 'product_panel:category-create' %}" class="btn">Add category</a>
+	<table class="highlight">
+		<thead>
+			<th>#</th>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Products</th>
+			<th>Actions</th>
+		</thead>
+		<tbody>
+			{% for object in object_list %}
+			<tr>
+				<td>{{ object.id }}</td>
+				<td>{{ object.name }}</td>
+				<td>{{ object.description|truncatechars:20 }}</td>
+				<td>{{ object.product_count }}</td>
+				<td>
+					<a href="{% url 'product_panel:category-update' pk=object.pk %}">EDIT</a>|
+					<a href="{% url 'product_panel:category-delete' pk=object.pk %}">
+						DELETE</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+	<div class="col s12">
+		{% include 'dashboard/paginator.html' %}
+	</div>
+{% endblock content %}

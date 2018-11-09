@@ -34,10 +34,16 @@ class ProductUpdateView(generic.UpdateView):
     fields = [
         'name',
         'active',
-        'slug',
         'description',
         'weight',
+        'width',
+        'length',
+        'height',
+        'categories'
     ]
+
+    def get_success_url(self):
+        return reverse('product_panel:product-list')
 
 
 class ProductDeleteView(generic.DeleteView):

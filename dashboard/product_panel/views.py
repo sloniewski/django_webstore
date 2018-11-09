@@ -6,7 +6,7 @@ from webstore.product.models import Product, Price, Category
 from django_filters.views import FilterView
 from django.views import generic
 
-from .forms import ProductFilterForm
+from .forms import ProductFilterForm, PriceCreateForm
 
 
 class ProductListView(FilterView):
@@ -80,8 +80,36 @@ class ProductPriceListView(generic.ListView):
 
 class ProductPriceCreateView(generic.CreateView):
     model = Price
-    template_name = 'dashboard/product/price_create.html'
+    template_name = 'dashboard/product/product_price_create.html'
+    form_class = PriceCreateForm
 
+    def dispatch(self, request, *args, **kwargs):
+        self.product = get_object_or_404(
+            Product,
+            number=self.kwargs.get('number'),
+        )
+        self.extra_context = {'product': self.product}
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'product': self.product})
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('product_panel:product-price-list', kwargs={'number': self.product.number})
+
+
+class PriceUpdateView(generic.UpdateView):
+    model = Price
+    template_name = 'dashboard/product/product_price_create.html'
+    fields = [
+        'value',
+        'valid_from',
+    ]
+
+    def get_success_url(self):
+        return reverse('product-price-list', kwargs={'number': self.object.product.numer})
 
 class CategoryListView(generic.ListView):
     model = Category
@@ -120,7 +148,7 @@ class CategoryUpdateView(generic.UpdateView):
 class CategoryDeleteView(generic.DeleteView):
     model = Category
     template_name = 'dashboard/generic_delete.html'
-    
+
     def get_success_url(self):
         return reverse('product_panel:category-list')
    

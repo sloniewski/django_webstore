@@ -20,8 +20,14 @@ urlpatterns = [
     path('create', views.ProductCreateView.as_view(),
          name='product-create'),
 
+    path('product/price-list/<int:number>/create', views.ProductPriceCreateView.as_view(),
+         name='product-price-create'),
+
     path('product/price-list/<int:number>', views.ProductPriceListView.as_view(),
          name='product-price-list'),
+
+    path('price/<int:pk>', views.PriceUpdateView.as_view(),
+         name='price-update'),
 
     path('category/list', views.CategoryListView.as_view(),
          name='category-list'),

@@ -4,7 +4,8 @@
 {% block content %}
 <div class='card-panel'>
     <h4>Price list for product: <b>{{ product.name }}</b></h4>
-    <a href="" class="btn">Add price</a>
+    <a href="{% url 'product_panel:product-price-create' number=product.number %}" class="btn">
+        Add price</a>
     <table class="highlight">
         <thead>
             <th>#</th>
@@ -16,10 +17,10 @@
             {% for object in object_list %}
             <tr>
                 <td>{{ object.id }}</td>
-                <td>{{ object.name }}</td>
+                <td>{{ object.value }}</td>
                 <td>{{ object.valid_from }}</td>
                 <td>
-                    <a href="">EDIT</a>|
+                    <a href="{% url 'product_panel:price-update' pk=object.pk %}">EDIT</a>|
                     <a href="">DELETE</a>
                 </td>
             </tr>

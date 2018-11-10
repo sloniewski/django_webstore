@@ -1,4 +1,5 @@
 from enum import Enum
+from decimal import Decimal
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -53,8 +54,19 @@ class OrderStatus(Enum):
     def choices(cls):
         return [(x.name, x.value) for x in cls]
 
+class OrderQuerySet(models.QuerySet):
+
+    def with_properites(self):
+        return self.annotate(item_count=models.Count('orderitems'))\
+
 
 class OrderManager(models.Manager):
+
+    def get_queryset(self):
+        return OrderQuerySet(self.model, using=self.db)
+
+    def with_properites(self):
+        return self.get_queryset().with_properites()
 
     def create_from_cart(self, cart, user):
         order = self.model.objects.create(
@@ -116,16 +128,8 @@ class Order(models.Model):
         return self.orderitems.all().select_related('product')
 
     @property
-    def item_count(self):
-        item_count = self.orderitems.aggregate(
-            Sum('quantity'))['quantity__sum']
-        if item_count is None:
-            return 0
-        return item_count
-
-    @property
     def value(self):
-        value = Cash('0')
+        value = Decimal('0')
         for item in self.orderitems.filter(quantity__gte=1):
             value += item.value
         return value

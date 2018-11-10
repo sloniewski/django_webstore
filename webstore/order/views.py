@@ -94,4 +94,4 @@ class OrderListView(ListView):
     template_name = 'webstore/order/order_list.html'
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return Order.objects.filter(user=self.request.user).with_properites()

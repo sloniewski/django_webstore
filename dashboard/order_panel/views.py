@@ -1,5 +1,6 @@
 from django.views import generic
 from django.shortcuts import reverse
+from django.db.models import Count
 
 from django_filters.views import FilterView
 
@@ -13,6 +14,11 @@ class OrderListView(FilterView):
     filterset_class = FilterOrdersForm
     strict = False
     paginate_by = 10
+
+    def get_queryset(self):
+        return self.model.objects.all()\
+            .prefetch_related('orderitems')\
+            .annotate(num_items=Count('orderitems'))
 
 
 class OrderUpdateView(generic.View):

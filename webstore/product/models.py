@@ -4,7 +4,6 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils import timezone
 
-from webstore.cash import fields
 from .managers import CategoryManager, ProductManager
 
 

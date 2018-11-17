@@ -1,9 +1,9 @@
 from enum import Enum
+from math import ceil
 
 from django.db import models
 
 from webstore.order.models import Order
-from webstore.cash.fields import CashField
 from webstore.core.mixins import TimeStampMixin
 from webstore.delivery.managers import (
     DeliveryPriceManager,
@@ -58,10 +58,15 @@ class DeliveryPricing(models.Model):
     objects = DeliveryPriceManager()
 
     name = models.CharField(max_length=64)
-    cost_per_kg = CashField()
+    cost = models.DecimalField(max_digits=8, decimal_places=2)
+    max_weight = models.FloatField(default=30.00)
 
     def __str__(self):
-        return 'Name: {}, price: {}'.format(self.name, self.cost_per_kg)
+        return 'Name: {}, price: {}'.format(self.name, self.cost)
 
     def __repr__(self):
         return self.__str__()
+
+    def get_price(self, weight):
+        parcels_num = weight / self.max_weight
+        return self.cost * ceil(parcels_num)

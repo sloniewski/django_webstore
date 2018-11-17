@@ -63,6 +63,9 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
 
         return redirect('order:order-summary', uuid=order.uuid)
 
+    def handle_no_permission(self):
+        return redirect('users:login')
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({

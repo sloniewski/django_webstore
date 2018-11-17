@@ -3,7 +3,6 @@ from enum import Enum
 from django.db import models
 from django.utils import timezone
 
-from webstore.cash.fields import CashField
 from webstore.core.mixins import TimeStampMixin
 from webstore.order.models import Order
 
@@ -60,7 +59,7 @@ class Payment(TimeStampMixin, models.Model):
         default=PaymentStatus.OPEN.name,
     )
 
-    value = CashField()
+    value = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
         return 'User {}, value: {}'.format(self.order.user, self.value)

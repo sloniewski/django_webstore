@@ -5,16 +5,38 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models.functions import Cast
 from django.shortcuts import reverse
 
 from webstore.product.models import Product
-from webstore.cash.fields import CashField
 
 
 User = get_user_model()
 
 
+class OrderItemQuerySet(models.QuerySet):
+
+    def with_value(self):
+        return self.annotate(
+            value=Cast(
+                expression=models.F('price') * models.F('quantity'),
+                output_field=models.FloatField(),
+            )
+        )
+
+
+class OrderItemManager(models.Manager):
+
+    def get_queryset(self):
+        return OrderItemQuerySet(self.model, using=self.db)
+
+    def with_value(self):
+        return self.get_queryset().with_value()
+
+
 class OrderItem(models.Model):
+    objects = OrderItemManager()
+
     order = models.ForeignKey(
         'Order',
         on_delete=models.CASCADE,
@@ -25,11 +47,10 @@ class OrderItem(models.Model):
         on_delete=models.CASCADE,
     )
     quantity = models.PositiveIntegerField()
-    price = CashField()
-
-    @property
-    def value(self):
-        return self.price * self.quantity
+    price = models.DecimalField(
+        decimal_places=2,
+        max_digits=8,
+    )
 
     class Meta:
         unique_together = [
@@ -160,14 +181,18 @@ class Order(models.Model):
 
     @property
     def items(self):
-        return self.orderitems.all().select_related('product')
+        return self.orderitems.all().with_value().select_related('product')
 
     @property
     def value(self):
-        value = Decimal('0')
-        for item in self.orderitems.filter(quantity__gte=1):
-            value += item.value
-        return value
+        value = self.orderitems\
+            .all()\
+            .with_value()\
+            .aggregate(total_value=models.Sum('value'))
+        total_value = value['total_value']
+        if total_value in [0, None, False]:
+            total_value = 0
+        return Decimal(total_value) + self.delivery.cost
 
     @property
     def weight(self):

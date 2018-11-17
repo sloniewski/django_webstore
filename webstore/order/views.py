@@ -55,6 +55,8 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
             order=order,
             delivery=delivery,
         )
+        mail = order.get_status_mail()
+        mail.send(fail_silently=False)
 
         return redirect('order:order-summary', uuid=order.uuid)
 

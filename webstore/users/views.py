@@ -13,9 +13,9 @@ class UsersLogoutView(LogoutView):
     next_page = 'product:product-list'
 
 
-class LoginRegisterBaseView():
+class LoginRegisterBaseView:
     form_class = None
-    template_name = 'users/login.html'
+    template_name = 'webstore/users/login.html'
     redirect_field_name = 'next'
     login_form = AuthenticationForm
     register_form = UserCreationForm

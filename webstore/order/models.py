@@ -1,14 +1,14 @@
 from enum import Enum
 from decimal import Decimal
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Sum
 from django.shortcuts import reverse
 
 from webstore.product.models import Product
 from webstore.cash.fields import CashField
-from webstore.cash.models import Cash
 
 
 User = get_user_model()
@@ -54,10 +54,11 @@ class OrderStatus(Enum):
     def choices(cls):
         return [(x.name, x.value) for x in cls]
 
+
 class OrderQuerySet(models.QuerySet):
 
-    def with_properites(self):
-        return self.annotate(item_count=models.Count('orderitems'))\
+    def with_properties(self):
+        return self.annotate(item_count=models.Count('orderitems'))
 
 
 class OrderManager(models.Manager):
@@ -65,8 +66,8 @@ class OrderManager(models.Manager):
     def get_queryset(self):
         return OrderQuerySet(self.model, using=self.db)
 
-    def with_properites(self):
-        return self.get_queryset().with_properites()
+    def with_properties(self):
+        return self.get_queryset().with_properties()
 
     def create_from_cart(self, cart, user):
         order = self.model.objects.create(
@@ -84,9 +85,39 @@ class OrderManager(models.Manager):
         return order
 
 
+class OrderStatusMailFactory:
+    order = None
+    content_subtype = 'html'
+    messages = {
+        OrderStatus.AWAITING_PAYMENT.name: {
+            'template_name': 'mail/order/awaiting_payment.html',
+            'subject': 'Order is awaiting payment',
+        },
+    }
+
+    def __init__(self, order):
+        self.order = order
+
+    def get_mail_obj(self):
+        text = render_to_string(
+            template_name=self.messages[self.order.status]['template_name'],
+            context={
+                'order': self.order,
+            }
+        )
+        mail = EmailMessage(
+            body=text,
+            subject=self.messages[self.order.status]['subject'],
+            to=[self.order.user.email]
+        )
+        mail.content_subtype = self.content_subtype
+        return mail
+
+
 class Order(models.Model):
 
     objects = OrderManager()
+    mail_manager = OrderStatusMailFactory
 
     status = models.CharField(
         max_length=32,
@@ -123,6 +154,10 @@ class Order(models.Model):
     def get_absolute_url(self):
         return reverse('order:order-detail', kwargs={'uuid': self.uuid})
 
+    def get_status_mail(self):
+        mail_factory = self.mail_manager(order=self)
+        return mail_factory.get_mail_obj()
+
     @property
     def items(self):
         return self.orderitems.all().select_related('product')
@@ -145,5 +180,5 @@ class Order(models.Model):
 
     @property
     def volume(self):
-        volumes = [x.volume for x in self.orderitem_set.all()]
+        volumes = [x.volume for x in self.orderitems.all()]
         return sum(volumes)

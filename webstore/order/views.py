@@ -17,10 +17,13 @@ class OrderDetailView(DetailView):
     http_method_names = ['get', 'head', 'options']
 
     def get_object(self, queryset=None):
-        return get_object_or_404(
-            klass=self.model,
-            uuid=self.kwargs.get(self.pk_url_kwarg)
-        )
+        uuid=self.kwargs.get(self.pk_url_kwarg)
+        object = self.model.objects\
+            .filter(uuid=uuid)\
+            .select_related('delivery')\
+            .prefetch_related('orderitems')\
+            .first()
+        return object
 
 
 class OrderConfirmView(LoginRequiredMixin, FormView):
@@ -94,6 +97,7 @@ class OrderSummary(ListView):
 class OrderListView(ListView):
     model = Order
     template_name = 'webstore/order/order_list.html'
+    paginate_by = 10
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).with_properites()
+        return Order.objects.filter(user=self.request.user).with_properties()

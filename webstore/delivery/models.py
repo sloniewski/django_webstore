@@ -26,14 +26,15 @@ class Delivery(TimeStampMixin, models.Model):
 
     name = models.CharField(max_length=64, null=True)
     surname = models.CharField(max_length=64, null=True)
+    city = models.CharField(max_length=64, null=True)
+    country = models.CharField(max_length=64, null=True)
+    postal_code = models.CharField(max_length=16, null=True)
     street_name = models.CharField(max_length=64)
     street_number = models.CharField(max_length=16)
     flat_number = models.CharField(max_length=16, null=True)
-    cost = CashField()
-    status = models.CharField(
-        max_length=32,
-        choices=DeliveryStatus.choices(),
-        default=DeliveryStatus.AWAITING_PAYMENT.name,
+    cost = models.DecimalField(
+        decimal_places=2,
+        max_digits=8,
     )
 
     order = models.OneToOneField(
@@ -50,6 +51,7 @@ class Delivery(TimeStampMixin, models.Model):
 
     class Meta:
         ordering = ('created',)
+        verbose_name_plural = 'Deliveries'
 
 
 class DeliveryPricing(models.Model):

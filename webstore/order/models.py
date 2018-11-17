@@ -167,7 +167,7 @@ class Order(models.Model):
         )
 
     def __str__(self):
-        return 'order id: {}, value: {};'.format(self.id, self.value)
+        return 'order id: {}, value: {};'.format(self.uuid, self.value)
 
     def __repr__(self):
         return self.__str__()
@@ -192,7 +192,7 @@ class Order(models.Model):
         total_value = value['total_value']
         if total_value in [0, None, False]:
             total_value = 0
-        return Decimal(total_value) + self.delivery.cost
+        return round(Decimal(total_value) + self.delivery.cost, 2)
 
     @property
     def weight(self):

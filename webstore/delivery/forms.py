@@ -17,4 +17,14 @@ class ChooseDeliveryForm(forms.ModelForm):
 
     class Meta:
         model = Delivery
-        fields = ['name', 'surname', 'street_name', 'street_number', 'flat_number', 'cost']
+        fields = [
+            'name',
+            'surname',
+            'street_name',
+            'street_number',
+            'flat_number',
+            'city',
+            'country',
+            'postal_code',
+            'cost',
+        ]

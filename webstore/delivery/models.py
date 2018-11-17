@@ -23,6 +23,10 @@ class DeliveryStatus(Enum):
 
 class Delivery(TimeStampMixin, models.Model):
     objects = DeliveryManager()
+    iterable_attrs = [
+        'name', 'surname', 'street_name', 'street_number',
+        'flat_number', 'postal_code', 'city', 'country',
+    ]
 
     name = models.CharField(max_length=64, null=True)
     surname = models.CharField(max_length=64, null=True)
@@ -48,6 +52,20 @@ class Delivery(TimeStampMixin, models.Model):
 
     def __repr__(self):
         return self.__str__()
+
+    def __iter__(self):
+        self.n = 0
+        return self
+
+    def __next__(self):
+        if self.n < len(self.iterable_attrs):
+            attr_name = self.iterable_attrs[self.n]
+            attr_val = getattr(self, attr_name)
+            result = (attr_name, attr_val)
+            self.n += 1
+            return result
+        else:
+            raise StopIteration
 
     class Meta:
         ordering = ('created',)

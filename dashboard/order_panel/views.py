@@ -1,11 +1,11 @@
 from django.views import generic
-from django.shortcuts import reverse
+from django.shortcuts import reverse, get_object_or_404
 from django.db.models import Count
 
 from django_filters.views import FilterView
 
-from webstore.order.models import Order, OrderItem, OrderStatus
-from .forms import FilterOrdersForm
+from webstore.order.models import Order, OrderItem
+from .forms import FilterOrdersForm, OrderUpdateForm
 
 
 class OrderListView(FilterView):
@@ -21,8 +21,15 @@ class OrderListView(FilterView):
             .annotate(num_items=Count('orderitems'))
 
 
-class OrderUpdateView(generic.View):
+class OrderUpdateView(generic.UpdateView):
+    model = Order
     template_name = 'dashboard/order/order_update.html'
+    form_class = OrderUpdateForm
+
+    def get_object(self, queryset=None):
+        uuid = self.kwargs.get('uuid')
+        return get_object_or_404(self.model, uuid=uuid)
+
 
 
 class OrderDetailView(generic.DetailView):

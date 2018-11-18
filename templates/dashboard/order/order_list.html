@@ -23,7 +23,8 @@
                     <thead>
                         <tr>
                             <th>Order id</th>
-                            <th>Client</th>
+                            <th>Created</th>
+                            <th>Status</th>
                             <th>Client email</th>
                             <th>Items</th>
                             <th>Value</th>
@@ -34,12 +35,13 @@
                         {% for object in object_list %}
                         <tr>
                             <td>{{ object.uuid }}</td>
-                            <td>{{ object.user.full_name }}</td>
+                            <td>{{ object.created|date:'d-m-Y' }}</td>
+                            <td>{{ object.status }}</td>
                             <td>{{ object.user.email }}</td>
                             <td>{{ object.num_items }}</td>
                             <td>{{ object.value }}</td>
                             <td>
-                                <a href="">
+                                <a href="{% url 'order_panel:order-update' uuid=object.uuid %}">
                                     EDIT
                                 </a>|
                                 <a href="">

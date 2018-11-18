@@ -51,8 +51,6 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         delivery.order = order
         delivery.save()
 
-        self.get_cart().delete()
-
         Payment.objects.create_for_order(
             order=order,
             delivery=delivery,

@@ -95,14 +95,12 @@ class OrderManager(models.Manager):
             user=user,
             status=OrderStatus.AWAITING_PAYMENT.name,
         )
-        for cart_item in cart.cartitem_set.all():
-            # TODO should be single query - hit databese one time
-            OrderItem.objects.create(
-                order=order,
-                price=cart_item.price,
-                product=cart_item.product,
-                quantity=cart_item.quantity,
-            )
+        OrderItem.objects.bulk_create(
+            [OrderItem(order=order, price=cart_item.price,
+                       product=cart_item.product,quantity=cart_item.quantity,)
+             for cart_item in cart.cartitem_set.all()]
+        )
+        cart.delete()
         return order
 
 
@@ -202,8 +200,3 @@ class Order(models.Model):
         for item in order_items:
             weight += (item.quantity * item.product.weight)
         return weight
-
-    @property
-    def volume(self):
-        volumes = [x.volume for x in self.orderitems.all()]
-        return sum(volumes)

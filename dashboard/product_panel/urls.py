@@ -20,7 +20,25 @@ urlpatterns = [
     path('create', views.ProductCreateView.as_view(),
          name='product-create'),
 
+    path('product/price-list/<int:number>/create', views.ProductPriceCreateView.as_view(),
+         name='product-price-create'),
+
     path('product/price-list/<int:number>', views.ProductPriceListView.as_view(),
          name='product-price-list'),
+
+    path('price/<int:pk>', views.PriceUpdateView.as_view(),
+         name='price-update'),
+
+    path('category/list', views.CategoryListView.as_view(),
+         name='category-list'),
+
+    path('category/<int:pk>/update/', views.CategoryUpdateView.as_view(),
+         name='category-update'),
+
+    path('category/<int:pk>/delete/', views.CategoryDeleteView.as_view(),
+         name='category-delete'),
+
+    path('category/create/', views.CategoryCreateView.as_view(),
+         name='category-create'),
 
 ]

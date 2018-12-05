@@ -1,19 +1,42 @@
 from enum import Enum
+from decimal import Decimal
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Sum
+from django.db.models.functions import Cast
 from django.shortcuts import reverse
 
 from webstore.product.models import Product
-from webstore.cash.fields import CashField
-from webstore.cash.models import Cash
 
 
 User = get_user_model()
 
 
+class OrderItemQuerySet(models.QuerySet):
+
+    def with_value(self):
+        return self.annotate(
+            value=Cast(
+                expression=models.F('price') * models.F('quantity'),
+                output_field=models.FloatField(),
+            )
+        )
+
+
+class OrderItemManager(models.Manager):
+
+    def get_queryset(self):
+        return OrderItemQuerySet(self.model, using=self.db)
+
+    def with_value(self):
+        return self.get_queryset().with_value()
+
+
 class OrderItem(models.Model):
+    objects = OrderItemManager()
+
     order = models.ForeignKey(
         'Order',
         on_delete=models.CASCADE,
@@ -24,11 +47,10 @@ class OrderItem(models.Model):
         on_delete=models.CASCADE,
     )
     quantity = models.PositiveIntegerField()
-    price = CashField()
-
-    @property
-    def value(self):
-        return self.price * self.quantity
+    price = models.DecimalField(
+        decimal_places=2,
+        max_digits=8,
+    )
 
     class Meta:
         unique_together = [
@@ -54,27 +76,67 @@ class OrderStatus(Enum):
         return [(x.name, x.value) for x in cls]
 
 
+class OrderQuerySet(models.QuerySet):
+
+    def with_properties(self):
+        return self.annotate(item_count=models.Count('orderitems'))
+
+
 class OrderManager(models.Manager):
+
+    def get_queryset(self):
+        return OrderQuerySet(self.model, using=self.db)
+
+    def with_properties(self):
+        return self.get_queryset().with_properties()
 
     def create_from_cart(self, cart, user):
         order = self.model.objects.create(
             user=user,
             status=OrderStatus.AWAITING_PAYMENT.name,
         )
-        for cart_item in cart.cartitem_set.all():
-            # TODO should be single query - hit databese one time
-            OrderItem.objects.create(
-                order=order,
-                price=cart_item.price,
-                product=cart_item.product,
-                quantity=cart_item.quantity,
-            )
+        OrderItem.objects.bulk_create(
+            [OrderItem(order=order, price=cart_item.price,
+                       product=cart_item.product,quantity=cart_item.quantity,)
+             for cart_item in cart.cartitem_set.all()]
+        )
+        cart.delete()
         return order
+
+
+class OrderStatusMailFactory:
+    order = None
+    content_subtype = 'html'
+    messages = {
+        OrderStatus.AWAITING_PAYMENT.name: {
+            'template_name': 'mail/order/awaiting_payment.html',
+            'subject': 'Order is awaiting payment',
+        },
+    }
+
+    def __init__(self, order):
+        self.order = order
+
+    def get_mail_obj(self):
+        text = render_to_string(
+            template_name=self.messages[self.order.status]['template_name'],
+            context={
+                'order': self.order,
+            }
+        )
+        mail = EmailMessage(
+            body=text,
+            subject=self.messages[self.order.status]['subject'],
+            to=[self.order.user.email]
+        )
+        mail.content_subtype = self.content_subtype
+        return mail
 
 
 class Order(models.Model):
 
     objects = OrderManager()
+    mail_manager = OrderStatusMailFactory
 
     status = models.CharField(
         max_length=32,
@@ -103,7 +165,7 @@ class Order(models.Model):
         )
 
     def __str__(self):
-        return 'order id: {}, value: {};'.format(self.id, self.value)
+        return 'order id: {}, value: {};'.format(self.uuid, self.value)
 
     def __repr__(self):
         return self.__str__()
@@ -111,24 +173,24 @@ class Order(models.Model):
     def get_absolute_url(self):
         return reverse('order:order-detail', kwargs={'uuid': self.uuid})
 
-    @property
-    def items(self):
-        return self.orderitems.all().select_related('product')
+    def get_status_mail(self):
+        mail_factory = self.mail_manager(order=self)
+        return mail_factory.get_mail_obj()
 
     @property
-    def item_count(self):
-        item_count = self.orderitems.aggregate(
-            Sum('quantity'))['quantity__sum']
-        if item_count is None:
-            return 0
-        return item_count
+    def items(self):
+        return self.orderitems.all().with_value().select_related('product')
 
     @property
     def value(self):
-        value = Cash('0')
-        for item in self.orderitems.filter(quantity__gte=1):
-            value += item.value
-        return value
+        value = self.orderitems\
+            .all()\
+            .with_value()\
+            .aggregate(total_value=models.Sum('value'))
+        total_value = value['total_value']
+        if total_value in [0, None, False]:
+            total_value = 0
+        return round(Decimal(total_value) + self.delivery.cost, 2)
 
     @property
     def weight(self):
@@ -138,8 +200,3 @@ class Order(models.Model):
         for item in order_items:
             weight += (item.quantity * item.product.weight)
         return weight
-
-    @property
-    def volume(self):
-        volumes = [x.volume for x in self.orderitem_set.all()]
-        return sum(volumes)

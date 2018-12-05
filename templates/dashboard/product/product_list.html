@@ -4,48 +4,70 @@
 {% block content %}
 <div class="row">
     <div class="col s12 m12 l3">
-        <ul class="collapsible">
-            <li>
-                <div class="collapsible-header"><i class="material-icons">keyboard_arrow_down</i>Filter products</div>
-                <div class="collapsible-body">
-                    <form class="" action="" method="get">
-                        <div class="row">
-                            {% for field in filter.form %}
-                                <div class="col s6 m6">
-                                    {{ field.errors }}
-                                    <label for="{{ field.id_for_label }}">{{ field.name }}</label>
-                                    {{ field }}
-                                </div>
-                            {% endfor %}
+        <div class="card">
+            <div class="card-title blue-grey lighten-4">
+                Filter products
+            </div>
+            <div class="card-content">
+                <form class="" action="" method="get">
+                    <div class="row">
+                        {% for field in filter.form %}
+                        <div class="col s6 m6">
+                            {{ field.errors }}
+                            <label for="{{ field.id_for_label }}">{{ field.name }}</label>
+                            {{ field }}
                         </div>
+                        {% endfor %}
+                    </div>
                     <input type="submit" name="submit" value="Submit" class="btn">
-                    </form>
-                </div>
-            </li>
-        </ul>
+                </form>
+
+            </div>
+        </div>
     </div>
 
     <div class="col s12 m12 l9">
-        <ul class="collection with-header">
-            <li class="collection-header blue-grey lighten-4"><h4>Products List</h4></li>
-            {% for object in object_list %}
-            <li class="collection-item">
-                <span class="title">{{ object.name }}</span>,
-                        Actual price: {{ object.price }}
-                <div class="secondary-content">
-                    <a href="{% url 'product_panel:product-update' slug=object.slug %}">
-                        EDIT
-                    </a>|
-                    <a href="{% url 'product_panel:product-delete' slug=object.slug %}">
-                        DELETE
-                    </a>|
-                    <a href="{% url 'product_panel:product-price-list' number=object.number %}">
-                        PRICING
-                    </a>
-                </div>
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="card">
+            <div class="card-title blue-grey lighten-4">
+                Products List
+            </div>
+            <div class="card-contet">
+                <table class="striped responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Number</th>
+                            <th>Name</th>
+                            <th>Active</th>
+                            <th>Stock</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for object in object_list %}
+                        <tr>
+                            <td>{{ object.number }}</td>
+                            <td>{{ object.name }}</td>
+                            <td>{{ object.active }}</td>
+                            <td>{{ object.stock }}</td>
+                            <td>{{ object.price }}</td>
+                            <td>
+                                <a href="{% url 'product_panel:product-update' slug=object.slug %}">
+                                    EDIT
+                                </a>|
+                                <a href="{% url 'product_panel:product-delete' slug=object.slug %}">
+                                    DELETE
+                                </a>|
+                                <a href="{% url 'product_panel:product-price-list' number=object.number %}">
+                                    PRICING
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div class="col s12">

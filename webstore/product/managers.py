@@ -22,8 +22,7 @@ class ProductQuerySet(models.QuerySet):
                     queryset=prices.values('value')[:1],
                     output_field=models.DecimalField(),
                 )
-            )\
-            .filter(price__isnull=False)
+            )
         return products
 
 

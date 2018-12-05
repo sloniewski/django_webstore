@@ -1,11 +1,12 @@
 from django.shortcuts import reverse, get_object_or_404
+from django.db.models import Count
 
-from webstore.product.models import Product, Price
+from webstore.product.models import Product, Price, Category
 
 from django_filters.views import FilterView
 from django.views import generic
 
-from .forms import ProductFilterForm
+from .forms import ProductFilterForm, PriceCreateForm
 
 
 class ProductListView(FilterView):
@@ -20,12 +21,21 @@ class ProductListView(FilterView):
 
 
 class ProductCreateView(generic.CreateView):
-    template_name = 'dashboard/product/product_create.html'
+    template_name = 'dashboard/product/product_update.html'
     model = Product
-    fields = '__all__'
+    fields = [
+        'name',
+        'active',
+        'description',
+        'weight',
+        'width',
+        'length',
+        'height',
+        'categories'
+    ]
 
     def get_success_url(self):
-        return reverse('dashboard:product-list')
+        return reverse('product_panel:product-list')
 
 
 class ProductUpdateView(generic.UpdateView):
@@ -34,10 +44,16 @@ class ProductUpdateView(generic.UpdateView):
     fields = [
         'name',
         'active',
-        'slug',
         'description',
         'weight',
+        'width',
+        'length',
+        'height',
+        'categories'
     ]
+
+    def get_success_url(self):
+        return reverse('product_panel:product-list')
 
 
 class ProductDeleteView(generic.DeleteView):
@@ -60,3 +76,79 @@ class ProductPriceListView(generic.ListView):
             self.extra_context = data_dict
         else:
             self.extra_context.update(data_dict)
+
+
+class ProductPriceCreateView(generic.CreateView):
+    model = Price
+    template_name = 'dashboard/product/product_price_create.html'
+    form_class = PriceCreateForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.product = get_object_or_404(
+            Product,
+            number=self.kwargs.get('number'),
+        )
+        self.extra_context = {'product': self.product}
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'product': self.product})
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('product_panel:product-price-list', kwargs={'number': self.product.number})
+
+
+class PriceUpdateView(generic.UpdateView):
+    model = Price
+    template_name = 'dashboard/product/product_price_create.html'
+    fields = [
+        'value',
+        'valid_from',
+    ]
+
+    def get_success_url(self):
+        return reverse('product-price-list', kwargs={'number': self.object.product.numer})
+
+class CategoryListView(generic.ListView):
+    model = Category
+    template_name = 'dashboard/product/category_list.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return self.model.objects.all()\
+            .annotate(product_count=Count('product'))
+
+
+class CategoryCreateView(generic.CreateView):
+    model = Category
+    template_name = 'dashboard/product/category_create_update.html'
+    fields = [
+        'name',
+        'description',
+    ]
+
+    def get_success_url(self):
+        return reverse('product_panel:category-list')
+
+
+class CategoryUpdateView(generic.UpdateView):
+    model = Category
+    template_name = 'dashboard/product/category_create_update.html'
+    fields = [
+        'name',
+        'description',
+    ]
+
+    def get_success_url(self):
+        return reverse('product_panel:category-list')
+
+
+class CategoryDeleteView(generic.DeleteView):
+    model = Category
+    template_name = 'dashboard/generic_delete.html'
+
+    def get_success_url(self):
+        return reverse('product_panel:category-list')
+   

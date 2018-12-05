@@ -1,0 +1,13 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %} 
+<div class="card-panel">
+	<h5>Confirm deletion:</h5>
+	<div class="teal lighten-4">
+		<h4>{{ object }}</h4>
+	</div>
+	{% include 'webstore/generic_form.html' with form=form %}
+</div>
+
+{% endblock content%}

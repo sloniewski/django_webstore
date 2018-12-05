@@ -4,7 +4,6 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils import timezone
 
-from webstore.cash import fields
 from .managers import CategoryManager, ProductManager
 
 
@@ -177,7 +176,6 @@ class Price(models.Model):
     value = models.DecimalField(
         decimal_places=2,
         max_digits=8,
-        help_text="returns instance of Cash"
     )
     product = models.ForeignKey(
         Product,
@@ -202,3 +200,6 @@ class Price(models.Model):
 
     def __str__(self):
         return str(self.value)
+
+    def __repr__(self):
+        return 'Price, id: {}, value: {}'.format(object.id, object.value)

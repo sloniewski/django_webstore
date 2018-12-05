@@ -9,7 +9,7 @@
 
     {% for x in page_obj.paginator.page_range %}
         <li><a href="{{ request.path }}?page={{x}}&{% for k,v in request.GET.items %}{% if k != "page" %}{{ k }}={{ v }} &{% endif %}{% endfor %}"
-            {% if x == page_obj.number %}class="active_page_num"{% endif %}>{{x}}</a>
+            {% if x == page_obj.number %}class="blue accent-1"{% endif %}>{{x}}</a>
         </li>
     {% endfor %}
 

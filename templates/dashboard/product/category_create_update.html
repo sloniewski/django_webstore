@@ -1,10 +1,8 @@
 {% extends 'dashboard/base_dashboard.html' %}
-{% load static %}
-
 
 {% block content %}
 <div class="card-panel">
-    {% include 'webstore/generic_form.html' %}
+	<h4>Create category</h4>
+	{% include 'webstore/generic_form.html' with form=form %}
 </div>
-
 {% endblock content %}

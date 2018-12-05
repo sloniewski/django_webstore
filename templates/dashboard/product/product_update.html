@@ -1,7 +1,69 @@
 {% extends 'dashboard/base_dashboard.html' %}
 
 {% block content %}
-    last updated: {{object.edited }} <br>
-    created: {{object.created }}
-    {% include 'dashboard/product/generic_form.html' %}
+    <div class="product-update-card card">
+        <div class="card-title">
+            <p>Name: {{ object.name }}</p>
+            <small>
+                last updated: {{object.edited }} <br>
+                created: {{object.created }}
+            </small>
+        </div>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form.errors }}
+            <div class="cart-content ">
+                <div class="row">
+                    <div class="input-field col m6 s12 xs12">
+                        {{ form.name.errors }}
+                        {{ form.name }}
+                        <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                    </div>
+                    <div class="input-field col m6 s12 xs12">
+                        {{ form.active.errors }}
+                        <label for="{{ form.active.id_for_label }}">
+                            {{ form.active }}
+                            <span>{{ form.active.label }}</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col m3 s6 xs12">
+                        {{ form.weight.errors }}
+                        {{ form.weight }}
+                        <label for="{{ form.weight.id_for_label }}">{{ form.weight.label }}</label>
+                    </div>
+                    <div class="input-field col m3 s6 xs12">
+                        {{ form.width.errors }}
+                        {{ form.width }}
+                        <label for="{{ form.width.id_for_label }}">{{ form.width.label }}</label>
+                    </div>
+                    <div class="input-field col m3 s6 xs12">
+                        {{ form.height.errors }}
+                        {{ form.height }}
+                        <label for="{{ form.height.id_for_label }}">{{ form.height.label }}</label>
+                    </div>
+                    <div class="input-field col m3 s6 xs12">
+                        {{ form.length.errors }}
+                        {{ form.length }}
+                        <label for="{{ form.length.id_for_label }}">{{ form.length.label }}</label>
+                    </div>
+                    <div class="input-field col m12 s12 xs12">
+                        {{ form.description.errors }}
+                        {{ form.description }}
+                        <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                    </div>
+                    <div class="input-field col m12 s12 xs12">
+                        {{ form.categories.errors }}
+                        {{ form.categories }}
+                        <label for="{{ form.categories.id_for_label }}">{{ form.categories.label }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="card-action">
+                <input type="submit" name="submit" value="submit" class="btn">
+                <a href="{% url 'product_panel:product-list' %}" class="btn">Cancel</a>
+            </div>
+        </form>
+    </div>
 {% endblock content %}

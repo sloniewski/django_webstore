@@ -1,10 +1,8 @@
 {% extends 'dashboard/base_dashboard.html' %}
-{% load static %}
-
 
 {% block content %}
 <div class="card-panel">
-    {% include 'webstore/generic_form.html' %}
+	<h5>Create price for: {{ product.name }}</h5>
+	{% include 'webstore/generic_form.html' with form=form %}
 </div>
-
 {% endblock content %}

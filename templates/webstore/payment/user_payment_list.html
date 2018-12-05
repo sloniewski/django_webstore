@@ -6,7 +6,7 @@
     <li class="collection-header"><h4>Outstanding payments</h4></li>
 
     {%for object in object_list %}
-    <li class="collection-item">Created: {{ object.created }}, Value: {{ object.value }}, Days outstainding: {{object.days_outstanding}}</li>
+    <li class="collection-item">{{ object.value }} EUR, Created: {{ object.created|date:'d-m-Y' }}, Days outstainding: {{object.days_outstanding}}</li>
     {% endfor %}
 
 </ul>

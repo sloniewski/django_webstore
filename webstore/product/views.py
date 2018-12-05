@@ -16,4 +16,4 @@ class ProductListView(FilterView):
     template_name = 'webstore/product/product_list.html'
     filterset_class = FilterProductsForm
     strict = False
-    queryset = Product.objects.with_prices()
+    queryset = Product.objects.with_prices().filter(price__isnull=False)

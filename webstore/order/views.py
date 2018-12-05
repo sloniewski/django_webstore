@@ -5,6 +5,7 @@ from django.views.generic import DetailView, FormView, ListView
 
 from webstore.cart.models import Cart
 from webstore.delivery.forms import ChooseDeliveryForm
+from webstore.delivery.models import Delivery
 from webstore.payment.models import Payment
 
 from .models import Order, OrderItem
@@ -17,10 +18,13 @@ class OrderDetailView(DetailView):
     http_method_names = ['get', 'head', 'options']
 
     def get_object(self, queryset=None):
-        return get_object_or_404(
-            klass=self.model,
-            uuid=self.kwargs.get(self.pk_url_kwarg)
-        )
+        uuid=self.kwargs.get(self.pk_url_kwarg)
+        object = self.model.objects\
+            .filter(uuid=uuid)\
+            .select_related('delivery')\
+            .prefetch_related('orderitems')\
+            .first()
+        return object
 
 
 class OrderConfirmView(LoginRequiredMixin, FormView):
@@ -33,10 +37,8 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
     def get_login_url(self):
         return reverse('users:login')
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['cart'] = self.get_cart()
-        return kwargs
+    def handle_no_permission(self):
+        return redirect('users:login')
 
     def form_valid(self, form):
         # TODO bug - you can create an order with no items
@@ -49,14 +51,23 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         delivery.order = order
         delivery.save()
 
-        self.get_cart().delete()
-
         Payment.objects.create_for_order(
             order=order,
             delivery=delivery,
         )
+        mail = order.get_status_mail()
+        mail.send(fail_silently=False)
 
         return redirect('order:order-summary', uuid=order.uuid)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['cart'] = self.get_cart()
+        return kwargs
+
+    def get_initial(self):
+        last_delivery = Delivery.objects.get_last(self.request.user)
+        return dict(last_delivery)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -92,6 +103,7 @@ class OrderSummary(ListView):
 class OrderListView(ListView):
     model = Order
     template_name = 'webstore/order/order_list.html'
+    paginate_by = 10
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return Order.objects.filter(user=self.request.user).with_properties()

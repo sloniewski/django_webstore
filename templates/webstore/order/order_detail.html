@@ -5,14 +5,60 @@ Order summary
 {% endblock title %}
 
 {% block body %}
-# adres dostawy
-# status platnosci
-<ol>
-{% for object in object.items %}
-    <li>
-        <span class="cart-list-item">{{ object.product.name }}</span>, qty: {{ object.quantity }}, price {{ object.price }}
-    </li>
-{% endfor %}
-</ol>
-TOTAL: <span id="cart-total-value">{{ object.value }}</span>
+<div class="row">
+	<div class="card-panel col m6 s12">
+		<span class="card-title"><h4>Deliver to:</h4></span>
+		<ul class="collection">
+			<li class="collection-item">{{ object.delivery.name }} {{object.delivery.surname}}</li>
+			<li class="collection-item">{{ object.delivery.street_name }} no.{{ object.delivery.street_number }} / {{ object.delivery.flat_number }}</li>
+			<li class="collection-item">{{ object.delivery.city }} {{ object.delivery.postal_code }}</li>
+			<li class="collection-item">{{ object.delivery.country }}</li>
+		</ul>
+	</div>
+	<div class="card-panel col m6 s12">
+		<span class="card-title"><h4>Order details:</h4></span>
+		<ul class="collection">
+			<li class="collection-item">Status: {{ object.status }}</li>
+			<li class="collection-item">Created: {{ object.created|date:'d-m-Y H:i' }}</li>
+			<li class="collection-item">Items: {{ object.item_count }}</li>
+			<li class="collection-item">Value: {{ object.value }}</li>
+		</ul>
+	</div>
+	<div class="card-panel col m12 s12">
+		<span class="card-title"><h4>Items</h4></span>
+		<table class="striped">
+			<thead>
+				<tr>
+					<th>Item</th>
+					<th>Qty</th>
+					<th>Price</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in object.items %}
+				<tr>
+					<td>{{ item.product.name }}</td>
+					<td>{{ item.quantity }}</td>
+					<td>{{ item.price }}</td>
+					<td>{{ item.value }}</td>
+				</tr>
+				{% endfor %}
+				<tr>
+					<td>Delivery</td>
+					<td>1</td>
+					<td>{{ object.delivery.cost }}</td>
+					<td>{{ object.delivery.cost }}</td>
+				</tr>
+				<tr>
+					<td>Total</td>
+					<td>{{ object.item_count }}</td>
+					<td>-</td>
+					<td>{{ object.value }}</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</div>
 {% endblock body %}

@@ -1,8 +1,38 @@
+import django_filters
 from django import forms
 from django.core.mail import send_mail
 
 from webstore.core.widgets import MaterializeCheckboxInput
 from webstore.payment.models import Payment
+
+
+class FilterPaymentForm(django_filters.FilterSet):
+    created_before = django_filters.DateFilter(
+        field_name='created',
+        lookup_expr='lte',
+        label='Created before',
+    )
+    created_after = django_filters.DateFilter(
+        field_name='created',
+        lookup_expr='gte',
+        label='Created after',
+    )
+    value_gte = django_filters.NumberFilter(
+        field_name='value',
+        lookup_expr='gte',
+        label='value greater than',
+    )
+    value_lte = django_filters.NumberFilter(
+        field_name='value',
+        lookup_expr='lte',
+        label='value less than',
+    )
+
+    class Meta:
+        model = Payment
+        fields = [
+            'payed',
+        ]
 
 
 class UpdatePaymentForm(forms.ModelForm):

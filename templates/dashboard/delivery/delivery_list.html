@@ -5,11 +5,7 @@
 <div class="row">
     <!-- filter form -->
     <div class="col s3">
-        <h4>Filter delivieres</h4>
-        <form action="" method="GET">
-            {{filter.form.as_p}}
-            <input type="submit" value="submit" class="btn">
-        </form>
+        {% include 'dashboard/generic_filter.html' with filter=filter model_name='deliveries' %}
     </div>
 
     <!-- delivieries list -->
@@ -35,10 +31,10 @@
                         <td>{{ object.status }}</td>
                         <td>{{ object.created }}</td>
                         <td>
-                            <a href="{% url 'delivery_panel:delivery-update' pk=object.pk %}">
+                            <a href="{% url 'order_panel:order-update' uuid=object.order.uuid %}">
                                 CHANGE STATUS
                             </a>|
-                            <a href="">
+                            <a href="{% url 'delivery_panel:delivery-update' pk=object.pk %}">
                                 EDIT
                             </a>|
                             <a href="">

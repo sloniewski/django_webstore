@@ -5,14 +5,15 @@ from django_filters.views import FilterView
 from webstore.delivery.models import Delivery
 from webstore.order.models import Order
 
-from .forms import DeliveryUpdateForm, FilterDelieriesForm
+from .forms import DeliveryUpdateForm, FilterDeliveriesForm
 
 
 class DeliveryListView(FilterView):
     model = Delivery
     template_name = 'dashboard/delivery/delivery_list.html'
-    filterset_class = FilterDelieriesForm
+    filterset_class = FilterDeliveriesForm
     strict = False
+    paginate_by = 20
 
 
 class DeliveryUpdateView(generic.UpdateView):

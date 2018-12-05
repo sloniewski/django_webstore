@@ -8,11 +8,12 @@ from .forms import FilterPaymentForm, UpdatePaymentForm
 
 
 class PaymentListView(FilterView):
-    model = Payment
     template_name = 'dashboard/payment/payment_list.html'
-    filter_form_class = FilterPaymentForm
+    filterset_class = FilterPaymentForm
     paginate_by = 20
     strict = False
+    model = Payment
+
 
     def get_queryset(self):
         return self.model.objects.all().select_related('order')

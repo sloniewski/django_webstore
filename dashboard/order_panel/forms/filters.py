@@ -12,12 +12,12 @@ class FilterOrdersForm(django_filters.FilterSet):
     created_before = django_filters.DateFilter(
         field_name='created',
         lookup_expr='lte',
-        label='Created before'
+        label='Created before',
     )
     created_after = django_filters.DateFilter(
         field_name='created',
         lookup_expr='gte',
-        label='Created after'
+        label='Created after',
     )
 
     class Meta:

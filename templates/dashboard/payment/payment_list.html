@@ -5,11 +5,7 @@
 <div class="row">
     <!-- filter form -->
     <div class="col s3">
-        <h4>Filter payments</h4>
-        <form action="" method="GET">
-            {{filter_form.as_p}}
-            <input type="submit" value="submit" class="btn">
-        </form>
+        {% include 'dashboard/generic_filter.html' with filter=filter model_name='payments' %}
     </div>
 
     <!-- payment list -->

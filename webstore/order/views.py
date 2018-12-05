@@ -18,7 +18,7 @@ class OrderDetailView(DetailView):
     http_method_names = ['get', 'head', 'options']
 
     def get_object(self, queryset=None):
-        uuid=self.kwargs.get(self.pk_url_kwarg)
+        uuid = self.kwargs.get(self.pk_url_kwarg)
         object = self.model.objects\
             .filter(uuid=uuid)\
             .select_related('delivery')\

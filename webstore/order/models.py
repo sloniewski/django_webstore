@@ -97,7 +97,7 @@ class OrderManager(models.Manager):
         )
         OrderItem.objects.bulk_create(
             [OrderItem(order=order, price=cart_item.price,
-                       product=cart_item.product,quantity=cart_item.quantity,)
+                       product=cart_item.product, quantity=cart_item.quantity,)
              for cart_item in cart.cartitem_set.all()]
         )
         cart.delete()
@@ -190,7 +190,7 @@ class Order(models.Model):
         total_value = value['total_value']
         if total_value in [0, None, False]:
             total_value = 0
-        return round(Decimal(total_value) + self.delivery.cost, 2)
+        return round(Decimal(total_value), 2)
 
     @property
     def weight(self):

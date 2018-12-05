@@ -67,6 +67,8 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
 
     def get_initial(self):
         last_delivery = Delivery.objects.get_last(self.request.user)
+        if last_delivery is None:
+            return {}
         return dict(last_delivery)
 
     def get_context_data(self, **kwargs):
@@ -100,7 +102,7 @@ class OrderSummary(ListView):
         return self.model.objects.filter(order=self.order)
 
 
-class OrderListView(ListView):
+class OrderListView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'webstore/order/order_list.html'
     paginate_by = 10

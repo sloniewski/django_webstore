@@ -1,24 +1,9 @@
-from enum import Enum
 
 from django.db import models
 from django.utils import timezone
 
 from webstore.core.mixins import TimeStampMixin
-from webstore.order.models import Order
-
-
-class PaymentStatus(Enum):
-    OPEN = 'open'
-    DELAYED = 'delayed'
-    CLOSED = 'closed'
-
-    @classmethod
-    def choices(cls):
-        return [(x.name, x.value) for x in cls]
-
-    @classmethod
-    def active(cls):
-        return [x.name for x in cls if x.name != 'CLOSED']
+from webstore.order.models import Order, OrderStatus
 
 
 class PaymentManager(models.Manager):
@@ -53,12 +38,6 @@ class Payment(TimeStampMixin, models.Model):
         default='tr',
     )
 
-    status = models.CharField(
-        max_length=16,
-        choices=PaymentStatus.choices(),
-        default=PaymentStatus.OPEN.name,
-    )
-
     value = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
@@ -74,4 +53,13 @@ class Payment(TimeStampMixin, models.Model):
     @property
     def days_outstanding(self):
         now = timezone.now()
-        return (now - self.created).days
+        if self.order.status == OrderStatus.AWAITING_PAYMENT.name:
+            return (now - self.created).days
+        return 0
+
+    @property
+    def status(self):
+        if self.order.status == OrderStatus.AWAITING_PAYMENT.name:
+            return 'open'
+        else:
+            return 'closed'

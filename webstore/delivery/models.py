@@ -1,4 +1,3 @@
-from enum import Enum
 from math import ceil
 
 from django.db import models
@@ -9,16 +8,6 @@ from webstore.delivery.managers import (
     DeliveryPriceManager,
     DeliveryManager,
 )
-
-
-class DeliveryStatus(Enum):
-    AWAITING_PAYMENT = 'awaiting payment'
-    READY_FOR_SHIPPING = 'ready for shipping'
-    SHIPPED = 'shipped'
-
-    @classmethod
-    def choices(cls):
-        return [(x.name, x.value) for x in cls if x.name != 'AWAITING_PAYMENT']
 
 
 class Delivery(TimeStampMixin, models.Model):
@@ -70,6 +59,10 @@ class Delivery(TimeStampMixin, models.Model):
     class Meta:
         ordering = ('created',)
         verbose_name_plural = 'Deliveries'
+
+    @property
+    def status(self):
+        return self.order.status
 
 
 class DeliveryPricing(models.Model):

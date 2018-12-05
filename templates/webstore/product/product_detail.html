@@ -18,7 +18,9 @@
                     <img src="/{{ image.picture.data.url }}" alt="" width="100">
                 </div>
             {% empty %}
-                <img src={% static 'images/default.png' %}>
+                <div class="carousel-item">
+                    <img src={% static 'images/default.png' %}>
+                </div>
             {% endfor %}
             </div>
         </div>
@@ -29,8 +31,8 @@
             <form id="add-item-form" action="{% url 'cart:add-item' %}" method="GET">
                 {% csrf_token %}
                 <input id="product-id" type="hidden" value="{{ object.id }}">
-                <label>qty.
-                    <input type="number" id="item-quantity">
+                <label>Select quantity
+                    <input type="number" id="item-quantity" value="1">
                 </label>
                 <input type="submit" id="add-to-cart" class="btn" value="Add to cart">
             </form>

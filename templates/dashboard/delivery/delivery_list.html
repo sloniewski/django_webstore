@@ -13,16 +13,50 @@
     </div>
 
     <!-- delivieries list -->
-    <ul class="collection with-header col s9">
-        <li class="collection-header"><h4>Deliveries list</h4></li>
-
-        {%for object in object_list %}
-        <li class="collection-item">{{ object }}
-            {% if object.status != 'AWAITING_PAYMENT' %}
-                <a href="{% url 'delivery_panel:delivery-update' pk=object.pk %}" class="btn-small">change status</a>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="col s12 m12 l9">
+        <div class="card">
+            <div class="card-title blue-grey lighten-4">
+                Deliveries list
+            </div>
+            <div class="card-contet">
+            <table class="striped responsive-table">
+                <thead>
+                    <tr>
+                        <th>Order id</th>
+                        <th>Order status</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {%for object in object_list %}
+                    <tr>
+                        <td>{{ object.order.uuid }}</td>
+                        <td>{{ object.status }}</td>
+                        <td>{{ object.created }}</td>
+                        <td>
+                            <a href="{% url 'delivery_panel:delivery-update' pk=object.pk %}">
+                                CHANGE STATUS
+                            </a>|
+                            <a href="">
+                                EDIT
+                            </a>|
+                            <a href="">
+                                DELETE
+                            </a>|
+                            <a href="">
+                                DETAILS
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">Nothing here</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock content %}

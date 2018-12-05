@@ -1,5 +1,4 @@
 from django.views.generic import DetailView
-from django.core.paginator import Paginator
 
 from django_filters.views import FilterView
 
@@ -17,3 +16,4 @@ class ProductListView(FilterView):
     filterset_class = FilterProductsForm
     strict = False
     queryset = Product.objects.with_prices().filter(price__isnull=False)
+    paginate_by = 20

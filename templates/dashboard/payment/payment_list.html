@@ -17,8 +17,10 @@
         <li class="collection-header"><h4>Payments list</h4></li>
 
         {%for object in object_list %}
-        <a href="{% url 'dashboard:payment-update' pk=object.id %}" class="collection-item">
-            User: {{ object.user }}, Value: {{ object.value }}, Days outstainding: {{object.days_outstanding}}
+        <a href="{% url 'payment_panel:payment-update' pk=object.pk %}" class="collection-item">
+            <b>User email</b>: {{ object.user.email }},
+            <b>Value</b>: {{ object.value }},
+            <b>Outstainding</b>: {{ object.status }} {{object.days_outstanding}} days
         </a>
         {% endfor %}
     </ul>

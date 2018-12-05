@@ -1,6 +1,5 @@
 import django_filters
 
-from webstore.core.widgets import MaterializeSelectMultiple
 from .models import Product
 
 

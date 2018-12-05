@@ -3,7 +3,7 @@
     <ul class='collapsible blue-grey darken-4 yellow-text text-lighten-5' style="border: 0px; box-shadow: 0px">
         <li>
           <div class="collapsible-header nav_header">
-              <i class="material-icons">view_list</i>Products</div>
+              <i class="material-icons">view_list</i>Products </div>
           <div class="collapsible-body">
               <div class="collection">
                   <a href="{% url 'product_panel:product-list' %}" class="nav_link collection-item">Products List</a>
@@ -14,36 +14,20 @@
         </li>
         <li>
           <div class="collapsible-header nav_header">
-              <i class="material-icons">shopping_basket</i>Orders</div>
+              <i class="material-icons">shopping_basket</i>Sales </div>
           <div class="collapsible-body">
               <div class="collection">
                   <a href="{% url 'order_panel:order-list' %}" class="nav_link collection-item">Order list</a>
+                  <a href="{% url 'delivery_panel:delivery-list' %}" class="nav_link collection-item">
+                      Deliveries
+                  </a>
+                  <a href="{% url 'payment_panel:payment-list' %}" class="nav_link collection-item">Payments</a>
             </div>
           </div>
         </li>
-        <li>
-          <div class="collapsible-header nav_header">
-              <i class="material-icons">monetization_on</i>Payments</div>
-          <div class="collapsible-body">
-              <div class="collection">
-                  <a href="{% url 'payment_panel:payment-list' status='open' %}" class="nav_link collection-item">New</a>
-                  <a href="{% url 'payment_panel:payment-list' status='delayed' %}" class="nav_link collection-item">Delayed</a>
-                  <a href="{% url 'payment_panel:payment-list' status='closed' %}" class="nav_link collection-item">Closed</a>
-              </div>
-          </div>
-        </li>
-        <li>
+         <li>
           <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
-              <i class="material-icons">airport_shuttle</i>Deliveries</div>
-          <div class="collapsible-body">
-              <div class="collection">
-                  <a href="{% url 'delivery_panel:delivery-list' %}" class="nav_link collection-item">Delivery list</a>
-              </div>
-          </div>
-        </li>
-        <li>
-          <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
-              <i class="material-icons">multiline_chart</i>Reports</div>
+              <i class="material-icons">account_circle</i>Clients</div>
           <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
         </li>
     </ul>

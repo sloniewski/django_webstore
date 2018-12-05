@@ -1,7 +1,8 @@
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Payment, PaymentStatus
+from .models import Payment
+from webstore.order.models import OrderStatus
 
 
 class UserOutstandingPaymentsView(LoginRequiredMixin, ListView):
@@ -10,6 +11,6 @@ class UserOutstandingPaymentsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return super().get_queryset()\
-            .filter(status__in=PaymentStatus.active())\
+            .filter(order__status=OrderStatus.AWAITING_PAYMENT.name)\
             .select_related('order')\
             .filter(order__user=self.request.user)

@@ -7,7 +7,10 @@
     <ul class="collection with-header">
         <li class="collection-header"><h4>Login</h4></li>
         <li class="collection-item">
-            {{ form.errors }}
+            {% for foo in  login_form.non_field_errors %}
+                {{ foo }}
+            {% endfor %}
+
             <form action="{% url 'users:login' %}" method="post">
                 {% csrf_token %}
                 {{ login_form.as_p }}

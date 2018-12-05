@@ -102,3 +102,4 @@ USE_TZ = True
 STATIC_URL = '/webstore/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
+LOGIN_URL = '/users/login'

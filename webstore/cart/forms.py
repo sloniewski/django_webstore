@@ -17,5 +17,6 @@ class ItemForm(forms.Form):
         min_value=0,
         validators=[
             validate_not_null,
-        ]
+        ],
+        label='Add item to cart'
     )

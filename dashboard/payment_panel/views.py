@@ -11,7 +11,11 @@ class PaymentListView(FilterView):
     model = Payment
     template_name = 'dashboard/payment/payment_list.html'
     filter_form_class = FilterPaymentForm
+    paginate_by = 20
+    strict = False
 
+    def get_queryset(self):
+        return self.model.objects.all().select_related('order')
 
 
 class PaymentUpdateView(generic.UpdateView):

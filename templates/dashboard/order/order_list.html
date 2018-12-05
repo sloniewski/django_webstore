@@ -27,6 +27,7 @@
                             <th>Client email</th>
                             <th>Items</th>
                             <th>Value</th>
+                            <th>Payment</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -39,9 +40,10 @@
                             <td>{{ object.user.email }}</td>
                             <td>{{ object.num_items }}</td>
                             <td>{{ object.value }}</td>
+                            <td>{{ object.payment.payed }}</td>
                             <td>
                                 <a href="{% url 'order_panel:order-update' uuid=object.uuid %}">
-                                    EDIT
+                                    CHANGE STATUS
                                 </a>|
                                 <a href="">
                                     DELETE

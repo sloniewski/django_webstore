@@ -17,6 +17,7 @@ class OrderListView(FilterView):
 
     def get_queryset(self):
         return self.model.objects.all()\
+            .select_related('payment')\
             .prefetch_related('orderitems')\
             .annotate(num_items=Count('orderitems'))
 

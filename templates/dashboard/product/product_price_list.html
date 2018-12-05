@@ -5,7 +5,9 @@
     <ul class="collection with-header">
         <li class="collection-header lime lighten-3"><h4>Price list for product: {{product.name}}</h4></li>
         {% for object in object_list %}
-        <li class="collection-item">{{object}}
+        <li class="collection-item">
+            <b>Value</b>: {{object.value}},
+            <b>Valid from</b>: {{ object.valid_from|date:'d-m-Y' }}
             <a href="#" class="secondary-content tooltipped"
                data-position="left" data-tooltip="edit">
                 <i class="material-icons" >create</i>

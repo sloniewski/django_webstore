@@ -15,7 +15,7 @@ class UsersLogoutView(LogoutView):
 
 class LoginRegisterBaseView():
     form_class = None
-    template_name = 'users/login.html'
+    template_name = 'webstore/users/login.html'
     redirect_field_name = 'next'
     login_form = AuthenticationForm
     register_form = UserCreationForm

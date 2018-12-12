@@ -29,3 +29,7 @@ class DeliveryUpdateView(generic.UpdateView):
         context_data.update({'order': order})
         return context_data
 
+
+class DeliveryDetailView(generic.DetailView):
+    model = Delivery
+    template_name = 'dashboard/delivery/delivery_detail.html'

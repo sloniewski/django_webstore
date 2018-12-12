@@ -1,12 +1,12 @@
 from django.shortcuts import reverse, get_object_or_404
 from django.db.models import Count
 
-from webstore.product.models import Product, Price, Category
+from webstore.product.models import Product, Price, Category, Picture
 
 from django_filters.views import FilterView
 from django.views import generic
 
-from .forms import ProductFilterForm, PriceCreateForm
+from .forms import ProductFilterForm, PriceCreateForm, PictureFilterForm
 
 
 class ProductListView(FilterView):
@@ -151,4 +151,23 @@ class CategoryDeleteView(generic.DeleteView):
 
     def get_success_url(self):
         return reverse('product_panel:category-list')
-   
+
+
+class PictureListView(FilterView):
+    model = Picture
+    template_name = 'dashboard/product/picture_list.html'
+    paginate_by = 20
+    strict = False
+    filterset_class = PictureFilterForm
+
+
+class PictureCreateView(generic.CreateView):
+    model = Picture
+    fields = [
+        'name',
+        'data',
+    ]
+    template_name = 'dashboard/product/picture_create.html'
+
+    def get_success_url(self):
+        return reverse('product_panel:picture-list')

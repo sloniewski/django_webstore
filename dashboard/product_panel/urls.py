@@ -50,4 +50,7 @@ urlpatterns = [
     path('picture/create/', views.PictureCreateView.as_view(),
          name='picture-create'),
 
+    path('product/<slug:slug>/gallery/', views.GalleryPicturesListView.as_view(),
+         name='product-gallery'),
+
 ]

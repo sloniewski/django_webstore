@@ -6,7 +6,7 @@
         <a href="{% url 'product_panel:picture-create' %}" class="btn">Add image</a>
     </div>
     {% for object in object_list %}
-        <div class="col s2">
+        <div class="col s6 m4 l2">
             <div class="card ">
                 <div class="card-image">
                     <img class="materialboxed" src="/{% get_media_prefix %}{{ object.data }}" alt="">

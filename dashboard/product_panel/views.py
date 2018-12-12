@@ -171,3 +171,12 @@ class PictureCreateView(generic.CreateView):
 
     def get_success_url(self):
         return reverse('product_panel:picture-list')
+
+
+class GalleryPicturesListView(generic.ListView):
+    # TODO change template
+    template_name = 'dashboard/product/picture_list.html'
+
+    def get_queryset(self):
+        slug = self.request.resolver_match.kwargs.get('slug')
+        return Picture.objects.filter(gallery__product__slug=slug)

@@ -1,0 +1,17 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="card-panel">
+        <h4>Confirm delete: {{ object.name }}</h4>
+        <img src="/{% get_media_prefix %}{{ object.data }}" class="materialboxed">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="Submit" value="Confirm" class="btn red">
+            <a href="{% url 'product_panel:picture-list' %}" class="btn green">
+                Cancel</a>
+        </form>
+    </div>
+
+{% endblock content %}

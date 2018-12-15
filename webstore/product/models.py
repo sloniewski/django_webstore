@@ -4,10 +4,11 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils import timezone
 
+from webstore.core.mixins import TimeStampMixin
 from .managers import CategoryManager, ProductManager
 
 
-class Picture(models.Model):
+class Picture(TimeStampMixin, models.Model):
     name = models.CharField(max_length=32)
     data = models.ImageField(
         upload_to='product_images/',
@@ -15,6 +16,11 @@ class Picture(models.Model):
 
     def __str__(self):
         return self.data.name
+
+    class Meta:
+        ordering = [
+            '-created',
+        ]
 
 
 class Gallery(models.Model):
@@ -31,7 +37,7 @@ class Gallery(models.Model):
         Picture,
         on_delete=models.DO_NOTHING,
     )
-    number = models.PositiveIntegerField()
+    number = models.PositiveIntegerField(null=True)
 
     class Meta:
         ordering = ['product', '-number']

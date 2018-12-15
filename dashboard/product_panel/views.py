@@ -1,12 +1,19 @@
 from django.shortcuts import reverse, get_object_or_404
 from django.db.models import Count
+from django.contrib import messages
 
 from webstore.product.models import Product, Price, Category, Picture, Gallery
 
 from django_filters.views import FilterView
 from django.views import generic
 
-from .forms import ProductFilterForm, PriceCreateForm, PictureFilterForm, GalleryImageCreateForm
+from .forms import (
+    ProductFilterForm,
+    PriceCreateForm,
+    PictureFilterForm,
+    GalleryImageCreateForm,
+    GalleryImageChooseForm,
+)
 
 
 class ProductListView(FilterView):
@@ -173,7 +180,16 @@ class PictureCreateView(generic.CreateView):
         return reverse('product_panel:picture-list')
 
 
-class BaseGalleryMixin():
+class PictureDeleteView(generic.DeleteView):
+    model = Picture
+    template_name = 'dashboard/product/picture_delete.html'
+
+    def get_success_url(self):
+        messages.success(self.request, 'Picture deleted')
+        return reverse('product_panel:picture-list')
+
+
+class BaseGalleryMixin:
 
     def dispatch(self, request, *args, **kwargs):
         self.product = get_object_or_404(
@@ -183,7 +199,7 @@ class BaseGalleryMixin():
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data( *args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
         context.update({
             'product': self.product,
         })
@@ -214,6 +230,7 @@ class GalleryPicturesUploadView(BaseGalleryMixin, generic.FormView):
         return kwargs
 
     def get_success_url(self):
+        messages.success(self.request, 'Picture added')
         return reverse(
             viewname='product_panel:product-gallery',
             kwargs={'slug': self.product.slug},
@@ -222,3 +239,27 @@ class GalleryPicturesUploadView(BaseGalleryMixin, generic.FormView):
     def form_valid(self, form):
         self.object = form.save()
         return super().form_valid(form)
+
+
+class GalleryPicturesAddView(BaseGalleryMixin, generic.FormView):
+    model = Gallery
+    template_name = 'dashboard/product/product_gallery_add.html'
+    form_class = GalleryImageChooseForm
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return super().form_valid(form)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'product': self.product
+        })
+        return kwargs
+
+    def get_success_url(self):
+        messages.success(self.request, 'Pictures added')
+        return reverse(
+            viewname='product_panel:product-gallery',
+            kwargs={'slug': self.product.slug},
+        )

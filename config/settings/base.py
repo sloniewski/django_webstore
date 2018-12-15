@@ -103,3 +103,13 @@ STATIC_URL = '/webstore/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_URL = '/users/login'
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert card deep-purple',
+    messages.INFO: 'alert card blue white-text',
+    messages.SUCCESS: 'alert card green white-text',
+    messages.WARNING: 'alert card yellow',
+    messages.ERROR: 'alert card red white-text',
+}

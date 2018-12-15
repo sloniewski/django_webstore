@@ -5,7 +5,7 @@
     <br>
     <div class="col s12">
         <h4>Images for product: {{ product.name }}</h4>
-        <a href="{% url 'product_panel:picture-create' %}" class="btn">Add from library</a>
+        <a href="{% url 'product_panel:product-gallery-add' slug=product.slug %}" class="btn">Add from library</a>
         <a href="{% url 'product_panel:product-gallery-upload' slug=product.slug %}" class="btn">Upload image</a>
     </div>
     {% for object in object_list %}

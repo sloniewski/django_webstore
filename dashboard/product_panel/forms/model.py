@@ -1,5 +1,6 @@
 from django import forms
 
+from webstore.core.widgets import MaterializeSelectMultiple
 from webstore.product.models import Price, Gallery, Picture
 
 
@@ -32,7 +33,7 @@ class GalleryImageCreateForm(forms.Form):
 	def __init__(self, *args, **kwargs):
 		product = kwargs.pop('product')
 		self.product = product
-		super(GalleryImageCreateForm, self).__init__(*args, **kwargs)
+		super().__init__(*args, **kwargs)
 
 	def save(self, commit=True):
 		picture = Picture.objects.create(
@@ -45,3 +46,22 @@ class GalleryImageCreateForm(forms.Form):
 			number=self.cleaned_data['number'],
 		)
 		return gallery
+
+
+class GalleryImageChooseForm(forms.Form):
+	picture = forms.ModelMultipleChoiceField(
+		queryset=None,
+	)
+
+	def __init__(self, *args, **kwargs):
+		product = kwargs.pop('product')
+		self.product = product
+		super().__init__(*args, **kwargs)
+		self.fields['picture'].queryset = Picture.objects.all()
+
+	def save(self):
+		Gallery.objects.bulk_create(
+			[Gallery(picture=x, product=self.product) for x in self.cleaned_data['picture']]
+		)
+		return self.product
+

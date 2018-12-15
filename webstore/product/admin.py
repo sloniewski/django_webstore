@@ -52,7 +52,11 @@ class PictureAdmin(admin.ModelAdmin):
         ))
     image_tag.short_description = 'Image'
 
-    readonly_fields = ('image_tag',)
+    readonly_fields = (
+        'image_tag',
+        'created',
+        'modified',
+    )
     list_display = [
         'name',
         location,

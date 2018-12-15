@@ -1,0 +1,10 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+    <form action="" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="Submit" value="Submit" class="btn">
+    </form>
+{% endblock content %}

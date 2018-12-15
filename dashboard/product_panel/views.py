@@ -1,12 +1,12 @@
 from django.shortcuts import reverse, get_object_or_404
 from django.db.models import Count
 
-from webstore.product.models import Product, Price, Category, Picture
+from webstore.product.models import Product, Price, Category, Picture, Gallery
 
 from django_filters.views import FilterView
 from django.views import generic
 
-from .forms import ProductFilterForm, PriceCreateForm, PictureFilterForm
+from .forms import ProductFilterForm, PriceCreateForm, PictureFilterForm, GalleryImageCreateForm
 
 
 class ProductListView(FilterView):
@@ -173,10 +173,52 @@ class PictureCreateView(generic.CreateView):
         return reverse('product_panel:picture-list')
 
 
-class GalleryPicturesListView(generic.ListView):
-    # TODO change template
-    template_name = 'dashboard/product/picture_list.html'
+class BaseGalleryMixin():
+
+    def dispatch(self, request, *args, **kwargs):
+        self.product = get_object_or_404(
+            klass=Product,
+            slug=self.request.resolver_match.kwargs.get('slug'),
+        )
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data( *args, **kwargs)
+        context.update({
+            'product': self.product,
+        })
+        return context
+
+    class Meta:
+        abstract = True
+
+
+class GalleryPicturesListView(BaseGalleryMixin, generic.ListView):
+    model = Gallery
+    template_name = 'dashboard/product/product_gallery.html'
 
     def get_queryset(self):
-        slug = self.request.resolver_match.kwargs.get('slug')
-        return Picture.objects.filter(gallery__product__slug=slug)
+        return self.model.objects.filter(product=self.product).select_related('picture')
+
+
+class GalleryPicturesUploadView(BaseGalleryMixin, generic.FormView):
+    model = Gallery
+    template_name = 'dashboard/product/product_gallery_upload.html'
+    form_class = GalleryImageCreateForm
+    
+    def get_form_kwargs(self):
+        kwargs = super(GalleryPicturesUploadView, self).get_form_kwargs()
+        kwargs.update({
+            'product': self.product
+        })
+        return kwargs
+
+    def get_success_url(self):
+        return reverse(
+            viewname='product_panel:product-gallery',
+            kwargs={'slug': self.product.slug},
+        )
+
+    def form_valid(self, form):
+        self.object = form.save()
+        return super().form_valid(form)

@@ -53,4 +53,7 @@ urlpatterns = [
     path('product/<slug:slug>/gallery/', views.GalleryPicturesListView.as_view(),
          name='product-gallery'),
 
+    path('product/<slug:slug>/gallery/upload/', views.GalleryPicturesUploadView.as_view(),
+         name='product-gallery-upload'),
+
 ]

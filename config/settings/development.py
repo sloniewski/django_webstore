@@ -15,26 +15,13 @@ ALLOWED_HOSTS = []
 # Database
 
 DATABASES = {
-    # 'default': {
-    #     'NAME': 'webshop',
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'USER': 'root',
-    #     'PASSWORD': 'kalafior01',
-    #     'OPTIONS': {
-    #         'autocommit': True,
-    #     },
-    # },
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # },
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'webstore',
         'USER': 'db_user',
         'PASSWORD': 'super_secret',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     }
 }
 

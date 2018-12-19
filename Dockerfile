@@ -11,6 +11,7 @@ RUN  /etc/init.d/postgresql start &&\
     psql --command "CREATE USER db_user WITH SUPERUSER PASSWORD 'super_secret';" &&\
        createdb -O db_user webstore
 
-RUN ./home/project/django_webstore/manage.py migrate
+# /etc/init.d/postgresql restart
+CMD ./home/project/django_webstore/manage.py migrate
 
 EXPOSE 8000:8000

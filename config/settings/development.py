@@ -1,3 +1,4 @@
+# THIS !!
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,10 +21,18 @@ DATABASES = {
         'NAME': 'webstore',
         'USER': 'db_user',
         'PASSWORD': 'super_secret',
-        'HOST': 'localhost',
+        'HOST': 'postgres_db',
         'PORT': '5432',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
 
 MEDIA_URL = 'files/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'webstore/core/media')

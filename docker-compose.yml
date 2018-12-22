@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  postgres_db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=db_user
+      - POSTGRES_PASSWORD=super_secret
+      - POSTGRES_DB=webstore
+    ports:
+      - "5433:5432"
+  web:
+    build: .
+    command: ./manage.py runserver 0.0.0.0:8000
+    restart: always
+    volumes:
+      - .:/home/project/dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_db

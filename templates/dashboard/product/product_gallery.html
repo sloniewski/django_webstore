@@ -9,8 +9,8 @@
         <a href="{% url 'product_panel:product-gallery-upload' slug=product.slug %}" class="btn">Upload image</a>
     </div>
     {% for object in object_list %}
-        <div class="col s6 m4 l2">
-            <div class="card ">
+        <div class="col s6 m4 l2" >
+            <div class="card" id="gallery_image_{{ object.id }}">
                 <div class="card-image">
                     <img class="materialboxed" src="/{% get_media_prefix %}{{ object.picture.data }}" alt="">
                     <span class="card-title" style="color: black !important;">
@@ -19,7 +19,12 @@
                     </span>
                 </div>
                 <div class="card-action">
-                    <a href="#">Remove</a>
+                    <a href="{% url 'product_panel:product-gallery-remove-api' slug=object.product.slug pk=object.pk %}"
+                       class="remove_image"
+                       data-id="{{ object.id }}"
+                    >
+                        Remove
+                    </a>
                     <a href="#">Edit</a>
                 </div>
             </div>
@@ -30,5 +35,23 @@
 {% block scripts %}
     <script>
         $('.materialboxed').materialbox()
+
+        $('.remove_image').on('click', function(event){
+            event.preventDefault();
+            var url = $(this).attr('href');
+            var card = $('#gallery_image_' + $(this).data('id'))
+            $.ajax({
+                url: url,
+                method: 'POST',
+            }).done(function (data) {
+                card.fadeOut('slow', function(){
+                    card.parent().remove();
+                });
+            }).fail(function () {
+                return 0;
+            });
+        });
+
+
     </script>
 {% endblock scripts %}

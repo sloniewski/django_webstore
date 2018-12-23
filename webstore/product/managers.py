@@ -45,8 +45,10 @@ class GalleryManager(models.Manager):
 
     def safe_bulk_create(self, object_list=[]):
         temp_list = []
+        # TODO make this hit database once
+
         for obj in object_list:
-            if self.model.objects.get(picture=obj.picture, product=obj.product) is None:
+            if not self.model.objects.filter(picture=obj.picture, product=obj.product).exists():
                 temp_list.append(obj)
         object_list = temp_list
         return self.bulk_create(object_list)

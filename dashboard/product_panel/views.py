@@ -1,11 +1,19 @@
 from django.shortcuts import reverse, get_object_or_404
+from django.http import HttpResponse
 from django.db.models import Count
 from django.contrib import messages
+from django.views import generic
+from django.views import View
 
-from webstore.product.models import Product, Price, Category, Picture, Gallery
+from webstore.product.models import (
+    Product,
+    Price,
+    Category,
+    Picture,
+    Gallery,
+)
 
 from django_filters.views import FilterView
-from django.views import generic
 
 from .forms import (
     ProductFilterForm,
@@ -263,3 +271,13 @@ class GalleryPicturesAddView(BaseGalleryMixin, generic.FormView):
             viewname='product_panel:product-gallery',
             kwargs={'slug': self.product.slug},
         )
+
+
+class GalleryImageRemoveApiView(BaseGalleryMixin, View):
+    http_method_names = ['post']
+    model = Gallery
+
+    def post(self, *args, **kwargs):
+        gallery_image = get_object_or_404(self.model, pk=kwargs.get('pk'))\
+                        .delete()
+        return HttpResponse(status=204)

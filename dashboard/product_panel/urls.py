@@ -62,4 +62,7 @@ urlpatterns = [
     path('product/<slug:slug>/gallery/add/', views.GalleryPicturesAddView.as_view(),
          name='product-gallery-add'),
 
+    path('product/<slug:slug>/gallery/<int:pk>/remove', views.GalleryImageRemoveApiView.as_view(),
+         name='product-gallery-remove-api'),
+
 ]

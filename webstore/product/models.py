@@ -5,7 +5,7 @@ from django.shortcuts import reverse
 from django.utils import timezone
 
 from webstore.core.mixins import TimeStampMixin
-from .managers import CategoryManager, ProductManager
+from .managers import CategoryManager, ProductManager, GalleryManager
 
 
 class Picture(TimeStampMixin, models.Model):
@@ -28,6 +28,7 @@ class Gallery(models.Model):
     Reference table for m2m relation product -> picture.
     Additional information is the picture order.
     """
+    objects = GalleryManager()
 
     product = models.ForeignKey(
         'Product',
@@ -44,6 +45,7 @@ class Gallery(models.Model):
         verbose_name = "Gallery Image"
         unique_together = (
             ('product', 'number'),
+            ('picture', 'product'),
         )
 
     def __str__(self):

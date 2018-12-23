@@ -60,7 +60,7 @@ class GalleryImageChooseForm(forms.Form):
 		self.fields['picture'].queryset = Picture.objects.all()
 
 	def save(self):
-		Gallery.objects.bulk_create(
+		Gallery.objects.safe_bulk_create(
 			[Gallery(picture=x, product=self.product) for x in self.cleaned_data['picture']]
 		)
 		return self.product

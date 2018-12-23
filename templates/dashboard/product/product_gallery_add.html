@@ -4,7 +4,32 @@
 {% block content %}
     <form action="" enctype="multipart/form-data" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="Submit" value="Submit" class="btn">
+        {% for picture in form.fields.picture.queryset %}
+        <div class="col s6 m4 l2">
+            <div class="card ">
+                <div class="card-image">
+                    <img class="materialboxed" src="/{% get_media_prefix %}{{ picture.data }}" alt="{{ picture.name }}">
+                    <span class="card-title" style="color: black !important;">
+                        Select {{ picture.id }}
+                    </span>
+                </div>
+                <div class="card-action">
+                    <label for="picture_{{picture.id}}">
+                        <input id="picture_{{picture.id}}" type="checkbox" value="{{ picture.id }}" name="picture">
+                        <span>{{ picture.name }}</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <input type="Submit" value="Submit" class="btn col s12">
     </form>
 {% endblock content %}
+
+
+{% block scripts %}
+    <script>
+        $('.materialboxed').materialbox()
+    </script>
+{% endblock scripts %}

@@ -39,3 +39,14 @@ class CategoryManager(models.Manager):
 
     def form_choices(self):
         return [x.form_choice for x in self.get_queryset().all()]
+
+
+class GalleryManager(models.Manager):
+
+    def safe_bulk_create(self, object_list=[]):
+        temp_list = []
+        for obj in object_list:
+            if self.model.objects.get(picture=obj.picture, product=obj.product) is None:
+                temp_list.append(obj)
+        object_list = temp_list
+        return self.bulk_create(object_list)

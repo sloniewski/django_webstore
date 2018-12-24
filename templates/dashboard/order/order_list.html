@@ -41,7 +41,7 @@
                                 <a href="{% url 'order_panel:order-update' uuid=object.uuid %}">
                                     CHANGE STATUS
                                 </a>|
-                                <a href="">
+                                <a href="{% url 'order_panel:order-delete' uuid=object.uuid %}">
                                     DELETE
                                 </a>|
                                 <a href="">

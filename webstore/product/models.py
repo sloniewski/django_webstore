@@ -3,6 +3,7 @@ from datetime import date
 from django.db import models
 from django.shortcuts import reverse
 from django.utils import timezone
+from django.contrib.postgres import indexes
 
 from webstore.core.mixins import TimeStampMixin
 from .managers import CategoryManager, ProductManager, GalleryManager
@@ -204,6 +205,9 @@ class Price(models.Model):
     class Meta:
         ordering = [
             '-valid_from',
+        ]
+        indexes = [
+            indexes.BrinIndex(fields=['valid_from']),
         ]
 
     def __str__(self):

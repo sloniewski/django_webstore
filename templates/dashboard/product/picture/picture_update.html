@@ -1,0 +1,15 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="card-panel">
+        <h4>Add image</h4>
+        <form action="" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="Submit" value="Save" class="btn green" style="width: 100%; margin-bottom: 10px;">
+            <a href="{% url 'product_panel:picture-list' %}" class="btn orange" style="width: 100%;">
+                Cancel</a>
+        </form>
+    </div>
+{% endblock content %}

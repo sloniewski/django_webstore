@@ -53,6 +53,9 @@ urlpatterns = [
     path('picture/<int:pk>/delete', views.PictureDeleteView.as_view(),
          name='picture-delete'),
 
+    path('picture/<int:pk>/update', views.PictureUpdateView.as_view(),
+         name='picture-update'),
+
     path('product/<slug:slug>/gallery/', views.GalleryPicturesListView.as_view(),
          name='product-gallery'),
 

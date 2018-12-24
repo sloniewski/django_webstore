@@ -281,3 +281,15 @@ class GalleryImageRemoveApiView(BaseGalleryMixin, View):
         gallery_image = get_object_or_404(self.model, pk=kwargs.get('pk'))\
                         .delete()
         return HttpResponse(status=204)
+
+
+class PictureUpdateView(generic.UpdateView):
+    model = Picture
+    template_name = 'dashboard/product/picture/picture_update.html'
+    fields = [
+        'name',
+    ]
+
+    def get_success_url(self):
+        messages.info(self.request, 'Picture updated')
+        return reverse('product_panel:picture-list')

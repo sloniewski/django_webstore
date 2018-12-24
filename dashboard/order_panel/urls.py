@@ -14,6 +14,9 @@ urlpatterns = [
     path('<int:pk>', views.OrderDetailView.as_view(),
          name='order-detail'),
 
+    path('<uuid>/delete', views.OrderDeleteView.as_view(),
+         name='order-delete'),
+
 
     path('update/<uuid>', views.OrderUpdateView.as_view(),
          name='order-update'),

@@ -18,8 +18,10 @@
                         <span class="card-title" style="color: black !important;">{{ object.name }}</span>
                     </div>
                     <div class="card-action">
-                        <a href="{% url 'product_panel:picture-delete' pk=object.pk %}">Delete</a>
-                        <a href="#">Rename</a>
+                        <a href="{% url 'product_panel:picture-delete' pk=object.pk %}">
+                            Delete</a>
+                        <a href="{% url 'product_panel:picture-update' pk=object.pk %}">
+                            Edit</a>
                     </div>
                 </div>
             </div>

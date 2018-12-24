@@ -1,6 +1,7 @@
 from django.views import generic
 from django.shortcuts import reverse, get_object_or_404
 from django.db.models import Count
+from django.contrib import messages
 
 from django_filters.views import FilterView
 
@@ -31,6 +32,18 @@ class OrderUpdateView(generic.UpdateView):
         uuid = self.kwargs.get('uuid')
         return get_object_or_404(self.model, uuid=uuid)
 
+
+class OrderDeleteView(generic.DeleteView):
+    model = Order
+    template_name = 'dashboard/generic_delete.html'
+
+    def get_object(self, queryset=None):
+        uuid = self.kwargs.get('uuid')
+        return get_object_or_404(self.model, uuid=uuid)
+
+    def get_success_url(self):
+        messages.info(self.request, 'Order {} deleted'.format(self.object.uuid))
+        return reverse('order_panel:order-list')
 
 
 class OrderDetailView(generic.DetailView):

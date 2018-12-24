@@ -25,7 +25,7 @@ class Payment(TimeStampMixin, models.Model):
     )
     order = models.OneToOneField(
         Order,
-        on_delete=models.DO_NOTHING,
+        on_delete=models.CASCADE,
         related_name='payment',
     )
     method = models.CharField(

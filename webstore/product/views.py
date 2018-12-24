@@ -10,6 +10,9 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'webstore/product/product_detail.html'
 
+    def get_queryset(self):
+        return self.model.objects.with_prices()
+
 
 class ProductListView(FilterView):
     template_name = 'webstore/product/product_list.html'

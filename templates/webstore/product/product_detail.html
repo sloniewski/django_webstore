@@ -26,8 +26,8 @@
         </div>
         <div class="col l6 m6 s12 xs12">
             <h2>{{ object.name }}</h2>
+            <div class="product-price">Price: {{ object.price }}</div>
             <div class="product-description">{{ object.description }}</div>
-            <div class="product-price">{{ object.price }}</div>
             <form id="add-item-form" action="{% url 'cart:add-item' %}" method="GET">
                 {% csrf_token %}
                 <input id="product-id" type="hidden" value="{{ object.id }}">

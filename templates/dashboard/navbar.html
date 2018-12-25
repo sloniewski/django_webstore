@@ -28,15 +28,23 @@
         </li>
          <li>
           <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
-              <i class="material-icons">account_circle</i>Clients</div>
-          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+              <i class="material-icons">account_circle</i>Accounts</div>
+          <div class="collapsible-body">
+                 <div class="collection">
+                    <a href="#" class="nav_link collection-item">
+                        Clients</a>
+                     <a href="#" class="nav_link collection-item">
+                        Staff</a>
+                </div>
+          </div>
         </li>
         <li>
           <div class="collapsible-header blue-grey darken-4 yellow-text text-lighten-5">
               <i class="material-icons">assessment</i>Settings</div>
             <div class="collapsible-body">
                 <div class="collection">
-                    <a href="" class="nav_link collection-item">Delivery</a>
+                    <a href="{% url 'delivery_panel:delivery-option-list' %}" class="nav_link collection-item">
+                        Delivery options</a>
                 </div>
             </div>
 

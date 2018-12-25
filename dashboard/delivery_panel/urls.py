@@ -14,4 +14,13 @@ urlpatterns = [
     path('update/<pk>', views.DeliveryUpdateView.as_view(),
          name='delivery-update'),
 
+    path('option-list/', views.DeliveryPricingListView.as_view(),
+         name='delivery-option-list'),
+
+    path('option/<int:pk>/update', views.DeliveryPricingUpdateView.as_view(),
+         name='delivery-option-update'),
+
+    path('option/create', views.DeliveryPricingCreateView.as_view(),
+         name='delivery-option-create'),
+
 ]

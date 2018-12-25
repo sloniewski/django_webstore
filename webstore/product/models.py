@@ -56,6 +56,17 @@ class Gallery(models.Model):
             self.picture.data.name,
         )
 
+    def save(self, *args, **kwargs):
+        if self.number is None:
+            num = type(self).objects\
+                .filter(product=self.product)\
+                .aggregate(models.Max('number'))['number__max']
+            if num is not None:
+                self.number = num['number__max'] + 1
+            else:
+                self.number = 1
+        super().save(*args, **kwargs)
+
 
 class Category(models.Model):
     objects = CategoryManager()

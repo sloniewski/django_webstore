@@ -2,7 +2,8 @@ from django import forms
 
 import django_filters
 
-from webstore.delivery.models import Delivery
+from webstore.delivery.models import Delivery, DeliveryPricing
+from webstore.core.widgets import MaterializeCheckboxInput
 
 
 class FilterDeliveriesForm(django_filters.FilterSet):
@@ -28,4 +29,20 @@ class DeliveryUpdateForm(forms.ModelForm):
             'flat_number',
             'city',
             'postal_code',
+            'cost',
+        ]
+
+
+class DeliveryPricingForm(forms.ModelForm):
+    active = forms.BooleanField(
+        widget=MaterializeCheckboxInput(),
+    )
+
+    class Meta:
+        model = DeliveryPricing
+        fields = [
+            'name',
+            'cost',
+            'max_weight',
+            'active',
         ]

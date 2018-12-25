@@ -36,6 +36,10 @@ class Delivery(TimeStampMixin, models.Model):
         related_name='delivery',
     )
 
+    class Meta:
+        ordering = ('created',)
+        verbose_name_plural = 'Deliveries'
+
     def __str__(self):
         return 'Delivery no. {} cost: {}'.format(self.pk, self.cost)
 
@@ -56,10 +60,6 @@ class Delivery(TimeStampMixin, models.Model):
         else:
             raise StopIteration
 
-    class Meta:
-        ordering = ('created',)
-        verbose_name_plural = 'Deliveries'
-
     @property
     def status(self):
         return self.order.status
@@ -71,6 +71,8 @@ class DeliveryPricing(models.Model):
     name = models.CharField(max_length=64)
     cost = models.DecimalField(max_digits=8, decimal_places=2)
     max_weight = models.FloatField(default=30.00)
+
+    active = models.BooleanField(default=False)
 
     def __str__(self):
         return 'Name: {}, price: {}'.format(self.name, self.cost)

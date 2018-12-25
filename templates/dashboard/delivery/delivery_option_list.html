@@ -44,7 +44,7 @@
                             <a href="{% url 'delivery_panel:delivery-option-update' pk=object.pk %}">
                                 EDIT
                             </a>|
-                            <a href="">
+                            <a href="{% url 'delivery_panel:delivery-option-delete' pk=object.pk %}">
                                 DELETE
                             </a>
                         </td>

@@ -68,3 +68,12 @@ class DeliveryPricingCreateView(generic.CreateView):
     def get_success_url(self):
         messages.success(self.request, 'Delivery option {} created'.format(self.object.name))
         return reverse('delivery_panel:delivery-option-list')
+
+
+class DeliveryPricingDeleteView(generic.DeleteView):
+    model = DeliveryPricing
+    template_name = 'dashboard/generic_delete.html'
+
+    def get_success_url(self):
+        messages.info(self.request, 'Delivery option {} deleted'.format(self.object.name))
+        return reverse('delivery_panel:delivery-option-list')

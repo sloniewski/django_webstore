@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 
 from .models import CustomUser
 
@@ -12,7 +13,7 @@ def activate(modeladmin, request, queryset):
 
 
 @admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
+class CustomUserAdmin(UserAdmin):
     list_display = [
         'username',
         'last_login',
@@ -20,8 +21,9 @@ class CustomUserAdmin(admin.ModelAdmin):
         'is_staff',
         'is_active',
     ]
-    list_filter = ('is_staff', 'is_active')
+    list_filter = ('is_staff', 'is_active', 'last_login')
     actions = [
         deactivate,
         activate
     ]
+

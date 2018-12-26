@@ -65,4 +65,16 @@ class PictureAdmin(admin.ModelAdmin):
 
 @admin.register(models.Gallery)
 class GalleryAdmin(admin.ModelAdmin):
-    pass
+    exclude = [
+        'picture',
+    ]
+
+    def image_tag(self, obj):
+        return mark_safe('<img src="/{}" />'.format(
+            obj.picture.data.url
+        ))
+
+    readonly_fields = [
+        'product',
+        'image_tag',
+    ]

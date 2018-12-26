@@ -4,11 +4,13 @@ services:
   redis_cache:
     image: redis
     restart: always
+    container_name: webstore_redis_cache
     ports:
       - "6379:6379"
   postgres_db:
     image: postgres
     restart: always
+    container_name: webstore_postgres
     environment:
       - POSTGRES_USER=db_user
       - POSTGRES_PASSWORD=super_secret
@@ -17,6 +19,7 @@ services:
       - "5433:5432"
   webstore:
     build: .
+    container_name: django_webstore
     volumes:
       - .:/home/project
     command: ./manage.py runserver 0.0.0.0:8000

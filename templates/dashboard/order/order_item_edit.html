@@ -1,0 +1,35 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<form method="post" action="">
+
+        {{ form.management_form }}
+        {% csrf_token %}
+        <table>
+            <thead>
+                <th>#</th>
+                <th>Product</th>
+                <th>qty</th>
+                <th>price</th>
+            </thead>
+            <tbody>
+            {% for formset in form %}
+            {% for hidden_field in formset.hidden_fields %}
+                {{ hidden_field.errors }}
+                {{ hidden_field }}
+            {% endfor %}
+            <tr>
+                <td>*</td>
+                <td>{{ formset.product }}</td>
+                <td>{{ formset.quantity }}</td>
+                <td>{{ formset.price }}</td>
+                {{ formset.errors }}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <input type="submit" name="Save" value="Save" class="btn btn-block">
+   </form>
+{% endblock content %}

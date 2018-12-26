@@ -1,6 +1,6 @@
 from django import forms
 
-from webstore.order.models import Order
+from webstore.order.models import Order, OrderItem
 from webstore.core.widgets import MaterializeCheckboxInput
 
 
@@ -15,3 +15,23 @@ class OrderUpdateForm(forms.ModelForm):
         fields = [
             'status'
         ]
+
+
+class OrderEditForm(forms.ModelForm):
+
+    class Meta:
+        model = OrderItem
+        fields = [
+            'product',
+            'quantity',
+            'price',
+        ]
+
+
+item_formset = forms.inlineformset_factory(
+                        model=OrderItem,
+                        parent_model=Order,
+                        form=OrderEditForm,
+                        extra=2,
+                )
+

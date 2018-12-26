@@ -6,7 +6,11 @@ from django.contrib import messages
 from django_filters.views import FilterView
 
 from webstore.order.models import Order, OrderItem
-from .forms import FilterOrdersForm, OrderUpdateForm
+from .forms import (
+    FilterOrdersForm,
+    OrderUpdateForm,
+    item_formset,
+)
 
 
 class OrderListView(FilterView):
@@ -31,6 +35,30 @@ class OrderUpdateView(generic.UpdateView):
     def get_object(self, queryset=None):
         uuid = self.kwargs.get('uuid')
         return get_object_or_404(self.model, uuid=uuid)
+
+
+class OrderEditView(generic.FormView):
+    form_class = item_formset
+    template_name = 'dashboard/order/order_item_edit.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        uuid = request.resolver_match.kwargs.get('uuid')
+        self.order = get_object_or_404(Order, uuid=uuid)
+        return super(OrderEditView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'instance': self.order})
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(OrderEditView, self).get_context_data(**kwargs)
+        context.update({'order': self.order})
+        return context
+
+    def form_valid(self, form):
+        form.save()
+        return super(OrderEditView, self).form_valid(form)
 
 
 class OrderDeleteView(generic.DeleteView):

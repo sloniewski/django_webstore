@@ -1,0 +1,25 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Change accounts{% endblock title %}
+
+{% block content %}
+<div class="card-panel">
+    <h4>Selected action: {{ action|title }}</h4>
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="{{ action }}">
+        <ul>
+        {{ form.fields.object_list.errors }}
+        {% for object in object_list%}
+            <li>
+                <input type="hidden" name="object_list" value="{{ object.id }}">
+                {{ object.id }}. {{ object.username|title }} last_login:{{ object.last_login|date:'d-m-Y' }}
+            </li>
+        {% endfor %}
+        </ul>
+        <input type="submit" class="btn" name="submit" value="save">
+        <a href="{% url 'users_panel:client-list' %}" class="btn">Cancel</a>
+    </form>
+</div>
+{% endblock content %}

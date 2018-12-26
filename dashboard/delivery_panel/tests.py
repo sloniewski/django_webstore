@@ -55,3 +55,17 @@ class TestDeliveryViews(TestCase):
             response=response,
             template_name='dashboard/delivery/delivery_option_update.html',
         )
+
+    def test_delivery_price_delete(self):
+        response = self.client.get(
+            reverse(
+                viewname='delivery_panel:delivery-option-delete',
+                kwargs={'pk': self.delivery_option.pk},
+            )
+        )
+        self.assertEqual(
+            first=response.status_code,
+            second=200,
+            msg='view returned {} code'.format(response.status_code),
+        )
+

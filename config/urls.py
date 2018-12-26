@@ -32,6 +32,7 @@ urlpatterns = [
     path('dashboard/order_panel/', include('dashboard.order_panel.urls')),
     path('dashboard/payment_panel/', include('dashboard.payment_panel.urls')),
     path('dashboard/delivery_panel/', include('dashboard.delivery_panel.urls')),
+    path('dashboard/users_panel/', include('dashboard.users_panel.urls')),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

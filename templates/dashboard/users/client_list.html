@@ -1,0 +1,36 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Client list{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m12 l3">
+        <div class="card">
+            <div class="card-title blue-grey lighten-4">
+                Filter users
+            </div>
+            <div class="card-content">
+                <form class="" action="" method="get">
+                    <div class="row">
+                        {% for field in filter.form %}
+                        <div class="col s6 m6">
+                            {{ field.errors }}
+                            <label for="{{ field.id_for_label }}">{{ field.name }}</label>
+                            {{ field }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <input type="submit" name="submit" value="Submit" class="btn">
+                </form>
+
+            </div>
+        </div>
+    </div>
+    {% include 'dashboard/users/user_list.html' with object_list=object_list users='clients' %}
+
+    <div class="col s12">
+        {% include 'dashboard/paginator.html' %}
+    </div>
+</div>
+{% endblock content %}

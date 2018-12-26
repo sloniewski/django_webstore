@@ -5,16 +5,22 @@ from django.contrib.auth.models import AbstractUser, UserManager
 class UserQueryset(models.QuerySet):
 
 	def staff(self):
-		return self.filter(is_staff=True)
+		return self.filter(models.Q(is_staff=True) | models.Q(is_superuser=True))
+
+	def clients(self):
+		return self.filter(models.Q(is_staff=False) & models.Q(is_superuser=False))
 
 
 class CustomUserManager(UserManager):
-	""" some """
+
 	def get_queryset(self):
 		return UserQueryset(self.model, using=self.db)
 
 	def staff(self):
 		return self.get_queryset().staff()
+
+	def clients(self):
+		return self.get_queryset().clients()
 
 
 class CustomUser(AbstractUser):

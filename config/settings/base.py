@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'dashboard.delivery_panel',
     'dashboard.order_panel',
     'dashboard.payment_panel',
+    'dashboard.users_panel',
 
     'django.contrib.admindocs',
     'django.forms',

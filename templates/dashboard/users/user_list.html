@@ -11,6 +11,7 @@
                 <th>email</th>
                 <th>active</th>
                 <th>last_login</th>
+                <th>actions</th>
             </thead>
             <tbody>
 
@@ -27,7 +28,10 @@
                     <td>{{ object.username }}</td>
                     <td>{{ object.email }}</td>
                     <td>{{ object.is_active }}</td>
-                    <td>{{ object.last_login }}</td>
+                    <td>{{ object.last_login|date:'d-m-Y'}}</td>
+                    <td>
+                        <a href="{% url 'order_panel:order-list' %}?{{ object.url_encoded_email }}">ORDERS</a>
+                    </td>
                 </tr>
                 {% endfor %}
 

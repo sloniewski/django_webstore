@@ -8,7 +8,7 @@ app_name = 'product'
 
 urlpatterns = [
 
-    path('list/', cache_page(60)(views.ProductListView.as_view()),
+    path('list/', views.ProductListView.as_view(),
          name='product-list'),
 
     path('<slug:slug>/', cache_page(60)(views.ProductDetailView.as_view()),

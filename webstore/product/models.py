@@ -1,4 +1,5 @@
 from datetime import date
+from urllib.parse import urlencode
 
 from django.db import models
 from django.shortcuts import reverse
@@ -89,6 +90,10 @@ class Category(models.Model):
     @property
     def form_choice(self):
         return self.pk, self.name
+
+    @property
+    def url_encode(self):
+        return urlencode({'category_id': self.id})
 
 
 class Product(models.Model):
@@ -211,6 +216,13 @@ class Price(models.Model):
     )
     edited = models.DateTimeField(
         auto_now=True,
+    )
+    is_promo = models.BooleanField(
+        default=False,
+    )
+    promo_message = models.CharField(
+        max_length=255,
+        null=True, blank=True,
     )
 
     class Meta:

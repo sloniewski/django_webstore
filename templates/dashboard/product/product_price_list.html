@@ -11,6 +11,7 @@
             <th>#</th>
             <th>Value</th>
             <th>valid_from</th>
+            <th>Promo</th>
             <th>Actions</th>
         </thead>
         <tbody>
@@ -19,6 +20,7 @@
                 <td>{{ object.id }}</td>
                 <td>{{ object.value }}</td>
                 <td>{{ object.valid_from }}</td>
+                <td>{{ object.is_promo }}</td>
                 <td>
                     <a href="{% url 'product_panel:price-update' pk=object.pk %}">EDIT</a>|
                     <a href="">DELETE</a>

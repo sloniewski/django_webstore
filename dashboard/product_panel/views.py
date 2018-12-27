@@ -124,7 +124,8 @@ class PriceUpdateView(generic.UpdateView):
     ]
 
     def get_success_url(self):
-        return reverse('product-price-list', kwargs={'number': self.object.product.numer})
+        return reverse('product_panel:product-price-list', kwargs={'number': self.object.product.number})
+
 
 class CategoryListView(generic.ListView):
     model = Category

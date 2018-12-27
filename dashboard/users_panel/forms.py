@@ -31,7 +31,7 @@ class BaseUserBulkActionMixin(forms.Form):
         model = User
 
 
-class BulkDeleteForm(BaseUserBulkActionMixin, forms.Form):
+class BulkDeleteForm(BaseUserBulkActionMixin):
 
     def execute(self):
         for object in self.cleaned_data['object_list']:
@@ -42,7 +42,7 @@ class BulkDeleteForm(BaseUserBulkActionMixin, forms.Form):
         return 'Deleted selected users'
 
 
-class BulkActivateForm(BaseUserBulkActionMixin, forms.Form):
+class BulkActivateForm(BaseUserBulkActionMixin):
 
     def execute(self):
         self.cleaned_data['object_list'].update(is_active=True)
@@ -52,7 +52,7 @@ class BulkActivateForm(BaseUserBulkActionMixin, forms.Form):
         return 'Activated selected users'
 
 
-class BulkDeactivateForm(BaseUserBulkActionMixin, forms.Form):
+class BulkDeactivateForm(BaseUserBulkActionMixin):
 
     def execute(self):
         self.cleaned_data['object_list'].update(is_active=False)

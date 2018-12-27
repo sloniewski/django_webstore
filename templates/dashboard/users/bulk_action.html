@@ -14,7 +14,7 @@
         {% for object in object_list%}
             <li>
                 <input type="hidden" name="object_list" value="{{ object.id }}">
-                {{ object.id }}. {{ object.username|title }} last_login:{{ object.last_login|date:'d-m-Y' }}
+                {{ object.id }}. <b>{{ object.username|title }}</b> email: {{ object.email }} last_login:{{ object.last_login|date:'d-m-Y' }}
             </li>
         {% endfor %}
         </ul>

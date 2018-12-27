@@ -1,0 +1,28 @@
+{% extends 'webstore/base.html' %}
+{% load static %}
+
+{% block title %}
+    The Cheese Shop
+{% endblock title %}
+
+{% block body %}
+    <div class="row">
+        <div class="col s12"><h5>Deals</h5></div>
+        {% for prod in promo_prod %}
+        <div class="col s6 m3">
+            {% include 'webstore/product/product_list_item.html' with object=prod %}
+        </div>
+        {% endfor %}
+
+        <div class="col s12"><h5>Bestsellers</h5></div>
+
+        <div class="col s12"><h5>Categories list</h5></div>
+        {% for cat in categories %}
+        <div class="col s6 m3">
+            <a href="{% url 'product:product-list' %}?{{ cat.url_encode }}">
+                <div class="card-panel">{{ cat.name|title }}</div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock body %}

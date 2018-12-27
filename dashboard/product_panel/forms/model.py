@@ -1,16 +1,22 @@
 from django import forms
 
-from webstore.core.widgets import MaterializeSelectMultiple
+from webstore.core.widgets import MaterializeCheckboxInput
 from webstore.product.models import Price, Gallery, Picture
 
 
 class PriceCreateForm(forms.ModelForm):
+	is_promo = forms.BooleanField(
+		widget=MaterializeCheckboxInput,
+		required=False,
+	)
 
 	class Meta:
 		model = Price
 		fields = [
 			'value',
 			'valid_from',
+			'is_promo',
+			'promo_message',
 		]
 
 	def __init__(self, *args, **kwargs):

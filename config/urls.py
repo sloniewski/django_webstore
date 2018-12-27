@@ -18,6 +18,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from webstore.core.views import WelcomeView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('admin/doc/', include('django.contrib.admindocs.urls')),
@@ -33,6 +35,8 @@ urlpatterns = [
     path('dashboard/payment_panel/', include('dashboard.payment_panel.urls')),
     path('dashboard/delivery_panel/', include('dashboard.delivery_panel.urls')),
     path('dashboard/users_panel/', include('dashboard.users_panel.urls')),
+
+    path('', WelcomeView.as_view(), name="welcome"),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) \
   + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

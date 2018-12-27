@@ -22,6 +22,17 @@ class ProductQuerySet(models.QuerySet):
                     queryset=prices.values('value')[:1],
                     output_field=models.DecimalField(),
                 )
+            )\
+            .annotate(
+                is_promo=Subquery(
+                    queryset=prices.values('is_promo')[:1],
+                    output_field=models.BooleanField(),
+                )
+            ).annotate(
+                promo_message=Subquery(
+                    queryset=prices.values('promo_message')[:1],
+                    output_field=models.CharField(max_length=255),
+                )
             )
         return products
 
@@ -35,10 +46,24 @@ class ProductManager(models.Manager):
         return self.get_queryset().with_prices()
 
 
+class CategoryQuerySet(models.QuerySet):
+
+    def with_products(self):
+        return self\
+            .annotate(product_count=models.Count('product'))\
+            .filter(product_count__gt=0)
+
+
 class CategoryManager(models.Manager):
 
     def form_choices(self):
         return [x.form_choice for x in self.get_queryset().all()]
+
+    def get_queryset(self):
+        return CategoryQuerySet(self.model, using=self.db)
+
+    def with_products(self):
+        return self.get_queryset().with_products()
 
 
 class GalleryManager(models.Manager):

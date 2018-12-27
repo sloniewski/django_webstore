@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 
@@ -31,4 +33,7 @@ class CustomUser(AbstractUser):
 		if self.first_name and self.last_name:
 			return '{} {}'.format(self.first_name, self.last_name)
 		return 'not provided'
-    
+
+	@property
+	def url_encoded_email(self):
+		return urlencode({'email': self.email})

@@ -10,6 +10,7 @@ class WelcomeView(TemplateView):
         context.update({
             'categories': Category.objects.with_products(),
             'promo_prod': Product.objects.with_prices().filter(is_promo=True),
+            'newcomers': Product.objects.newcomers().with_prices()
         })
         return context
 

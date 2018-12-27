@@ -14,8 +14,6 @@
         </div>
         {% endfor %}
 
-        <div class="col s12"><h5>Bestsellers</h5></div>
-
         <div class="col s12"><h5>Categories list</h5></div>
         {% for cat in categories %}
         <div class="col s6 m3">
@@ -24,5 +22,14 @@
             </a>
         </div>
         {% endfor %}
+
+        <div class="col s12"><h5>New products</h5></div>
+        {% for new in newcomers %}
+        <div class="col s6 m3">
+            {% include 'webstore/product/product_list_item.html' with object=new %}
+        </div>
+        {% endfor %}
+
+
     </div>
 {% endblock body %}

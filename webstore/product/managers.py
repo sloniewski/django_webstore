@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+
 from django.db import models
 from django.db.models import OuterRef, Subquery
 from django.utils import timezone
@@ -36,6 +39,10 @@ class ProductQuerySet(models.QuerySet):
             )
         return products
 
+    def newcomers(self):
+        ago = timezone.now() - timedelta(days=14)
+        return self.filter(created__gte=ago)
+
 
 class ProductManager(models.Manager):
 
@@ -44,6 +51,9 @@ class ProductManager(models.Manager):
 
     def with_prices(self):
         return self.get_queryset().with_prices()
+
+    def newcomers(self):
+        return self.get_queryset().newcomers()
 
 
 class CategoryQuerySet(models.QuerySet):

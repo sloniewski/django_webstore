@@ -15,6 +15,7 @@ class ProductQuerySet(models.QuerySet):
 
     def with_prices(self):
         # TODO circular import workaround
+        # TODO make raw SQL instead of 3 nested subqueries (JOIN on prices)
         from .models import Price
         prices = Price.objects\
             .filter(product=OuterRef('pk'), valid_from__lte=timezone.now())\

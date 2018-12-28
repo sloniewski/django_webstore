@@ -1,6 +1,9 @@
-from django.test import TestCase
+from decimal import Decimal
+from datetime import timedelta
 
-from webstore.cash.models import Cash
+from django.test import TestCase
+from django.utils.timezone import now
+
 from webstore.product.models import (
     Product,
     Price,
@@ -8,6 +11,11 @@ from webstore.product.models import (
 
 
 class TestProductModel(TestCase):
+
+    def setUp(self):
+        self.product = Product.objects.create(
+            name='test product',
+        )
 
     def test_product_has_unique_slug_created(self):
         test_name = 'the machine that goes \'ping\''
@@ -23,16 +31,11 @@ class TestProductModel(TestCase):
         )
 
     def test_changing_name_does_not_change_slug(self):
-        product = Product(
-            name='Red Leicester',
-        )
-        product.save()
-
-        slug = product.slug
-        product.name = 'Norwegian Jarlsberg'
-        product.save()
+        slug = self.product.slug
+        self.product.name = 'Norwegian Jarlsberg'
+        self.product.save()
         self.assertEqual(
-            product.slug, slug,
+            self.product.slug, slug,
             msg='product slug should stay the same after name update',
         )
 
@@ -44,39 +47,55 @@ class TestProductModel(TestCase):
         )
 
     def test_get_latest_price(self):
-        product = Product.objects.create(
-            name='test product',
-        )
         prices = Price.objects.bulk_create([
-            Price(value=12.0101, valid_from='2018-01-01', product=product),
-            Price(value=45.345, valid_from='2017-04-05', product=product),
-            Price(value=78.9999, valid_from='2016-08-12', product=product),
+            Price(value=12.01, valid_from='2018-01-01', product=self.product),
+            Price(value=45.34, valid_from='2017-04-05', product=self.product),
+            Price(value=78.99, valid_from='2016-08-12', product=self.product),
         ])
-        self.assertIsInstance(product.get_price, Cash)
-        self.assertEqual(
-            product.get_price,
-            Cash('12.0101'),
-        )
+        self.product.set_price()
+        self.assertIsInstance(self.product.price, Decimal)
+        self.assertEqual(self.product.price,Decimal('12.01'))
 
     def test_behaviour_if_no_price_is_set(self):
         product = Product.objects.create(
             name='test product',
         )
+        product.set_price()
         self.assertEqual(
-            product.get_price,
+            product.price,
             None,
         )
 
-
-class TestPriceModel(TestCase):
-
     def test_price_type(self):
-        product = Product.objects.create(
-            name='test product',
-        )
-        price = Price(
-            value=12.0101,
+
+        price = Price.objects.create(
+            value=92.9123,
             valid_from='2018-01-01',
-            product=product
+            product=self.product
         )
-        self.assertIsInstance(price.value, Cash)
+        price.refresh_from_db()
+        self.assertIsInstance(
+            price.value, Decimal,
+            msg='price type is {}'.format(type(price.value)),
+        )
+        self.assertEqual(price.value,Decimal('92.91'))
+
+    def test_queryset_with_prices(self):
+        price = Price.objects.create(
+            value='14.01',
+            valid_from=now()-timedelta(days=1),
+            product=self.product,
+            is_promo=True,
+            promo_message='best deal',
+        )
+        product = Product.objects\
+            .with_prices()\
+            .filter(slug=self.product.slug)\
+            .first()
+
+        self.assertEqual(
+            product.price, Decimal('14.01'),
+            msg='price was {} {}'.format(type(product.price), product.price )
+        )
+        self.assertEqual(product.is_promo, True)
+        self.assertEqual(product.promo_message, 'best deal')

@@ -163,6 +163,21 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('product:product-detail', kwargs={'slug': self.slug})
 
+    def set_price(self):
+        if not hasattr(self, 'price'):
+            today = timezone.now()
+            price = self.prices.filter(valid_from__lte=today).first()
+            if price is not None:
+                self.price = price.value
+                self.is_promo = price.is_promo
+                self.promo_message = price.promo_message
+            else:
+                self.price = None
+                self.is_promo = False
+                self.promo_message = None
+            return True
+        return False
+
     @property
     def actual_price(self):
         today = timezone.now()

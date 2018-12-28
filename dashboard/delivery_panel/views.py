@@ -29,7 +29,7 @@ class DeliveryUpdateView(generic.UpdateView):
     success_url = '/dashboard/delivery/list/shipped'
 
     def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
+        context_data = super(DeliveryUpdateView, self).get_context_data(**kwargs)
         pk = self.kwargs.get(self.pk_url_kwarg)
         order = Order.objects.filter(delivery__pk=pk).first()
         context_data.update({'order': order})

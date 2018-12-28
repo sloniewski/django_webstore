@@ -12,7 +12,6 @@ INSTALLED_APPS = [
     'webstore.cart',
     'webstore.order',
     'webstore.core',
-    'webstore.functional_tests',
     'webstore.delivery',
     'webstore.payment',
 

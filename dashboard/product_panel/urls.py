@@ -26,9 +26,9 @@ urlpatterns = [
     path('product/price-list/<int:number>', views.ProductPriceListView.as_view(),
          name='product-price-list'),
 
-
     path('price/<int:pk>', views.PriceUpdateView.as_view(),
          name='price-update'),
+
 
     # Category
     path('category/list', views.CategoryListView.as_view(),

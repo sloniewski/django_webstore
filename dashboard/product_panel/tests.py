@@ -20,6 +20,9 @@ class TestViews(TestCase):
         self.product = Product.objects.create(
             name='The Holy Grail',
         )
+        self.delete_this = Product.objects.create(
+            name='for deletion',
+        )
         self.product.categories.add(self.category)
         self.price = Price.objects.create(
             value=11.11,
@@ -108,6 +111,24 @@ class TestViews(TestCase):
         self.assertTemplateUsed(
             response=response,
             template_name='dashboard/product/product_delete.html'
+        )
+
+    def test_product_delete_post(self):
+        response = self.client.post(
+            reverse(
+                'product_panel:product-delete',
+                kwargs={'slug': self.delete_this.slug},
+            ),
+            content_type="application/x-www-form-urlencoded",
+        )
+        self.assertEqual(
+            first=response.status_code,
+            second=302,
+            msg='view returned {} code'.format(response.status_code),
+        )
+        self.assertEqual(
+            first=response.url,
+            second=reverse('product_panel:product-list')
         )
 
     def test_product_create_get(self):

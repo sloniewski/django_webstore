@@ -75,6 +75,9 @@ class ProductDeleteView(generic.DeleteView):
     model = Product
     template_name = 'dashboard/product/product_delete.html'
 
+    def get_success_url(self):
+        return reverse('product_panel:product-list')
+
 
 class ProductPriceListView(generic.ListView):
     model = Price

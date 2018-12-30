@@ -78,6 +78,10 @@ class OrderDetailView(generic.DetailView):
     model = Order
     template_name = 'dashboard/order/order_detail.html'
 
+    def get_object(self, queryset=None):
+        uuid = self.kwargs.get('uuid')
+        return get_object_or_404(self.model, uuid=uuid)
+
 
 class OrderItemUpdateView(generic.UpdateView):
     model = OrderItem
@@ -88,7 +92,7 @@ class OrderItemUpdateView(generic.UpdateView):
     ]
 
     def get_success_url(self):
-        return reverse('dashboard:order-detail', kwargs={'pk': self.object.order.id})
+        return reverse('order_panel:order-detail', kwargs={'uuid': self.object.order.uuid})
 
 
 class OrderItemDeleteView(generic.DeleteView):
@@ -96,5 +100,5 @@ class OrderItemDeleteView(generic.DeleteView):
     template_name = 'dashboard/order/order_item_delete.html'
 
     def get_success_url(self):
-        return reverse('dashboard:order-detail', kwargs={'pk': self.object.order.id})
+        return reverse('order_panel:order-detail', kwargs={'uuid': self.object.order.uuid})
 

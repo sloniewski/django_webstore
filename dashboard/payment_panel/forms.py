@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 
 from webstore.core.widgets import MaterializeCheckboxInput
 from webstore.payment.models import Payment
+from webstore.order.models import OrderStatus
 
 
 class FilterPaymentForm(django_filters.FilterSet):
@@ -58,10 +59,18 @@ class UpdatePaymentForm(forms.ModelForm):
         )
     )
 
+    class Meta:
+        model = Payment
+        fields = [
+            'payed',
+        ]
+
     def save(self, commit=True):
         object = super().save(commit)
-
         send_mail_flag = self.cleaned_data.get('send_mail')
+        if object.payed is True and self.order.status == OrderStatus.AWAITING_PAYMENT.name:
+            self.order.status = OrderStatus.SHIPPING.name
+            self.order.save()
         if send_mail_flag is True:
             send_mail(
                 subject='Payment status for order: {}'.format(object.order.id),
@@ -72,8 +81,6 @@ class UpdatePaymentForm(forms.ModelForm):
             )
         return object
 
-    class Meta:
-        model = Payment
-        fields = [
-            'payed',
-        ]
+    def __init__(self, *args, **kwargs):
+        self.order = kwargs.pop('order')
+        super(UpdatePaymentForm, self).__init__(*args, **kwargs)

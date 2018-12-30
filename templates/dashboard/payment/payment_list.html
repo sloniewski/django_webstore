@@ -9,16 +9,39 @@
     </div>
 
     <!-- payment list -->
-    <ul class="collection with-header col s9">
-        <li class="collection-header"><h4>Payments list</h4></li>
-
-        {%for object in object_list %}
-        <a href="{% url 'payment_panel:payment-update' pk=object.pk %}" class="collection-item">
-            <b>User email</b>: {{ object.user.email }},
-            <b>Value</b>: {{ object.value }},
-            <b>Outstainding</b>: {{ object.status }} {{object.days_outstanding}} days
-        </a>
-        {% endfor %}
-    </ul>
+    <div class="collection with-header col s9">
+        <h4>Payments list</h4>
+        <table>
+            <thead class="striped responsive-table">
+            <tr>
+                <th>client</th>
+                <th>email</th>
+                <th>value</th>
+                <th>status</th>
+                <th>recived</th>
+                <th>order</th>
+                <th>late</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {%for object in object_list %}
+            <tr>
+                <td>{{ object.user.full_name }}</td>
+                <td>{{ object.user.email }}</td>
+                <td>{{ object.value }}</td>
+                <td>{{ object.status }}</td>
+                <td>{{ object.payed }}</td>
+                <td>{{ object.order.status }}</td>
+                <td>{{object.days_outstanding}} </td>
+                <td>
+                    <a href="{% url 'payment_panel:payment-update' pk=object.pk %}">
+                        EDIT</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock content %}

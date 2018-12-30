@@ -1,6 +1,7 @@
 
 from django.db import models
 from django.utils import timezone
+from django.utils.functional import cached_property
 
 from webstore.core.mixins import TimeStampMixin
 from webstore.order.models import Order, OrderStatus
@@ -55,9 +56,9 @@ class Payment(TimeStampMixin, models.Model):
         now = timezone.now()
         if self.order.status == OrderStatus.AWAITING_PAYMENT.name:
             return (now - self.created).days
-        return 0
+        return '-'
 
-    @property
+    @cached_property
     def status(self):
         if self.order.status == OrderStatus.AWAITING_PAYMENT.name:
             return 'open'

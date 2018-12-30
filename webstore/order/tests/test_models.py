@@ -1,15 +1,16 @@
+from decimal import Decimal
+
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
-from webstore.cash.models import Cash
 from webstore.product.models import Product, Price
-from webstore.product.utils import random_string
+from webstore.core.utils import random_string
 from webstore.order.models import Order, OrderItem
 
 
 User = get_user_model()
 
-def create_test_product(name=None, price=None):
+def create_test_product(name=None, price='45.76'):
     if name is None:
         name = 'product' + random_string(6)
     product = Product.objects.create(name=name)
@@ -48,8 +49,16 @@ class TestOrderModel(TestCase):
             quantity=2,
             price='22.22',
         )
-        self.assertEquals(order.value, Cash('88.88'))
-        self.assertIsInstance(order.value, Cash)
+        self.assertEquals(order.value, Decimal('88.88'))
+        self.assertIsInstance(order.value, Decimal)
+
+    def test_order_has_uuid_assigned(self):
+        orders = [Order(user=self.user) for _ in range(100)]
+        for o in orders:
+            o.save()
+            o.refresh_from_db()
+        ids = [ord.uuid for ord in orders]
+        self.assertEqual(len(orders), len(set(ids)))
 
 
 class TestOrderItemModel(TestCase):
@@ -66,6 +75,7 @@ class TestOrderItemModel(TestCase):
             quantity=2,
             price='11.11',
         )
-        self.assertIsInstance(order_item.price, Cash)
-        self.assertEqual(order_item.value, Cash('22.22'))
-        self.assertIsInstance(order_item.value, Cash)
+        order_item.refresh_from_db()
+        self.assertIsInstance(order_item.price, Decimal)
+        self.assertEqual(order_item.value, Decimal('22.22'))
+        self.assertIsInstance(order_item.value, Decimal)

@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.functions import Cast
 from django.shortcuts import reverse
+from django.utils.functional import cached_property
 
 from webstore.product.models import Product
 
@@ -63,6 +64,14 @@ class OrderItem(models.Model):
             self.quantity,
             self.price,
         )
+
+    @cached_property
+    def value(self):
+        if self.price in [None, Decimal('0'), 0]:
+            return Decimal('0')
+        if self.quantity in [None, Decimal('0'), 0]:
+            return Decimal('0')
+        return self.price * self.quantity
 
 
 class OrderStatus(Enum):

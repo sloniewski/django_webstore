@@ -162,7 +162,7 @@ class TestViews(TestCase):
         self.assertEqual(self.order_item.quantity, data['quantity'])
         self.assertEqual(self.order_item.price, Decimal(data['price']))
 
-    def test_order_item_update_delete_get(self):
+    def test_order_item_delete_get(self):
         response = self.client.get(
             reverse(
                 viewname='order_panel:order-item-delete',
@@ -172,7 +172,7 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'dashboard/order/order_item_delete.html')
 
-    def test_order_item_update_delete_post(self):
+    def test_order_item_delete_post(self):
         temp_id = self.delete_order_item.id
         response = self.client.post(
             reverse(
@@ -181,6 +181,6 @@ class TestViews(TestCase):
             )
         )
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response, reverse('order_panel:order-detail', kwargs={'uuid': self.order.id}))
+        self.assertEqual(response.url, reverse('order_panel:order-detail', kwargs={'uuid': self.order.uuid}))
         with self.assertRaises(OrderItem.DoesNotExist):
             item = OrderItem.objects.get(id=temp_id)

@@ -1,16 +1,35 @@
 from urllib.parse import urlencode
 from decimal import Decimal
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.shortcuts import reverse
 
-from webstore.delivery.models import DeliveryPricing
+from webstore.delivery.models import DeliveryPricing, Delivery
+from webstore.order.models import Order
+
+User = get_user_model()
 
 
 class TestDeliveryViews(TestCase):
     """ Tests for authenticated user """
 
     def setUp(self):
+        self.user = User.objects.create(username='username')
+        self.order = Order.objects.create(user=self.user)
+        self.delivery_data = {
+            'name': 'xxx',
+            'surname': 'yyy',
+            'city': 'neverland',
+            'country': 'trinidad tobago',
+            'postal_code': '00000',
+            'street_name': 'test delivery',
+            'street_number': 1,
+            'flat_number': 4,
+            'cost': '22.22',
+            'order': self.order,
+        }
+        self.delivery = Delivery.objects.create(**self.delivery_data)
         self.delivery_option = DeliveryPricing.objects.create(
             name='test',
             cost=32.99,
@@ -24,15 +43,43 @@ class TestDeliveryViews(TestCase):
         response = self.client.get(
             reverse(viewname='delivery_panel:delivery-list')
         )
-        self.assertEqual(
-            first=response.status_code,
-            second=200,
-            msg='view returned {} code'.format(response.status_code),
+        self.assertEqual(response.status_code,200)
+        self.assertTemplateUsed(response, 'dashboard/delivery/delivery_list.html')
+        self.assertContains(response, self.order.uuid)
+
+    def test_delivery_update_get(self):
+        response = self.client.get(
+            reverse(
+                'delivery_panel:delivery-update',
+                kwargs={'pk': self.delivery.id},
+            )
         )
-        self.assertTemplateUsed(
-            response=response,
-            template_name='dashboard/delivery/delivery_list.html',
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'dashboard/delivery/delivery_update.html')
+
+    def test_delivery_update_post(self):
+        self.delivery_data['street_number'] = 55
+        response = self.client.post(
+            reverse(
+                'delivery_panel:delivery-update',
+                kwargs={'pk': self.delivery.id},
+            ),
+            data=self.delivery_data,
         )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('delivery_panel:delivery-list'))
+        self.delivery.refresh_from_db()
+        self.assertEqual(self.delivery.street_number, '55')
+
+    def test_delivery_detail_get(self):
+        response = self.client.get(
+            reverse(
+                'delivery_panel:delivery-detail',
+                kwargs={'pk': self.delivery.id},
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'dashboard/delivery/delivery_detail.html')
 
     def test_delivery_price_list(self):
         response = self.client.get(

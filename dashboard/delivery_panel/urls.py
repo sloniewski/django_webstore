@@ -11,8 +11,11 @@ urlpatterns = [
     path('list/', views.DeliveryListView.as_view(),
          name='delivery-list'),
 
-    path('update/<pk>', views.DeliveryUpdateView.as_view(),
+    path('<pk>/update', views.DeliveryUpdateView.as_view(),
          name='delivery-update'),
+
+    path('<int:pk>/detail', views.DeliveryDetailView.as_view(),
+         name='delivery-detail'),
 
     # delivery pricing
     path('option-list/', views.DeliveryPricingListView.as_view(),

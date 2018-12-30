@@ -36,3 +36,16 @@ class TestIntegrated(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'dashboard/payment/payment_update.html')
+    
+    def test_payment_update_view_post(self):
+        response = self.client.post(
+            reverse(
+                'payment_panel:payment-update',
+                kwargs={'pk': self.payment.id},
+            ),
+            data={'payed': 'on'}
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('payment_panel:payment-list'))
+        self.payment.refresh_from_db()
+        self.assertEqual(self.payment.payed, True)

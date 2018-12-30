@@ -61,10 +61,7 @@ class TestProductModel(TestCase):
             name='test product',
         )
         product.set_price()
-        self.assertEqual(
-            product.price,
-            None,
-        )
+        self.assertEqual(product.price, None)
 
     def test_price_type(self):
 
@@ -78,7 +75,7 @@ class TestProductModel(TestCase):
             price.value, Decimal,
             msg='price type is {}'.format(type(price.value)),
         )
-        self.assertEqual(price.value,Decimal('92.91'))
+        self.assertEqual(price.value, Decimal('92.91'))
 
     def test_queryset_with_prices(self):
         price = Price.objects.create(

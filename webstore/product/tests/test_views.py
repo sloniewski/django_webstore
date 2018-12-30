@@ -1,10 +1,10 @@
-from django.shortcuts import reverse
 from django.test import TestCase
 
 from webstore.product.models import Product, Price
+from webstore.product.views import ProductDetailView
 
 
-class TestProductViews(TestCase):
+class TestDetailView(TestCase):
 
     def setUp(self):
         self.product = Product.objects.create(
@@ -16,31 +16,7 @@ class TestProductViews(TestCase):
             product=self.product,
         )
 
-    def test_product_list_get(self):
-        response = self.client.get(
-            reverse('product:product-list')
-        )
-        self.assertEqual(
-            first=response.status_code,
-            second=200,
-        )
-        self.assertTemplateUsed(
-            response=response,
-            template_name='webstore/product/product_list.html',
-        )
-
-    def test_product_detail(self):
-        response = self.client.get(
-            reverse('product:product-detail', kwargs={'slug':self.product.slug})
-        )
-        self.assertEqual(
-            first=response.status_code,
-            second=200,
-        )
-        self.assertTemplateUsed(
-            response=response,
-            template_name='webstore/product/product_detail.html',
-        )
-
-
-
+    def test_queryset(self):
+        view = ProductDetailView()
+        qs = view.get_queryset()
+        self.assertIn(self.product, qs)

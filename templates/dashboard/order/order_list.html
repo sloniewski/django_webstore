@@ -38,8 +38,11 @@
                             <td>{{ object.value }}</td>
                             <td>{{ object.payment.payed }}</td>
                             <td>
+                                <a href="{% url 'order_panel:order-detail' uuid=object.uuid %}">
+                                    VIEW
+                                </a>|
                                 <a href="{% url 'order_panel:order-update' uuid=object.uuid %}">
-                                    CHANGE STATUS
+                                    STATUS
                                 </a>|
                                 <a href="{% url 'order_panel:order-delete' uuid=object.uuid %}">
                                     DELETE

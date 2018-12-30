@@ -4,18 +4,33 @@
 {% block content %}
 <div class="row">
     <!-- payment list -->
-    <ul class="collection with-header col s12">
-        <li class="collection-header"><h4>Order details</h4></li>
-        {% for item in object.items %}
-        <li class="collection-item">
-            {{item.product.name}}, {{item.quantity}} pcs, {{item.value}}
-            <div class="secondary-content">
-                <a href="#">ADD PRODUCT</a>|
-                <a href="{% url 'order_panel:order-item-update' pk=item.pk %}">EDIT</a>|
-                <a href="{% url 'order_panel:order-item-delete' pk=item.pk %}">DELETE</a>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="col s12">
+        <div class="card-panel">
+            <h4>Order details</h4>
+            <table class="highlight responsive-table">
+                <thead>
+                    <tr>
+                        <th>Product name</th>
+                        <th>Qty</th>
+                        <th>Value</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for item in object.items %}
+                <tr>
+                    <td>{{item.product.name}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.value}}</td>
+                    <td>
+                        <a href="{% url 'order_panel:order-item-update' pk=item.pk %}">EDIT</a>|
+                        <a href="{% url 'order_panel:order-item-delete' pk=item.pk %}">DELETE</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock content %}

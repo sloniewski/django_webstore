@@ -11,7 +11,7 @@ from webstore.order.models import Order
 User = get_user_model()
 
 
-class TestDeliveryViews(TestCase):
+class TestsIntegrated(TestCase):
     """ Tests for authenticated user """
 
     def setUp(self):

@@ -52,6 +52,7 @@ class TestViews(TestCase):
             response=response,
             template_name='dashboard/product/product_list.html',
         )
+        self.assertContains(response, self.product.name)
 
     def test_product_update_get(self):
         response = self.client.get(
@@ -281,6 +282,7 @@ class TestViews(TestCase):
             response=response,
             template_name='dashboard/product/category_list.html',
         )
+        self.assertContains(response, self.category.name)
 
     def test_category_update_get(self):
         response = self.client.get(

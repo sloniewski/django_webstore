@@ -124,6 +124,8 @@ class PriceUpdateView(generic.UpdateView):
     fields = [
         'value',
         'valid_from',
+        'is_promo',
+        'promo_message',
     ]
 
     def get_success_url(self):

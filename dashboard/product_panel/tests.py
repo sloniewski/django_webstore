@@ -1,3 +1,4 @@
+from decimal import Decimal
 from datetime import date
 from urllib.parse import urlencode
 
@@ -16,11 +17,12 @@ from webstore.product.models import (
 class TestViews(TestCase):
 
     def setUp(self):
-        self.category = Category.objects.create(name='utensils')
+        self.category = Category.objects.create(name='for delete')
+        self.delete_this_category = Category.objects.create(name='utensils')
         self.product = Product.objects.create(
             name='The Holy Grail',
         )
-        self.delete_this = Product.objects.create(
+        self.delete_this_product = Product.objects.create(
             name='for deletion',
         )
         self.product.categories.add(self.category)
@@ -31,6 +33,9 @@ class TestViews(TestCase):
         )
         self.picture = Picture.objects.create(
             name='clay bowl', data='/test'
+        )
+        self.delete_this_picture = Picture.objects.create(
+            name='for delete', data='/4delete'
         )
         self.gallery = Gallery.objects.create(
             picture=self.picture,
@@ -70,7 +75,7 @@ class TestViews(TestCase):
             'width': 5,
             'height': 5,
             'length': 5,
-            'categories': 1,
+            'categories': self.category.id,
             'submit': 'submit',
         }
         response = self.client.post(
@@ -117,7 +122,7 @@ class TestViews(TestCase):
         response = self.client.post(
             reverse(
                 'product_panel:product-delete',
-                kwargs={'slug': self.delete_this.slug},
+                kwargs={'slug': self.delete_this_product.slug},
             ),
             content_type="application/x-www-form-urlencoded",
         )
@@ -141,6 +146,41 @@ class TestViews(TestCase):
             template_name='dashboard/product/product_update.html',
         )
 
+    def test_product_create_post(self):
+        data = {
+            'name': 'jabberwocky',
+            'description': 'mythical creature',
+            'weight': 55,
+            'width': 7,
+            'height': 6,
+            'length': 5,
+            'categories': self.category.id,
+        }
+        response = self.client.post(
+            reverse(
+                'product_panel:product-create',
+            ),
+            data=urlencode(data),
+            content_type="application/x-www-form-urlencoded",
+        )
+        self.assertEqual(
+            first=response.status_code,
+            second=302,
+            msg='view returned {} code'.format(response.status_code),
+        )
+        self.assertEqual(
+            first=response.url,
+            second=reverse('product_panel:product-list')
+        )
+
+        product = Product.objects.get(**data)
+        self.assertEqual(product.name, data['name'])
+        self.assertEqual(product.description, data['description'])
+        self.assertEqual(product.weight, data['weight'])
+        self.assertEqual(product.width, data['width'])
+        self.assertEqual(product.height, data['height'])
+        self.assertEqual(product.length, data['length'])
+
     def test_product_price_create_get(self):
         response = self.client.get(
             reverse(
@@ -152,6 +192,28 @@ class TestViews(TestCase):
         self.assertTemplateUsed(
             response=response,
             template_name='dashboard/product/product_price_create.html',
+        )
+
+    def test_product_price_create_post(self):
+        data = {
+            'value': 76.23,
+            'valid_from': date(year=2017, month=4, day=1),
+            'is_promo': 'on',
+            'promo_message': 'blue monday',
+        }
+        response = self.client.post(
+            reverse(
+                'product_panel:product-price-create',
+                kwargs={'number': self.product.number},
+            ),
+            data=urlencode(data),
+            content_type="application/x-www-form-urlencoded",
+
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            reverse('product_panel:product-price-list', kwargs={'number': self.product.number})
         )
 
     def test_product_price_list_get(self):
@@ -168,17 +230,47 @@ class TestViews(TestCase):
         )
 
     def test_product_price_update_get(self):
-        response = self.client.get(
+        response = self.client.post(
             reverse(
                 'product_panel:price-update',
                 kwargs={'pk': self.price.pk},
-            )
+            ),
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
             response=response,
             template_name='dashboard/product/product_price_create.html',
         )
+
+    def test_product_price_update_post(self):
+        data = {
+            'value': '55.55',
+            'valid_from': date(year=2016, month=4, day=1),
+            'is_promo': 'on',
+            'promo_message': 'x',
+        }
+        response = self.client.post(
+            reverse(
+                'product_panel:price-update',
+                kwargs={'pk': self.price.pk},
+            ),
+            data=urlencode(data),
+            content_type="application/x-www-form-urlencoded",
+
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response.url,
+            reverse(
+                'product_panel:product-price-list',
+                kwargs={'number': self.product.number},
+            )
+        )
+        self.price.refresh_from_db()
+        self.assertEqual(self.price.value, Decimal(data['value']), )
+        self.assertEqual(self.price.valid_from, data['valid_from'])
+        self.assertEqual(self.price.promo_message, data['promo_message'])
+        self.assertEqual(self.price.is_promo, True)
 
     def test_category_list_get(self):
         response = self.client.get(
@@ -203,6 +295,26 @@ class TestViews(TestCase):
             template_name='dashboard/product/category_create_update.html',
         )
 
+    def test_category_update_post(self):
+        data = {
+            'name': 'aaabbbccc',
+            'description': 'aaaaaaaaaaabbbbbbbbbbbb',
+        }
+        response = self.client.post(
+            reverse(
+                'product_panel:category-update',
+                kwargs={'pk': self.category.pk},
+            ),
+            data=urlencode(data),
+            content_type="application/x-www-form-urlencoded",
+
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('product_panel:category-list'))
+        self.category.refresh_from_db()
+        self.assertEqual(self.category.name, data['name'])
+        self.assertEqual(self.category.description, data['description'])
+
     def test_category_delete_get(self):
         response = self.client.get(
             reverse(
@@ -216,6 +328,19 @@ class TestViews(TestCase):
             template_name='dashboard/generic_delete.html',
         )
 
+    def test_category_delete_post(self):
+        temp_id = self.delete_this_category.id
+        response = self.client.post(
+            reverse(
+                'product_panel:category-delete',
+                kwargs={'pk': self.delete_this_category.pk},
+            )
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('product_panel:category-list'))
+        with self.assertRaises(Category.DoesNotExist):
+            cat = Category.objects.get(id=temp_id)
+
     def test_category_create_get(self):
         response = self.client.get(
             reverse('product_panel:category-create')
@@ -225,6 +350,25 @@ class TestViews(TestCase):
             response=response,
             template_name='dashboard/product/category_create_update.html',
         )
+
+    def test_category_create_post(self):
+        data = {
+            'name': 'aaabbbccc1111',
+            'description': 'aaaaaaaaaaabbbbbbbbbbbb2222',
+        }
+        response = self.client.post(
+            reverse(
+                'product_panel:category-create',
+            ),
+            data=urlencode(data),
+            content_type="application/x-www-form-urlencoded",
+
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('product_panel:category-list'))
+        category = Category.objects.get(**data)
+        self.assertEqual(category.name, data['name'])
+        self.assertEqual(category.description, data['description'])
 
     def test_picture_list_get(self):
         response = self.client.get(
@@ -253,10 +397,19 @@ class TestViews(TestCase):
                 kwargs={'pk': self.picture.pk}),
         )
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response=response,
-            template_name='dashboard/product/picture_delete.html',
+        self.assertTemplateUsed(response, 'dashboard/product/picture_delete.html')
+
+    def test_picture_delete_post(self):
+        temp_id = self.delete_this_picture.id
+        response = self.client.post(
+            reverse(
+                'product_panel:picture-delete',
+                kwargs={'pk': self.delete_this_picture.pk}),
         )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('product_panel:picture-list'))
+        with self.assertRaises(Picture.DoesNotExist):
+            pic = Picture.objects.get(id=temp_id)
 
     def test_picture_update_get(self):
         response = self.client.get(
@@ -269,6 +422,20 @@ class TestViews(TestCase):
             response=response,
             template_name='dashboard/product/picture/picture_update.html',
         )
+
+    def test_picture_update_post(self):
+        response = self.client.post(
+            reverse(
+                'product_panel:picture-update',
+                kwargs={'pk': self.picture.pk}
+            ),
+            data=urlencode({'name': 'xxxxyyyyzzzz'}),
+            content_type="application/x-www-form-urlencoded",
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('product_panel:picture-list'))
+        self.picture.refresh_from_db()
+        self.assertEqual(self.picture.name, 'xxxxyyyyzzzz')
 
     def test_product_gallery_get(self):
         response = self.client.get(

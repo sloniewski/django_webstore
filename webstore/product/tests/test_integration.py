@@ -29,5 +29,9 @@ class TestProductViews(TestCase):
         self.assertTemplateUsed(response, 'webstore/product/product_detail.html')
         self.assertContains(response, self.product.name)
 
+    def test_product_detail_get_404(self):
+        # TODO write test
+        pass
+
 
 

@@ -491,6 +491,11 @@ class TestIntegratedAnonymousUser(TestCase):
         self.product = Product.objects.create(
             name='test product',
         )
+        self.price = Price.objects.create(
+            value='11.99',
+            valid_from=date(year=2017, month=4, day=1),
+            product=self.product,
+        )
 
     def test_product_list_get_302(self):
         test_url = reverse('product_panel:product-list')
@@ -518,8 +523,16 @@ class TestIntegratedAnonymousUser(TestCase):
 
     def test_product_create_get_302(self):
         test_url = reverse(
-                'product_panel:product-delete',
-                kwargs={'slug': self.product.slug}
+                'product_panel:product-create',
+            )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
+
+    def test_product_pricel_list_get_302(self):
+        test_url = reverse(
+                'product_panel:product-price-list',
+                kwargs={'number': self.product.number}
             )
         response = self.client.get(test_url)
         self.assertEqual(response.status_code, 302)
@@ -533,3 +546,13 @@ class TestIntegratedAnonymousUser(TestCase):
         response = self.client.get(test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
+
+    def test_product_price_update_get_302(self):
+        test_url = reverse(
+                'product_panel:price-update',
+                kwargs={'pk': self.price.id},
+            )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
+

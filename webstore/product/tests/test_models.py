@@ -96,3 +96,11 @@ class TestProductModel(TestCase):
         )
         self.assertEqual(product.is_promo, True)
         self.assertEqual(product.promo_message, 'best deal')
+
+    def test_gallery_images_have_consequent_numbers(self):
+        self.fail('write the test')
+        pass
+
+    def test_gallery_bulk_create_skips_dupes(self):
+        self.fail('write the test')
+        pass

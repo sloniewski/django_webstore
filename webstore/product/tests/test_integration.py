@@ -30,7 +30,7 @@ class TestProductViews(TestCase):
         self.assertContains(response, self.product.name)
 
     def test_product_detail_get_404(self):
-        # TODO write test
+        self.fail('write the test')
         pass
 
 

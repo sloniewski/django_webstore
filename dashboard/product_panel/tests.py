@@ -75,6 +75,24 @@ class TestIntegrationUserStaff(TestCase):
             template_name='dashboard/product/product_update.html',
         )
 
+    def test_product_update_get_404(self):
+        response = self.client.get(
+            reverse(
+                'product_panel:product-update',
+                kwargs={'slug': 'wkrstgf'},
+            )
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_product_update_post_404(self):
+        response = self.client.post(
+            reverse(
+                'product_panel:product-update',
+                kwargs={'slug': 'wkrstgf'},
+            )
+        )
+        self.assertEqual(response.status_code, 404)
+
     def test_product_update_post(self):
         data = {
             'name': 'changed_name',
@@ -488,6 +506,7 @@ class TestIntegratedAnonymousUser(TestCase):
     """ test cases for not authenticated user"""
 
     def setUp(self):
+        self.category = Category.objects.create(name='something something')
         self.product = Product.objects.create(
             name='test product',
         )
@@ -556,3 +575,19 @@ class TestIntegratedAnonymousUser(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
 
+    def test_product_category_list_get_302(self):
+        test_url = reverse(
+                'product_panel:category-list',
+            )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
+
+    def test_product_category_update_get_302(self):
+        test_url = reverse(
+                'product_panel:category-update',
+                kwargs={'pk': self.category.id}
+            )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)

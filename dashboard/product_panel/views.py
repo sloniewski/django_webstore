@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from django.db.models import Count
 from django.contrib import messages
 from django.views import generic, View
-from django.contrib.auth.mixins import UserPassesTestMixin
 from django_filters.views import FilterView
 
+from dashboard.main.mixins import StaffOnlyMixin
 from webstore.product.models import (
     Product,
     Price,
@@ -21,13 +21,6 @@ from .forms import (
     GalleryImageCreateForm,
     GalleryImageChooseForm,
 )
-
-
-class StaffOnlyMixin(UserPassesTestMixin):
-    login_url = '/dashboard/users_panel/login'
-
-    def test_func(self):
-        return self.request.user.is_staff
 
 
 class ProductListView(StaffOnlyMixin, FilterView):
@@ -209,7 +202,7 @@ class PictureDeleteView(StaffOnlyMixin, generic.DeleteView):
         return reverse('product_panel:picture-list')
 
 
-class BaseGalleryMixin:
+class BaseGalleryMixin(StaffOnlyMixin):
 
     def dispatch(self, request, *args, **kwargs):
         self.product = get_object_or_404(

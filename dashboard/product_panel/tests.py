@@ -515,6 +515,14 @@ class TestIntegratedAnonymousUser(TestCase):
             valid_from=date(year=2017, month=4, day=1),
             product=self.product,
         )
+        self.picture = Picture.objects.create(
+            name='clay bowl', data='/test'
+        )
+        self.gallery = Gallery.objects.create(
+            picture=self.picture,
+            product=self.product,
+            number=1,
+        )
 
     def test_product_list_get_302(self):
         test_url = reverse('product_panel:product-list')
@@ -588,6 +596,32 @@ class TestIntegratedAnonymousUser(TestCase):
                 'product_panel:category-update',
                 kwargs={'pk': self.category.id}
             )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
+
+    def test_picture_list_get_302(self):
+        test_url = reverse(
+            'product_panel:picture-list',
+        )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
+
+    def test_picture_update_get_302(self):
+        test_url = reverse(
+            'product_panel:picture-update',
+            kwargs={'pk': self.picture.id}
+        )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
+
+    def test_product_gallery_get_302(self):
+        test_url = reverse(
+            'product_panel:product-gallery',
+            kwargs={'slug': self.product.slug}
+        )
         response = self.client.get(test_url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)

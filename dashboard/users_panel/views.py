@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth import get_user_model
+from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.views.generic import FormView
 from django.shortcuts import reverse
@@ -99,3 +100,7 @@ class UserBulkActionView(FormView):
 
     def get_success_url(self):
         return reverse('users_panel:client-list')
+
+
+class StaffLoginView(LoginView):
+    template_name = 'dashboard/users/login.html'

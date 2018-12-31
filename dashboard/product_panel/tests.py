@@ -2,6 +2,7 @@ from decimal import Decimal
 from datetime import date
 from urllib.parse import urlencode
 
+from django.contrib.auth import get_user_model
 from django.shortcuts import reverse
 from django.test import TestCase
 
@@ -14,9 +15,16 @@ from webstore.product.models import (
 )
 
 
-class TestViews(TestCase):
+User = get_user_model()
+
+
+class TestIntegrationUserStaff(TestCase):
+    """ test cases for authenticated staff user """
 
     def setUp(self):
+        self.user = User.objects.create_user(username='username', password='1234', is_staff=True)
+        self.client.login(username='username', password='1234')
+
         self.category = Category.objects.create(name='for delete')
         self.delete_this_category = Category.objects.create(name='utensils')
         self.product = Product.objects.create(
@@ -474,3 +482,54 @@ class TestViews(TestCase):
             response=response,
             template_name='dashboard/product/product_gallery_add.html',
         )
+
+
+class TestIntegratedAnonymousUser(TestCase):
+    """ test cases for not authenticated user"""
+
+    def setUp(self):
+        self.product = Product.objects.create(
+            name='test product',
+        )
+
+    def test_product_list_get_302(self):
+        test_url = reverse('product_panel:product-list')
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login')+'?next='+test_url)
+
+    def test_product_update_get_302(self):
+        test_url = reverse(
+                'product_panel:product-update',
+                kwargs={'slug': self.product.slug},
+            )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login')+'?next='+test_url)
+
+    def test_product_delete_get_302(self):
+        test_url = reverse(
+                'product_panel:product-delete',
+                kwargs={'slug': self.product.slug},
+            )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
+
+    def test_product_create_get_302(self):
+        test_url = reverse(
+                'product_panel:product-delete',
+                kwargs={'slug': self.product.slug}
+            )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)
+
+    def test_product_price_create_get_302(self):
+        test_url = reverse(
+                'product_panel:product-price-create',
+                kwargs={'number': self.product.number},
+            )
+        response = self.client.get(test_url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('users_panel:login') + '?next=' + test_url)

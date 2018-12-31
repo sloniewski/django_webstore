@@ -15,4 +15,7 @@ urlpatterns = [
     path('user-bulk-action', views.UserBulkActionView.as_view(),
          name='user-bulk-action'),
 
+    path('login', views.StaffLoginView.as_view(),
+         name='login'),
+
 ]

@@ -2,8 +2,9 @@ from django.shortcuts import reverse, get_object_or_404
 from django.http import HttpResponse
 from django.db.models import Count
 from django.contrib import messages
-from django.views import generic
-from django.views import View
+from django.views import generic, View
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django_filters.views import FilterView
 
 from webstore.product.models import (
     Product,
@@ -12,8 +13,6 @@ from webstore.product.models import (
     Picture,
     Gallery,
 )
-
-from django_filters.views import FilterView
 
 from .forms import (
     ProductFilterForm,
@@ -24,7 +23,14 @@ from .forms import (
 )
 
 
-class ProductListView(FilterView):
+class StaffOnlyMixin(UserPassesTestMixin):
+    login_url = '/dashboard/users_panel/login'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class ProductListView(StaffOnlyMixin, FilterView):
     model = Product
     template_name = 'dashboard/product/product_list.html'
     strict = False
@@ -35,7 +41,7 @@ class ProductListView(FilterView):
         return self.model.objects.with_prices()
 
 
-class ProductCreateView(generic.CreateView):
+class ProductCreateView(StaffOnlyMixin, generic.CreateView):
     template_name = 'dashboard/product/product_update.html'
     model = Product
     fields = [
@@ -53,7 +59,7 @@ class ProductCreateView(generic.CreateView):
         return reverse('product_panel:product-list')
 
 
-class ProductUpdateView(generic.UpdateView):
+class ProductUpdateView(StaffOnlyMixin, generic.UpdateView):
     model = Product
     template_name = 'dashboard/product/product_update.html'
     fields = [
@@ -71,7 +77,7 @@ class ProductUpdateView(generic.UpdateView):
         return reverse('product_panel:product-list')
 
 
-class ProductDeleteView(generic.DeleteView):
+class ProductDeleteView(StaffOnlyMixin, generic.DeleteView):
     model = Product
     template_name = 'dashboard/product/product_delete.html'
 
@@ -79,7 +85,7 @@ class ProductDeleteView(generic.DeleteView):
         return reverse('product_panel:product-list')
 
 
-class ProductPriceListView(generic.ListView):
+class ProductPriceListView(StaffOnlyMixin, generic.ListView):
     model = Price
     template_name = 'dashboard/product/product_price_list.html'
 
@@ -96,7 +102,7 @@ class ProductPriceListView(generic.ListView):
             self.extra_context.update(data_dict)
 
 
-class ProductPriceCreateView(generic.CreateView):
+class ProductPriceCreateView(StaffOnlyMixin, generic.CreateView):
     model = Price
     template_name = 'dashboard/product/product_price_create.html'
     form_class = PriceCreateForm
@@ -118,7 +124,7 @@ class ProductPriceCreateView(generic.CreateView):
         return reverse('product_panel:product-price-list', kwargs={'number': self.product.number})
 
 
-class PriceUpdateView(generic.UpdateView):
+class PriceUpdateView(StaffOnlyMixin, generic.UpdateView):
     model = Price
     template_name = 'dashboard/product/product_price_create.html'
     fields = [
@@ -132,7 +138,7 @@ class PriceUpdateView(generic.UpdateView):
         return reverse('product_panel:product-price-list', kwargs={'number': self.object.product.number})
 
 
-class CategoryListView(generic.ListView):
+class CategoryListView(StaffOnlyMixin, generic.ListView):
     model = Category
     template_name = 'dashboard/product/category_list.html'
     paginate_by = 20
@@ -142,7 +148,7 @@ class CategoryListView(generic.ListView):
             .annotate(product_count=Count('product'))
 
 
-class CategoryCreateView(generic.CreateView):
+class CategoryCreateView(StaffOnlyMixin, generic.CreateView):
     model = Category
     template_name = 'dashboard/product/category_create_update.html'
     fields = [
@@ -154,7 +160,7 @@ class CategoryCreateView(generic.CreateView):
         return reverse('product_panel:category-list')
 
 
-class CategoryUpdateView(generic.UpdateView):
+class CategoryUpdateView(StaffOnlyMixin, generic.UpdateView):
     model = Category
     template_name = 'dashboard/product/category_create_update.html'
     fields = [
@@ -166,7 +172,7 @@ class CategoryUpdateView(generic.UpdateView):
         return reverse('product_panel:category-list')
 
 
-class CategoryDeleteView(generic.DeleteView):
+class CategoryDeleteView(StaffOnlyMixin, generic.DeleteView):
     model = Category
     template_name = 'dashboard/generic_delete.html'
 
@@ -182,7 +188,7 @@ class PictureListView(FilterView):
     filterset_class = PictureFilterForm
 
 
-class PictureCreateView(generic.CreateView):
+class PictureCreateView(StaffOnlyMixin, generic.CreateView):
     model = Picture
     fields = [
         'name',
@@ -194,7 +200,7 @@ class PictureCreateView(generic.CreateView):
         return reverse('product_panel:picture-list')
 
 
-class PictureDeleteView(generic.DeleteView):
+class PictureDeleteView(StaffOnlyMixin, generic.DeleteView):
     model = Picture
     template_name = 'dashboard/product/picture_delete.html'
 
@@ -289,7 +295,7 @@ class GalleryImageRemoveApiView(BaseGalleryMixin, View):
         return HttpResponse(status=204)
 
 
-class PictureUpdateView(generic.UpdateView):
+class PictureUpdateView(StaffOnlyMixin, generic.UpdateView):
     model = Picture
     template_name = 'dashboard/product/picture/picture_update.html'
     fields = [

@@ -1,6 +1,6 @@
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth import get_user_model
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib import messages
 from django.views.generic import FormView
 from django.shortcuts import reverse
@@ -104,3 +104,11 @@ class UserBulkActionView(FormView):
 
 class StaffLoginView(LoginView):
     template_name = 'dashboard/users/login.html'
+
+
+class StaffLogoutView(LogoutView):
+    template_name = 'dashboard/users/logout.html'
+
+    def get(self, *args, **kwargs):
+        messages.info(self.request, 'You have been logged out')
+        return super().get(self, *args, **kwargs)

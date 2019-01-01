@@ -7,6 +7,22 @@ from webstore.core.widgets import MaterializeCheckboxInput
 
 
 class FilterDeliveriesForm(django_filters.FilterSet):
+    name = django_filters.CharFilter(
+        field_name='name',
+        lookup_expr='icontains',
+    )
+    surname = django_filters.CharFilter(
+        field_name='surname',
+        lookup_expr='icontains',
+    )
+    city = django_filters.CharFilter(
+        field_name='city',
+        lookup_expr='icontains',
+    )
+    street = django_filters.CharFilter(
+        field_name='street',
+        lookup_expr='icontains',
+    )
 
     class Meta:
         model = Delivery
@@ -14,6 +30,7 @@ class FilterDeliveriesForm(django_filters.FilterSet):
             'name',
             'surname',
             'city',
+            'street',
         ]
 
 

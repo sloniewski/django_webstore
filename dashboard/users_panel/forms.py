@@ -1,7 +1,34 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
+import django_filters
+
 User = get_user_model()
+
+
+class FilterUsersForm(django_filters.FilterSet):
+    first_name = django_filters.CharFilter(
+        field_name='first_name',
+        lookup_expr='icontains',
+    )
+    last_name = django_filters.CharFilter(
+        field_name='last_name',
+        lookup_expr='icontains',
+    )
+    email = django_filters.CharFilter(
+        field_name='email',
+        lookup_expr='icontains',
+    )
+
+    class Meta:
+        model = User
+        fields = [
+            'first_name',
+            'last_name',
+            'email',
+            'is_staff',
+            'is_active',
+        ]
 
 
 class BaseUserBulkActionMixin(forms.Form):

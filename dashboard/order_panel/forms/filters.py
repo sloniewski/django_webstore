@@ -7,7 +7,12 @@ class FilterOrdersForm(django_filters.FilterSet):
     email = django_filters.CharFilter(
         field_name='user__email',
         lookup_expr='icontains',
-        label='User email',
+        label='client email',
+    )
+    uuid = django_filters.CharFilter(
+        field_name='uuid',
+        lookup_expr='icontains',
+        label='id',
     )
     created_before = django_filters.DateFilter(
         field_name='created',

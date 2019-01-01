@@ -8,7 +8,7 @@ from django.shortcuts import reverse
 from django_filters.views import FilterView
 
 from dashboard.main.mixins import StaffOnlyMixin
-from .forms import UserBulkActions
+from .forms import UserBulkActions, FilterUsersForm
 
 User = get_user_model()
 
@@ -18,6 +18,7 @@ class StaffListView(StaffOnlyMixin, FilterView):
     template_name = 'dashboard/users/staff_list.html'
     strict = False
     paginate_by = 20
+    filterset_class = FilterUsersForm
 
     def get_queryset(self):
         return self.model.objects.staff()
@@ -44,6 +45,7 @@ class ClientListView(StaffOnlyMixin, FilterView):
     template_name = 'dashboard/users/client_list.html'
     strict = False
     paginate_by = 20
+    filterset_class = FilterUsersForm
 
     def get_queryset(self):
         return self.model.objects.clients()
@@ -110,7 +112,3 @@ class StaffLoginView(LoginView):
 
 class StaffLogoutView(LogoutView):
     template_name = 'dashboard/users/logout.html'
-
-    def get(self, *args, **kwargs):
-        messages.info(self.request, 'You have been logged out')
-        return super().get(self, *args, **kwargs)

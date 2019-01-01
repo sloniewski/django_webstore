@@ -42,9 +42,6 @@ class ProductCreateView(StaffOnlyMixin, generic.CreateView):
         'active',
         'description',
         'weight',
-        'width',
-        'length',
-        'height',
         'categories'
     ]
 
@@ -60,9 +57,6 @@ class ProductUpdateView(StaffOnlyMixin, generic.UpdateView):
         'active',
         'description',
         'weight',
-        'width',
-        'length',
-        'height',
         'categories'
     ]
 

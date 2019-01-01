@@ -3,6 +3,7 @@ from decimal import Decimal, getcontext
 from django.db import models
 from django.db.models import Sum
 from django.contrib.auth import get_user_model
+from django.utils.functional import cached_property
 
 from webstore.product.models import Product
 
@@ -86,16 +87,16 @@ class Cart(models.Model):
     Cart representation, has unique reference to session_key.
     Does not store items, cart items are m2m relation to cart & product
     """
-
     objects = CartManager()
 
-    session = models.CharField(max_length=255, unique=True)
-
+    session = models.CharField(
+        max_length=255,
+        unique=True
+    )
     product = models.ManyToManyField(
         Product,
         through=CartItem,
     )
-
     created = models.DateTimeField(
         auto_now_add=True,
     )
@@ -151,7 +152,7 @@ class Cart(models.Model):
     def items(self):
         return self.cartitem_set.all().select_related('product')
 
-    @property
+    @cached_property
     def weight(self):
         weight = 0
         for item in self.items:

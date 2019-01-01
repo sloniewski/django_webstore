@@ -55,7 +55,7 @@ class PictureAdmin(admin.ModelAdmin):
     readonly_fields = (
         'image_tag',
         'created',
-        'modified',
+        'edited',
     )
     list_display = [
         'name',

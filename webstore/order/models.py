@@ -10,6 +10,7 @@ from django.shortcuts import reverse
 from django.utils.functional import cached_property
 
 from webstore.product.models import Product
+from webstore.core.mixins import TimeStampMixin
 
 
 User = get_user_model()
@@ -56,6 +57,10 @@ class OrderItem(models.Model):
     class Meta:
         unique_together = [
             ('order', 'product')
+        ]
+        indexes = [
+            models.Index(fields=['order', 'product']),
+            models.Index(fields=['price']),
         ]
 
     def __str__(self):
@@ -142,7 +147,7 @@ class OrderStatusMailFactory:
         return mail
 
 
-class Order(models.Model):
+class Order(TimeStampMixin, models.Model):
 
     objects = OrderManager()
     mail_manager = OrderStatusMailFactory
@@ -157,11 +162,6 @@ class Order(models.Model):
         User,
         on_delete=models.CASCADE,
     )
-
-    created = models.DateTimeField(
-        auto_now_add=True,
-    )
-
     uuid = models.CharField(
         max_length=32,
         unique=True,
@@ -172,6 +172,10 @@ class Order(models.Model):
         ordering = (
             '-created',
         )
+        indexes = [
+            models.Index(fields=['user']),
+            models.Index(fields=['uuid']),
+        ]
 
     def __str__(self):
         return 'order id: {}, value: {};'.format(self.uuid, self.value)
@@ -190,7 +194,7 @@ class Order(models.Model):
     def items(self):
         return self.orderitems.all().with_value().select_related('product')
 
-    @property
+    @cached_property
     def value(self):
         value = self.orderitems\
             .all()\
@@ -201,7 +205,7 @@ class Order(models.Model):
             total_value = 0
         return round(Decimal(total_value), 2)
 
-    @property
+    @cached_property
     def weight(self):
         order_items = OrderItem.objects.filter(order_id=self.pk)\
             .select_related('product')

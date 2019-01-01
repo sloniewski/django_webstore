@@ -38,3 +38,7 @@ class TestIntegration(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'webstore/order/order_summary.html')
+
+    def test_order_detail_get_raises_404(self):
+        # for other users orders
+        self.fail('write the test')

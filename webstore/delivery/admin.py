@@ -17,7 +17,7 @@ class DeliveryAdmin(admin.ModelAdmin):
     ]
     readonly_fields = [
         'created',
-        'modified',
+        'edited',
         'order',
     ]
 

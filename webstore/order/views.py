@@ -11,7 +11,7 @@ from webstore.payment.models import Payment
 from .models import Order, OrderItem
 
 
-class OrderDetailView(DetailView):
+class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'webstore/order/order_detail.html'
     pk_url_kwarg = 'uuid'
@@ -86,7 +86,7 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         return self.cart
 
 
-class OrderSummary(ListView):
+class OrderSummary(LoginRequiredMixin, ListView):
     template_name = 'webstore/order/order_summary.html'
     model = OrderItem
     pk_url_kwarg = 'uuid'

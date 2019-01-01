@@ -99,9 +99,6 @@ class TestIntegrationUserStaff(TestCase):
             'active': 'on',
             'description': 'altered description',
             'weight': 99,
-            'width': 5,
-            'height': 5,
-            'length': 5,
             'categories': self.category.id,
             'submit': 'submit',
         }
@@ -127,9 +124,6 @@ class TestIntegrationUserStaff(TestCase):
         self.assertEqual(self.product.name, 'changed_name')
         self.assertEqual(self.product.description, 'altered description')
         self.assertEqual(self.product.weight, 99)
-        self.assertEqual(self.product.width, 5)
-        self.assertEqual(self.product.height, 5)
-        self.assertEqual(self.product.length, 5)
         self.assertEqual(self.product.active, True)
 
     def test_product_delete_get(self):
@@ -178,9 +172,6 @@ class TestIntegrationUserStaff(TestCase):
             'name': 'jabberwocky',
             'description': 'mythical creature',
             'weight': 55,
-            'width': 7,
-            'height': 6,
-            'length': 5,
             'categories': self.category.id,
         }
         response = self.client.post(
@@ -204,9 +195,6 @@ class TestIntegrationUserStaff(TestCase):
         self.assertEqual(product.name, data['name'])
         self.assertEqual(product.description, data['description'])
         self.assertEqual(product.weight, data['weight'])
-        self.assertEqual(product.width, data['width'])
-        self.assertEqual(product.height, data['height'])
-        self.assertEqual(product.length, data['length'])
 
     def test_product_price_create_get(self):
         response = self.client.get(

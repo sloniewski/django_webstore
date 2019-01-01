@@ -5,7 +5,7 @@ class TimeStampMixin(models.Model):
     created = models.DateTimeField(
         auto_now_add=True,
     )
-    modified = models.DateTimeField(
+    edited = models.DateTimeField(
         auto_now=True,
     )
 

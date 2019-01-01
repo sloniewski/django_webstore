@@ -5,6 +5,7 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils import timezone
 from django.contrib.postgres import indexes
+from django.utils.functional import cached_property
 
 from webstore.core.mixins import TimeStampMixin
 from .managers import CategoryManager, ProductManager, GalleryManager
@@ -22,6 +23,9 @@ class Picture(TimeStampMixin, models.Model):
     class Meta:
         ordering = [
             '-created',
+        ]
+        indexes = [
+            models.Index(fields=['name']),
         ]
 
 
@@ -49,6 +53,10 @@ class Gallery(models.Model):
             ('product', 'number'),
             ('picture', 'product'),
         )
+        indexes = [
+            models.Index(fields=['product']),
+            models.Index(fields=['picture']),
+        ]
 
     def __str__(self):
         return '{}. {} - {}'.format(
@@ -80,6 +88,9 @@ class Category(models.Model):
     class Meta:
         ordering = ['name']
         verbose_name_plural = 'Categories'
+        indexes = [
+            models.Index(fields=['name']),
+        ]
 
     def __str__(self):
         return '{}'.format(self.name)
@@ -87,16 +98,16 @@ class Category(models.Model):
     def __repr__(self):
         return 'id: {}, {}'.format(self.pk, self.name)
 
-    @property
+    @cached_property
     def form_choice(self):
         return self.pk, self.name
 
-    @property
+    @cached_property
     def url_encode(self):
         return urlencode({'category_id': self.id})
 
 
-class Product(models.Model):
+class Product(TimeStampMixin, models.Model):
     """
     Represents product resource, stores basic information.
     Prices, Pictures and Categories are m2m relations to Product.
@@ -107,16 +118,13 @@ class Product(models.Model):
     name = models.CharField(
         max_length=32,
     )
-
     active = models.BooleanField(
         default=False,
     )
-
     picture = models.ManyToManyField(
         Picture,
         through=Gallery,
     )
-
     slug = models.SlugField(
         max_length=64,
         unique=True,
@@ -132,30 +140,16 @@ class Product(models.Model):
     categories = models.ManyToManyField(
         Category,
     )
-
-    created = models.DateTimeField(
-        auto_now_add=True,
-    )
-    edited = models.DateTimeField(
-        auto_now=True,
-    )
-
     weight = models.FloatField(
         help_text='weight in kg',
         default=0,
     )
-    width = models.FloatField(
-        help_text='width in cm',
-        default=0,
-    )
-    height = models.FloatField(
-        help_text='height in cm',
-        default=0,
-    )
-    length = models.FloatField(
-        help_text='length in cm',
-        default=0,
-    )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['name']),
+            indexes.BrinIndex(fields=['weight']),
+        ]
 
     def __str__(self):
         return self.name
@@ -187,13 +181,6 @@ class Product(models.Model):
         return None
 
     @property
-    def volume(self):
-        """
-        :return:float, product box volume in cubic meters
-        """
-        return (self.width * self.height * self.length)*(10**(-6))
-
-    @property
     def gallery(self):
         return Gallery.objects\
             .select_related('picture')\
@@ -211,7 +198,7 @@ class Product(models.Model):
         return None
 
 
-class Price(models.Model):
+class Price(TimeStampMixin, models.Model):
 
     value = models.DecimalField(
         decimal_places=2,
@@ -225,12 +212,6 @@ class Price(models.Model):
     valid_from = models.DateField(
         default=date.today,
         help_text="helps to determine which price is valid at moment of runtime",
-    )
-    created = models.DateTimeField(
-        auto_now_add=True,
-    )
-    edited = models.DateTimeField(
-        auto_now=True,
     )
     is_promo = models.BooleanField(
         default=False,
@@ -246,6 +227,7 @@ class Price(models.Model):
         ]
         indexes = [
             indexes.BrinIndex(fields=['valid_from']),
+            models.Index(fields=['product']),
         ]
 
     def __str__(self):

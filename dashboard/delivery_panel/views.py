@@ -6,6 +6,7 @@ from django_filters.views import FilterView
 
 from webstore.delivery.models import Delivery, DeliveryPricing
 from webstore.order.models import Order
+from dashboard.main.mixins import StaffOnlyMixin
 
 from .forms import (
     DeliveryUpdateForm,
@@ -14,7 +15,7 @@ from .forms import (
 )
 
 
-class DeliveryListView(FilterView):
+class DeliveryListView(StaffOnlyMixin, FilterView):
     model = Delivery
     template_name = 'dashboard/delivery/delivery_list.html'
     filterset_class = FilterDeliveriesForm
@@ -22,7 +23,7 @@ class DeliveryListView(FilterView):
     paginate_by = 20
 
 
-class DeliveryUpdateView(generic.UpdateView):
+class DeliveryUpdateView(StaffOnlyMixin, generic.UpdateView):
     model = Delivery
     template_name = 'dashboard/delivery/delivery_update.html'
     form_class = DeliveryUpdateForm
@@ -40,17 +41,17 @@ class DeliveryUpdateView(generic.UpdateView):
         return reverse('delivery_panel:delivery-list')
 
 
-class DeliveryDetailView(generic.DetailView):
+class DeliveryDetailView(StaffOnlyMixin, generic.DetailView):
     model = Delivery
     template_name = 'dashboard/delivery/delivery_detail.html'
 
 
-class DeliveryPricingListView(generic.ListView):
+class DeliveryPricingListView(StaffOnlyMixin, generic.ListView):
     model = DeliveryPricing
     template_name = 'dashboard/delivery/delivery_option_list.html'
 
 
-class DeliveryPricingUpdateView(generic.UpdateView):
+class DeliveryPricingUpdateView(StaffOnlyMixin, generic.UpdateView):
     model = DeliveryPricing
     template_name = 'dashboard/delivery/delivery_option_update.html'
     form_class = DeliveryPricingForm
@@ -60,7 +61,7 @@ class DeliveryPricingUpdateView(generic.UpdateView):
         return reverse('delivery_panel:delivery-option-list')
 
 
-class DeliveryPricingCreateView(generic.CreateView):
+class DeliveryPricingCreateView(StaffOnlyMixin, generic.CreateView):
     model = DeliveryPricing
     form_class = DeliveryPricingForm
     template_name = 'dashboard/delivery/delivery_option_update.html'
@@ -70,7 +71,7 @@ class DeliveryPricingCreateView(generic.CreateView):
         return reverse('delivery_panel:delivery-option-list')
 
 
-class DeliveryPricingDeleteView(generic.DeleteView):
+class DeliveryPricingDeleteView(StaffOnlyMixin, generic.DeleteView):
     model = DeliveryPricing
     template_name = 'dashboard/generic_delete.html'
 

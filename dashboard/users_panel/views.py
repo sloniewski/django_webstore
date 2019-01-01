@@ -7,12 +7,13 @@ from django.shortcuts import reverse
 
 from django_filters.views import FilterView
 
+from dashboard.main.mixins import StaffOnlyMixin
 from .forms import UserBulkActions
 
 User = get_user_model()
 
 
-class StaffListView(FilterView):
+class StaffListView(StaffOnlyMixin, FilterView):
     model = User
     template_name = 'dashboard/users/staff_list.html'
     strict = False
@@ -38,7 +39,7 @@ class StaffListView(FilterView):
         return context
 
 
-class ClientListView(FilterView):
+class ClientListView(StaffOnlyMixin, FilterView):
     model = User
     template_name = 'dashboard/users/client_list.html'
     strict = False
@@ -64,7 +65,7 @@ class ClientListView(FilterView):
         return context
 
 
-class UserBulkActionView(FormView):
+class UserBulkActionView(StaffOnlyMixin, FormView):
     template_name = 'dashboard/users/bulk_action.html'
     model = User
 
@@ -103,6 +104,7 @@ class UserBulkActionView(FormView):
 
 
 class StaffLoginView(LoginView):
+    # TODO redirect after login
     template_name = 'dashboard/users/login.html'
 
 

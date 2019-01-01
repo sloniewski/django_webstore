@@ -2,13 +2,14 @@ from django.views import generic
 from django_filters.views import FilterView
 from django.shortcuts import reverse
 
+from dashboard.main.mixins import StaffOnlyMixin
 from webstore.order.models import Order
 from webstore.payment.models import Payment
 
 from .forms import FilterPaymentForm, UpdatePaymentForm
 
 
-class PaymentListView(FilterView):
+class PaymentListView(StaffOnlyMixin, FilterView):
     http_method_names = ['get', 'head', 'options']
     template_name = 'dashboard/payment/payment_list.html'
     filterset_class = FilterPaymentForm
@@ -16,12 +17,11 @@ class PaymentListView(FilterView):
     strict = False
     model = Payment
 
-
     def get_queryset(self):
         return self.model.objects.all().select_related('order')
 
 
-class PaymentUpdateView(generic.UpdateView):
+class PaymentUpdateView(StaffOnlyMixin, generic.UpdateView):
     model = Payment
     template_name = 'dashboard/payment/payment_update.html'
     form_class = UpdatePaymentForm

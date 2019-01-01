@@ -19,6 +19,9 @@ User = get_user_model()
 class TestViews(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create_user(username='username', password='1234', is_staff=True)
+        self.client.login(username='username', password='1234')
+
         self.category = Category.objects.create(name='for delete')
         self.product = Product.objects.create(name='The Holy Grail')
         self.product_2 = Product.objects.create(name='shrubbery')
@@ -33,7 +36,6 @@ class TestViews(TestCase):
             valid_from=date(year=2017, month=1, day=1),
             product=self.product_2,
         )
-        self.user = User.objects.create(username='username')
         self.order = Order.objects.create(
             user=self.user
         )

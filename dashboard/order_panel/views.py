@@ -5,6 +5,7 @@ from django.contrib import messages
 
 from django_filters.views import FilterView
 
+from dashboard.main.mixins import StaffOnlyMixin
 from webstore.order.models import Order, OrderItem
 from .forms import (
     FilterOrdersForm,
@@ -13,7 +14,7 @@ from .forms import (
 )
 
 
-class OrderListView(FilterView):
+class OrderListView(StaffOnlyMixin, FilterView):
     model = Order
     template_name = 'dashboard/order/order_list.html'
     filterset_class = FilterOrdersForm
@@ -27,7 +28,7 @@ class OrderListView(FilterView):
             .annotate(num_items=Count('orderitems'))
 
 
-class OrderUpdateView(generic.UpdateView):
+class OrderUpdateView(StaffOnlyMixin, generic.UpdateView):
     model = Order
     template_name = 'dashboard/order/order_update.html'
     form_class = OrderUpdateForm
@@ -37,7 +38,7 @@ class OrderUpdateView(generic.UpdateView):
         return get_object_or_404(self.model, uuid=uuid)
 
 
-class OrderEditView(generic.FormView):
+class OrderEditView(StaffOnlyMixin, generic.FormView):
     form_class = item_formset
     template_name = 'dashboard/order/order_item_edit.html'
 
@@ -61,7 +62,7 @@ class OrderEditView(generic.FormView):
         return super(OrderEditView, self).form_valid(form)
 
 
-class OrderDeleteView(generic.DeleteView):
+class OrderDeleteView(StaffOnlyMixin, generic.DeleteView):
     model = Order
     template_name = 'dashboard/generic_delete.html'
 
@@ -74,7 +75,7 @@ class OrderDeleteView(generic.DeleteView):
         return reverse('order_panel:order-list')
 
 
-class OrderDetailView(generic.DetailView):
+class OrderDetailView(StaffOnlyMixin, generic.DetailView):
     model = Order
     template_name = 'dashboard/order/order_detail.html'
 
@@ -83,7 +84,7 @@ class OrderDetailView(generic.DetailView):
         return get_object_or_404(self.model, uuid=uuid)
 
 
-class OrderItemUpdateView(generic.UpdateView):
+class OrderItemUpdateView(StaffOnlyMixin, generic.UpdateView):
     model = OrderItem
     template_name = 'dashboard/order/order_item_update.html'
     fields = [
@@ -95,7 +96,7 @@ class OrderItemUpdateView(generic.UpdateView):
         return reverse('order_panel:order-detail', kwargs={'uuid': self.object.order.uuid})
 
 
-class OrderItemDeleteView(generic.DeleteView):
+class OrderItemDeleteView(StaffOnlyMixin, generic.DeleteView):
     model = OrderItem
     template_name = 'dashboard/order/order_item_delete.html'
 

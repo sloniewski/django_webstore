@@ -12,7 +12,9 @@ User = get_user_model()
 class TestIntegrated(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user(username='username')
+        self.user = User.objects.create_user(username='username', password='1234', is_staff=True)
+        self.client.login(username='username', password='1234')
+
         self.order = Order.objects.create(user=self.user)
         self.payment = Payment.objects.create(
             payed=False,

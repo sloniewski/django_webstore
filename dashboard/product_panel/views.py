@@ -173,7 +173,7 @@ class CategoryDeleteView(StaffOnlyMixin, generic.DeleteView):
         return reverse('product_panel:category-list')
 
 
-class PictureListView(FilterView):
+class PictureListView(StaffOnlyMixin, FilterView):
     model = Picture
     template_name = 'dashboard/product/picture_list.html'
     paginate_by = 20

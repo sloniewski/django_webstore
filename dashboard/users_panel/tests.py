@@ -9,6 +9,9 @@ User = get_user_model()
 class TestViews(TestCase):
 
     def setUp(self):
+        self.user = User.objects.create_user(username='username', password='1234', is_staff=True)
+        self.client.login(username='username', password='1234')
+
         self.user_staff = User.objects.create(username='staff', is_staff=True)
         self.user_client = User.objects.create(username='client', is_staff=False)
 

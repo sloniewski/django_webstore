@@ -38,8 +38,15 @@ class Payment(TimeStampMixin, models.Model):
         ],
         default='tr',
     )
+    value = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+    )
 
-    value = models.DecimalField(max_digits=8, decimal_places=2)
+    class Meta:
+        indexes = [
+            models.Index(fields=['order']),
+        ]
 
     def __str__(self):
         return 'User {}, value: {}'.format(self.order.user, self.value)

@@ -109,6 +109,13 @@ class StaffLoginView(LoginView):
     # TODO redirect after login
     template_name = 'dashboard/users/login.html'
 
+    def get_success_url(self):
+        if not self.request.user.is_staff:
+            return reverse('product:product-list')
+        if not self.request.GET.get(self.redirect_field_name):
+            return reverse('product_panel:product-list')
+        return super().get_success_url()
+
 
 class StaffLogoutView(LogoutView):
     template_name = 'dashboard/users/logout.html'

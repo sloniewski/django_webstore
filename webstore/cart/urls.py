@@ -12,9 +12,13 @@ urlpatterns = [
     path('list-item/', views.CartListView.as_view(),
          name='item-list'),
 
-    path('quick-add-item/item/<int:item_id>', views.CartQuickAddItem.as_view(),
+    path('item/add/<int:item_id>', views.CartQuickAddItem.as_view(),
          name='quick-add-item'),
 
-    path('quick-remove-item/item/<int:item_id>', views.CartQuickRemoveItem.as_view(),
+    path('item/remove/<int:item_id>', views.CartQuickRemoveItem.as_view(),
          name='quick-remove-item'),
+
+    path('item/delete/<int:item_id>', views.CartQuickDeleteItem.as_view(),
+         name='quick-delete-item'),
+
 ]

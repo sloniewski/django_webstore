@@ -2,8 +2,15 @@
 <span class="" data-badge-caption="EUR" id="item_value">{{object.value}}</span>
 
 <div class="secondary-content">
-    <a href="{% url 'cart:quick-add-item' object.product.id %}" class="add_one_item">
-        <i class="small material-icons">add_box</i>
+    <a href="{% url 'cart:quick-delete-item' item_id=object.product.id %}" class="delete_item">
+        <i class="small material-icons">delete_forever</i>
+    </a>
+</div>
+
+
+<div class="secondary-content">
+    <a href="{% url 'cart:quick-remove-item' item_id=object.product.id %}" class="remove_one_item">
+        <i class="small material-icons">indeterminate_check_box</i>
     </a>
 </div>
 
@@ -12,7 +19,7 @@
 </div>
 
 <div class="secondary-content">
-    <a href="{% url 'cart:quick-remove-item' object.product.id %}" class="remove_one_item">
-        <i class="small material-icons">indeterminate_check_box</i>
+    <a href="{% url 'cart:quick-add-item' item_id=object.product.id %}" class="add_one_item">
+        <i class="small material-icons">add_box</i>
     </a>
 </div>

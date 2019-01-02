@@ -11,12 +11,21 @@ from .forms import ItemForm
 from .models import Cart, CartItem
 
 
-class CartQuickRemoveItem(ForceSessionMixin, View):
+class CartMixin:
+
+    def get_cart(self, request):
+        cart = Cart.objects.get_or_create(
+            session=request.session.session_key,
+        )[0]
+        return cart
+
+
+class CartQuickRemoveItem(CartMixin, View):
     http_method_names = ['post']
 
     def post(self, request, *args, **kwawrgs):
         item_id = request.resolver_match.kwargs['item_id']
-        cart = Cart.objects.recive_or_create(self.request)
+        cart = self.get_cart(self.request)
         item = cart.remove_item(item=item_id, qty=1)
 
         if item is None:
@@ -31,12 +40,12 @@ class CartQuickRemoveItem(ForceSessionMixin, View):
         return JsonResponse(data=data, status=200)
 
 
-class CartQuickAddItem(ForceSessionMixin, View):
+class CartQuickAddItem(CartMixin, View):
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
         item_id = request.resolver_match.kwargs['item_id']
-        cart = Cart.objects.recive_or_create(self.request)
+        cart = self.get_cart(self.request)
         item = cart.add_item(item_id, 1)
         data = {
             'cart_items': cart.item_count,
@@ -44,35 +53,33 @@ class CartQuickAddItem(ForceSessionMixin, View):
             'item_qty': item.quantity,
             'item_value': item.value,
             }
-        return JsonResponse(data=data)
+        return JsonResponse(data=data, status=201)
 
 
-class CartDeleteItem(View):
+class CartQuickDeleteItem(CartMixin, View):
     http_method_names = ['post']
 
-    def post(self, request, *args, **kwargs):
-        item_id = request.resolver_match.kwargs['item_id']
-        cart = Cart.objects.recive_or_create(self.request)
-        item = cart.cartitem_set.filter(pk=item_id)
-        item.delete()
+    def post(self, request, *args, **kwawrgs):
+        cart = self.get_cart(self.request)
+        item_id = request.resolver_match.kwargs.get('item_id')
+        cart.delete_item(item_id)
         data = {
             'cart_items': cart.item_count,
             'cart_value': cart.value,
             }
-        return JsonResponse(data=data)
+        return JsonResponse(data=data, status=200)
 
 
-class CartAddItem(ForceSessionMixin, FormView):
+class CartAddItem(CartMixin, FormView):
     form_class = ItemForm
 
     def get(self, request, *args, **kwargs):
         return page_not_found(request, 'page not found')
 
     def form_valid(self, form):
-
         item = form.cleaned_data['item']
         qty = form.cleaned_data['qty']
-        cart = Cart.objects.recive_or_create(self.request)
+        cart = self.get_cart(self.request)
         cart.add_item(item, qty)
 
         data = json.dumps({

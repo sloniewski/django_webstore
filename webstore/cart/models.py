@@ -101,12 +101,16 @@ class Cart(models.Model):
         auto_now_add=True,
     )
 
+    def _get_item(self, item):
+        item = CartItem.objects.get(
+            product_id=item,
+            cart=self,
+        )
+        return item
+
     def add_item(self, item, qty):
         try:
-            cart_item = CartItem.objects.get(
-                product_id=item,
-                cart=self,
-            )
+            cart_item = self._get_item(item)
             cart_item.add_qty(qty)
         except CartItem.DoesNotExist:
             cart_item = CartItem.objects.create(
@@ -118,16 +122,21 @@ class Cart(models.Model):
 
     def remove_item(self, item, qty):
         try:
-            cart_item = CartItem.objects.get(
-                product_id=item,
-                cart=self,
-            )
+            cart_item = self._get_item(item)
             item = cart_item.remove_qty(qty)
             if item is None:
                 return None
             return item
         except CartItem.DoesNotExist:
             pass
+
+    def delete_item(self, item):
+        try:
+            cart_item = self._get_item(item)
+            cart_item.delete()
+            return True
+        except CartItem.DoesNotExist:
+            return True
 
     @property
     def item_count(self):

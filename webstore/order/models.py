@@ -76,7 +76,7 @@ class OrderItem(models.Model):
             return Decimal('0')
         if self.quantity in [None, Decimal('0'), 0]:
             return Decimal('0')
-        return self.price * self.quantity
+        return (self.price * self.quantity)
 
 
 class OrderStatus(Enum):
@@ -203,7 +203,7 @@ class Order(TimeStampMixin, models.Model):
         total_value = value['total_value']
         if total_value in [0, None, False]:
             total_value = 0
-        return round(Decimal(total_value), 2)
+        return round(Decimal(total_value), 2) + self.delivery.cost
 
     @cached_property
     def weight(self):

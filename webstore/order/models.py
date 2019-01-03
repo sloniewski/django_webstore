@@ -141,7 +141,7 @@ class OrderStatusMailFactory:
         mail = EmailMessage(
             body=text,
             subject=self.messages[self.order.status]['subject'],
-            to=[self.order.user.email]
+            to=[self.order.user.email],
         )
         mail.content_subtype = self.content_subtype
         return mail

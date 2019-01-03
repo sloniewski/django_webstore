@@ -37,6 +37,9 @@ class OrderUpdateView(StaffOnlyMixin, generic.UpdateView):
         uuid = self.kwargs.get('uuid')
         return get_object_or_404(self.model, uuid=uuid)
 
+    def get_success_url(self):
+        return reverse('order_panel:order-list')
+
 
 class OrderEditView(StaffOnlyMixin, generic.FormView):
     form_class = item_formset

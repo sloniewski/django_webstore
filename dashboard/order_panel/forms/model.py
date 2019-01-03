@@ -8,6 +8,7 @@ class OrderUpdateForm(forms.ModelForm):
     send_mail = forms.BooleanField(
         widget=MaterializeCheckboxInput(),
         help_text='Send email to client with information about status change',
+        required=False,
     )
 
     class Meta:
@@ -15,6 +16,13 @@ class OrderUpdateForm(forms.ModelForm):
         fields = [
             'status'
         ]
+
+    def save(self, *args, **kwargs):
+        order = super().save(*args, **kwargs)
+        if self.cleaned_data['send_mail']:
+            mail = order.get_status_mail()
+            mail.send(fail_silently=True)
+        return order
 
 
 class OrderEditForm(forms.ModelForm):

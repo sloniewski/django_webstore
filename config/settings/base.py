@@ -1,3 +1,12 @@
+import os
+
+BASE_DIR = os.path.dirname(os.path.realpath(os.path.dirname(__file__) + "/.."))
+
+SECRET_KEY = '02cc5x8u+-rga7)3&al^cepc6-g=qy^$yq+%$4_uq9(nltp4lf'
+
+DEBUG = True
+
+ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -42,7 +51,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            'webstore/templates',
             'templates',
         ],
         'APP_DIRS': True,
@@ -62,9 +70,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -80,10 +85,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/2.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -93,10 +94,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/webstore/'
 
@@ -111,4 +108,24 @@ MESSAGE_TAGS = {
     messages.SUCCESS: 'alert card green white-text',
     messages.WARNING: 'alert card yellow',
     messages.ERROR: 'alert card red white-text',
+}
+
+MEDIA_URL = 'files/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'webstore/core/media')
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST_USER = 'placeholder@test.com'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
 }

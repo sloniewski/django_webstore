@@ -126,6 +126,18 @@ class OrderStatusMailFactory:
             'template_name': 'mail/order/awaiting_payment.html',
             'subject': 'Order is awaiting payment',
         },
+        OrderStatus.SHIPPING.name: {
+            'template_name': 'mail/order/shipping.html',
+            'subject': 'Order is under preparation',
+        },
+        OrderStatus.CLOSED.name: {
+            'template_name': 'mail/order/closed.html',
+            'subject': 'Your order was shipped',
+        },
+        OrderStatus.CANCELLED.name: {
+            'template_name': 'mail/order/cancelled.html',
+            'subject': 'Your order was cancelled',
+        },
     }
 
     def __init__(self, order):

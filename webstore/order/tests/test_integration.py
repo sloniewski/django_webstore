@@ -32,13 +32,6 @@ class TestIntegration(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'webstore/order/order_list.html')
 
-    def test_order_summary_get(self):
-        response = self.client.get(
-            reverse('order:order-summary', kwargs={'uuid': self.order.uuid})
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'webstore/order/order_summary.html')
-
     def test_order_detail_get_raises_404(self):
         # for other users orders
         self.fail('write the test')

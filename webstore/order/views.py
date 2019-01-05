@@ -58,7 +58,7 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         mail = order.get_status_mail()
         mail.send(fail_silently=False)
 
-        return redirect('order:order-summary', uuid=order.uuid)
+        return redirect('order:order-detail', uuid=order.uuid)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -84,22 +84,6 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
         if self.cart is None:
             self.cart = Cart.objects.recive_or_create(self.request)
         return self.cart
-
-
-class OrderSummary(LoginRequiredMixin, ListView):
-    template_name = 'webstore/order/order_summary.html'
-    model = OrderItem
-    pk_url_kwarg = 'uuid'
-
-    def get(self, request, *args, **kwargs):
-        order_id = request.resolver_match.kwargs[self.pk_url_kwarg]
-        self.order = get_object_or_404(Order, uuid=order_id)
-        if request.user != self.order.user:
-            raise Http404
-        return super().get(request, *args, **kwargs)
-
-    def get_queryset(self):
-        return self.model.objects.filter(order=self.order)
 
 
 class OrderListView(LoginRequiredMixin, ListView):

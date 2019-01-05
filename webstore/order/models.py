@@ -148,6 +148,7 @@ class OrderStatusMailFactory:
             template_name=self.messages[self.order.status]['template_name'],
             context={
                 'order': self.order,
+                'user': self.order.user,
             }
         )
         mail = EmailMessage(

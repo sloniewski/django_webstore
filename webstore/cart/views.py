@@ -107,7 +107,9 @@ class CartListView(ForceSessionMixin, ListView):
     
     def get_context_data(self):
         context = super().get_context_data()
-        cart = Cart.objects.recive_or_create(self.request)
+        cart = Cart.objects.get_or_create(
+            session=self.request.session.session_key,
+        )[0]
         context.update({
                 'cart_value': cart.value,
                 'cart_item_count': cart.item_count,

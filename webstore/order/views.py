@@ -82,7 +82,9 @@ class OrderConfirmView(LoginRequiredMixin, FormView):
 
     def get_cart(self):
         if self.cart is None:
-            self.cart = Cart.objects.recive_or_create(self.request)
+            self.cart = Cart.objects.get_or_create(
+                session=self.request.session.session_key,
+            )[0]
         return self.cart
 
 

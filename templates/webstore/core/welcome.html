@@ -18,7 +18,10 @@
         {% for cat in categories %}
         <div class="col s6 m3">
             <a href="{% url 'product:product-list' %}?{{ cat.url_encode }}">
-                <div class="card-panel">{{ cat.name|title }}</div>
+                <div class="card-panel">
+                    <span class="card-title">{{ cat.name|title }}</span>
+                    <p><small>{{ cat.description }}</small></p>
+                </div>
             </a>
         </div>
         {% endfor %}

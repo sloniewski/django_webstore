@@ -27,7 +27,12 @@
             {% endfor %}
             </div>
         </div>
+
+        <div class="col s12">
+            {% include 'dashboard/paginator.html' %}
+        </div>
     </div>
+
 {% endblock body %}
 
 {% block scripts %}

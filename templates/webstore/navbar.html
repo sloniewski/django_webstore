@@ -47,6 +47,14 @@
 </nav>
 
 <ul class="sidenav" id="mobile-nav">
+    <li>
+        <a href="{% url 'cart:item-list' %}">
+            <b>Cart: </b>
+            <span id="cart_item_count" class="new badge" data-badge-caption=''>
+                {{ cart_items }}
+            </span>
+        </a>
+    </li>
     <li><b>My account</b></li>
     {% if request.user.is_authenticated %}
     <li><a href="{% url 'order:order-list' %}">Orders</a></li>

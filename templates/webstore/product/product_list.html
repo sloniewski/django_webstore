@@ -16,7 +16,7 @@
             </form>
         </div>
 
-        <div class="col s9">
+        <div class="col s12 m9">
             <div class="row">
             {% for object in object_list %}
                 <div class="col s12 m4">
@@ -27,7 +27,12 @@
             {% endfor %}
             </div>
         </div>
+
+        <div class="col s12">
+            {% include 'dashboard/paginator.html' %}
+        </div>
     </div>
+
 {% endblock body %}
 
 {% block scripts %}

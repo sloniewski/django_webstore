@@ -15,7 +15,4 @@ urlpatterns = [
     path('confirm/', views.OrderConfirmView.as_view(),
          name='order-confirm'),
 
-    path('summary/<uuid>', views.OrderSummary.as_view(),
-         name='order-summary'),
-
 ]

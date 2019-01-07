@@ -19,4 +19,4 @@ class ProductListView(FilterView):
     filterset_class = FilterProductsForm
     strict = False
     queryset = Product.objects.with_prices().filter(price__isnull=False)
-    paginate_by = 20
+    paginate_by = 10

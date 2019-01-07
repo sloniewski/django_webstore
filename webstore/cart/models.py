@@ -12,16 +12,6 @@ User = get_user_model()
 
 class CartManager(models.Manager):
 
-    def recive_or_create(self, request):
-        session = request.session.session_key
-        # TODO prefetch cart_items and products
-        cart = self.get_queryset().filter(
-            session=session).first()
-        if cart is None:
-            cart = self.model(session=session)
-            cart.save()
-        return cart
-
     def get_for_session(self, request):
         session = request.session.session_key
         cart = self.get_queryset().filter(

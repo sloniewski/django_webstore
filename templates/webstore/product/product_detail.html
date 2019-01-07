@@ -10,16 +10,13 @@
         <div class="col l6 m6 s12 xs12">
 
             <div class="carousel carousel-slider">
-                <div class="carousel-item">
-                    <img src="/{{ object.image }}">
-                </div>
             {% for image in product.gallery %}
                 <div class="carousel-item">
-                    <img src="/{{ image.picture.data.url }}" alt="" width="100">
+                    <img src="/{{ image.data.url }}" alt="" width="100">
                 </div>
             {% empty %}
                 <div class="carousel-item">
-                    <img src={% static 'images/default.png' %}>
+                    <img src={% static 'default.png' %}>
                 </div>
             {% endfor %}
             </div>
@@ -27,7 +24,6 @@
         <div class="col l6 m6 s12 xs12">
             <h2>{{ object.name }}</h2>
             <div class="product-price">Price: {{ object.price }}</div>
-            <div class="product-description">{{ object.description }}</div>
             <form id="add-item-form" action="{% url 'cart:add-item' %}" method="GET">
                 {% csrf_token %}
                 <input id="product-id" type="hidden" value="{{ object.id }}">
@@ -36,6 +32,7 @@
                 </label>
                 <input type="submit" id="add-to-cart" class="btn" value="Add to cart">
             </form>
+            <div class="product-description">{{ object.description }}</div>
         </div>
     </div>
 {% endblock body %}

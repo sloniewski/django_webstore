@@ -22,7 +22,7 @@ class Picture(TimeStampMixin, models.Model):
 
     class Meta:
         ordering = [
-            '-created',
+            'gallery__number',
         ]
         indexes = [
             models.Index(fields=['name']),
@@ -47,7 +47,7 @@ class Gallery(models.Model):
     number = models.PositiveIntegerField(null=True)
 
     class Meta:
-        ordering = ['product', '-number']
+        ordering = ['product', 'number']
         verbose_name = "Gallery Image"
         unique_together = (
             ('product', 'number'),
@@ -182,19 +182,16 @@ class Product(TimeStampMixin, models.Model):
 
     @property
     def gallery(self):
-        return Gallery.objects\
-            .select_related('picture')\
-            .filter(product_id=self.id)
+        return Picture.objects\
+            .filter(gallery__product=self)
 
     @property
     def image(self):
-        image = Gallery.objects\
-            .filter(product_id=self.id)\
-            .select_related('picture')\
-            .order_by('number')\
+        image = Picture.objects\
+            .filter(gallery__product=self)\
             .first()
         if image:
-            return image.picture.data.url
+            return image
         return None
 
 

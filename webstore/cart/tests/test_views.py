@@ -1,7 +1,12 @@
+from http.cookies import SimpleCookie
+from importlib import import_module
+
 from django.shortcuts import reverse
 from django.test import TestCase
+from django.conf import settings
 
 from webstore.product.models import Product
+from webstore.cart.models import Cart
 
 import json
 
@@ -12,8 +17,14 @@ class TestAddItemView(TestCase):
     ''' 
 
     def setUp(self):
-        self.product = Product.objects.create(name='Mint Chocolate')
+        SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+        self.session = SessionStore()
+        self.session.create()
+        self.session.save()
 
+        self.cart = Cart.objects.create(session=self.session)
+
+        self.product = Product.objects.create(name='Mint Chocolate')
 
     def test_get_raises_404(self):
         response = self.client.get(
@@ -32,6 +43,7 @@ class TestAddItemView(TestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_on_post_return_item_qty_added_to_cart(self):
+        self.client.cookies = SimpleCookie({'sessionid': self.session.session_key})
         response = self.client.post(
             path=reverse('cart:add-item'),
             data={
@@ -45,13 +57,3 @@ class TestAddItemView(TestCase):
         self.assertEqual(data['added']['item'], self.product.id)
         self.assertEqual(data['added']['qty'], 5)
         self.assertEqual(data['cart_items'], 5)
-
-    def test_cart_summary_view(self):
-        response = self.client.get(
-            path=reverse('cart:item-list'),
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response=response,
-            template_name='webstore/cart/cart_list.html',
-        )

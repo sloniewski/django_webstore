@@ -1,31 +1,42 @@
 <nav>
     <div class="nav-wrapper amber">
-    <a href="{% url 'product:product-list' %}" class="brand-logo black-text">Cheese shop</a>
+        <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <a href="{% url 'product:product-list' %}" class="brand-logo black-text">Cheese shop</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="#">Categories</a></li>
-
             <li>
-                <!-- fix needed -->
+                <a class='dropdown-trigger' href='#' data-target='dropdown2'>
+                    Categories
+                </a>
+                <ul id='dropdown2' class='dropdown-content'>
+                    {% for category in categories %}
+                        <li>
+                            <a href="{% url 'product:product-list' %}?{{ category.url_encode }}">{{ category.name }}</a>
+                        </li>
+                    {% empty %}
+                        <li>Nothing here</li>
+                    {% endfor %}
+                </ul>
+            <li>
                 <a href="{% url 'cart:item-list' %}">
-                <i class="large material-icons">shopping_cart</i></a>
+                    <i class="large material-icons">shopping_cart</i></a>
             </li>
             <li>
                 <a href="{% url 'cart:item-list' %}">
-                <span id="cart_item_count" class="new badge" data-badge-caption=''>
-                    {{ cart_items }}
-                </span>
+                    <span id="cart_item_count" class="new badge" data-badge-caption=''>
+                        {{ cart_items }}
+                    </span>
                 </a>
             </li>
             <li>
                 {% if request.user.is_authenticated %}
                     <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>
-                      My account
+                    My account
                     </a>
                     <ul id='dropdown1' class='dropdown-content'>
-                      <li><a href="{% url 'order:order-list' %}">Orders</a></li>
-                      <li><a href="{% url 'payment:user-list' %}">Payments</a></li>
-                      <li><a href="#">Settings</a></li>
-                      <li><a href="{% url 'users:logout' %}" >Logout</a></li>
+                        <li><a href="{% url 'order:order-list' %}">Orders</a></li>
+                        <li><a href="{% url 'payment:user-list' %}">Payments</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="{% url 'users:logout' %}" >Logout</a></li>
                     </ul>
                 {% else %}
                     <a href="{% url 'users:login' %}">Login</a>
@@ -34,3 +45,35 @@
         </ul>
     </div>
 </nav>
+
+<ul class="sidenav" id="mobile-nav">
+    <li>
+        <a href="{% url 'cart:item-list' %}">
+            <b>Cart: </b>
+            <span id="cart_item_count" class="new badge" data-badge-caption=''>
+                {{ cart_items }}
+            </span>
+        </a>
+    </li>
+    <li><b>My account</b></li>
+    {% if request.user.is_authenticated %}
+    <li><a href="{% url 'order:order-list' %}">Orders</a></li>
+    <li><a href="{% url 'payment:user-list' %}">Payments</a></li>
+    <li><a href="#">Settings</a></li>
+    <li><a href="{% url 'users:logout' %}">Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'users:login' %}">Login</a></li>
+    {% endif %}
+    <li><b>Categories</b></li>
+    <li>
+        <ul class="collapsible">
+            {% for category in categories %}
+            <li>
+                <a href="{% url 'product:product-list' %}?{{ category.url_encode }}">{{ category.name }}</a>
+            </li>
+            {% empty %}
+            <li>Nothing here</li>
+            {% endfor %}
+        </ul>
+    </li>
+</ul>

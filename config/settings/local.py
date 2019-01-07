@@ -17,3 +17,7 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
+CELERY_BROKER_URL = 'amqp://localhost'
+DJANGO_SETTINGS_MODULE = 'config.settings.local'
+# celery -A config  worker -l info

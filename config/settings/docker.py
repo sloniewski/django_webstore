@@ -24,3 +24,13 @@ CACHES = {
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+BROKER_URL = 'redis://redis_cache:6379'
+CELERY_BROKER_URL = 'redis://redis_cache:6379'
+CELERY_RESULT_BACKEND = 'redis://redis_cache:6379'
+CELERY_TASK_RESULT_EXPIRES = 60*60
+DJANGO_SETTINGS_MODULE = 'config.settings.local'
+
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']

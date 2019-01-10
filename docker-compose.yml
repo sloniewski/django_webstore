@@ -19,6 +19,17 @@ services:
     ports:
       - "5433:5432"
 
+  celery_worker:
+    build: .
+    volumes:
+      - .:/home/project
+    container_name: celery_worker
+    command: celery -A config worker -l info
+    restart: always
+    depends_on:
+      - postgres_db
+      - redis_cache
+
   webstore:
     build: .
     container_name: django_webstore
@@ -31,3 +42,4 @@ services:
     depends_on:
       - postgres_db
       - redis_cache
+      - celery_worker

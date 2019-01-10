@@ -7,7 +7,7 @@
             <img src={% static 'images/default.png' %}>
         {% endif %}
         <span class="card-title {% if object.is_promo %}red-text{% else %}black-text{% endif %}">
-            {{object.name}}
+            {{ object.name|title }}
         {% if object.is_promo %}
             <h5 style="color:red;">Bargain: {{ object.promo_message }}</h5>
         {% endif %}</span>

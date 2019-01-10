@@ -6,6 +6,7 @@ from django.views.defaults import page_not_found, bad_request
 from django.views.generic import FormView, ListView
 
 from webstore.core.mixins import ForceSessionMixin
+from webstore.cart.tasks import test_task
 
 from .forms import ItemForm
 from .models import Cart, CartItem
@@ -44,6 +45,7 @@ class CartQuickAddItem(CartMixin, View):
     http_method_names = ['post']
 
     def post(self, request, *args, **kwargs):
+        test_task.delay()
         item_id = request.resolver_match.kwargs['item_id']
         cart = self.get_cart(self.request)
         item = cart.add_item(item_id, 1)

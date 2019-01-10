@@ -18,6 +18,6 @@ CACHES = {
     }
 }
 
-CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_BROKER_URL = 'amqp://localhost'
 DJANGO_SETTINGS_MODULE = 'config.settings.local'
 # celery -A config  worker -l info

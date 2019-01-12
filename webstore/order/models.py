@@ -2,13 +2,13 @@ from enum import Enum
 from decimal import Decimal
 
 from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.functions import Cast
 from django.shortcuts import reverse
 from django.utils.functional import cached_property
 
+from webstore.order.tasks import AsyncEmailMessage
 from webstore.product.models import Product
 from webstore.core.mixins import TimeStampMixin
 
@@ -151,7 +151,7 @@ class OrderStatusMailFactory:
                 'user': self.order.user,
             }
         )
-        mail = EmailMessage(
+        mail = AsyncEmailMessage(
             body=text,
             subject=self.messages[self.order.status]['subject'],
             to=[self.order.user.email],

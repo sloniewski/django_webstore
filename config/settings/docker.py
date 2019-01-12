@@ -29,7 +29,7 @@ BROKER_URL = 'redis://redis_cache:6379'
 CELERY_BROKER_URL = 'redis://redis_cache:6379'
 CELERY_RESULT_BACKEND = 'redis://redis_cache:6379'
 CELERY_TASK_RESULT_EXPIRES = 60*60
-DJANGO_SETTINGS_MODULE = 'config.settings.local'
+DJANGO_SETTINGS_MODULE = 'config.settings.docker'
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

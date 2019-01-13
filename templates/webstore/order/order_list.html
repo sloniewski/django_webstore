@@ -1,5 +1,6 @@
 {% extends "webstore/base.html" %}
 {% load static %}
+{% load webstore %}
 
 {% block title %}Your orders{% endblock title %}
 
@@ -23,7 +24,7 @@
 			<td>{{ order.status }}</td>
 			<td>{{ order.created }}</td>
 			<td>{{ order.item_count }}</td>
-			<td>{{ order.value }}</td>
+			<td>{{ order.value|round }}</td>
 			<td><a href="{% url 'order:order-detail' uuid=order.uuid %}" class="btn">details</a></td>
 		</tr>
 			

@@ -9,8 +9,8 @@ class WelcomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         context.update({
             'categories': Category.objects.with_products(),
-            'promo_prod': Product.objects.with_prices().filter(is_promo=True),
-            'newcomers': Product.objects.newcomers().with_prices()
+            'promo_prod': Product.objects.with_prices().filter(is_promo=True)[:8],
+            'newcomers': Product.objects.newcomers().with_prices()[:8],
         })
         return context
 

@@ -1,5 +1,6 @@
 {% extends 'dashboard/base_dashboard.html' %}
 {% load static %}
+{% load webstore %}
 
 {% block content %}
 <div class="row">
@@ -35,7 +36,7 @@
                             <td>{{ object.status }}</td>
                             <td>{{ object.user.email }}</td>
                             <td>{{ object.num_items }}</td>
-                            <td>{{ object.value }}</td>
+                            <td>{{ object.value|round }}</td>
                             <td>{{ object.payment.payed }}</td>
                             <td>
                                 <a href="{% url 'order_panel:order-detail' uuid=object.uuid %}">

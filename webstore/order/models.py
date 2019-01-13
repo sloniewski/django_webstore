@@ -216,7 +216,7 @@ class Order(TimeStampMixin, models.Model):
         total_value = value['total_value']
         if total_value in [0, None, False]:
             total_value = 0
-        return round(Decimal(total_value), 2) + self.delivery.cost
+        return Decimal(total_value) + self.delivery.cost
 
     @cached_property
     def weight(self):

@@ -1,4 +1,6 @@
 {% extends 'webstore/base.html' %}
+{% load webstore %}
+
 
 {% block title %}
 Order summary
@@ -59,7 +61,7 @@ Order summary
 						<td>Total</td>
 						<td>{{ object.item_count }}</td>
 						<td>-</td>
-						<td>{{ object.value }}</td>
+						<td>{{ object.value|round }}</td>
 					</tr>
 				</tbody>
 			</table>

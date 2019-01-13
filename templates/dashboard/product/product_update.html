@@ -1,6 +1,19 @@
 {% extends 'dashboard/base_dashboard.html' %}
 
 {% block content %}
+    <ul class="collapsible">
+        <li>
+            <div class="collapsible-header">
+                <i class="material-icons">create</i>
+                <b>Product creaton checklist</b>
+            </div>
+            <div class="collapsible-body">
+                <p>Each product needs to have at least one category - create it before adding a product</p>
+                <p>Product withouth price won`t be avaliable in store - add a price after creating a product</p>
+                <p>Images are stored independently from products - add a picutre, and attach it to product</p>
+            </div>
+        </li>
+    </ul>
     <div class="product-update-card card">
         <div class="card-title">
             <p>Name: {{ object.name }}</p>
@@ -34,21 +47,6 @@
                         {{ form.weight }}
                         <label for="{{ form.weight.id_for_label }}">{{ form.weight.label }}</label>
                     </div>
-                    <div class="input-field col m3 s6 xs12">
-                        {{ form.width.errors }}
-                        {{ form.width }}
-                        <label for="{{ form.width.id_for_label }}">{{ form.width.label }}</label>
-                    </div>
-                    <div class="input-field col m3 s6 xs12">
-                        {{ form.height.errors }}
-                        {{ form.height }}
-                        <label for="{{ form.height.id_for_label }}">{{ form.height.label }}</label>
-                    </div>
-                    <div class="input-field col m3 s6 xs12">
-                        {{ form.length.errors }}
-                        {{ form.length }}
-                        <label for="{{ form.length.id_for_label }}">{{ form.length.label }}</label>
-                    </div>
                     <div class="input-field col m12 s12 xs12">
                         {{ form.description.errors }}
                         {{ form.description }}
@@ -68,3 +66,9 @@
         </form>
     </div>
 {% endblock content %}
+
+{% block scripts %}
+<script>
+    $('.collapsible').collapsible();
+</script>
+{% endblock scripts %}

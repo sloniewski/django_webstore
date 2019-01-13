@@ -2,14 +2,16 @@
 {% load static %}
 
 {% block content %}
-    <div class="col s12">
-        <a href="{% url 'product_panel:picture-create' %}" class="btn">Add image</a>
-    </div>
+
     <div class="col s12 m12 l3">
         {% include 'dashboard/generic_filter.html' %}
     </div>
     <div class="col s12 m12 l9">
         <div class="row">
+            <div class="col s12">
+                <h3>Avaliable pictures list</h3>
+                <a href="{% url 'product_panel:picture-create' %}" class="btn">Upload a image</a>
+            </div>
             {% for object in object_list %}
             <div class="col s6 m4 l2">
                 <div class="card ">

@@ -19,7 +19,7 @@ def async_send_mail(
 
 
 class AsyncEmailMessage:
-    from_email = 'test'
+    from_email = 'test@test.test'
     
     def __init__(self, body, subject, to):
         self.body = body
@@ -28,22 +28,21 @@ class AsyncEmailMessage:
     
     def send(self, fail_silently=True):
         if isinstance(self.to, (tuple, list)):
-            print(self.body)
             for recipient in self.to:
                 async_send_mail.delay(
-                    subject=self.subject,
-                    recipient=recipient,
-                    message=self.body,
-                    fail_silently=fail_silently,
+                    message=self.body, 
+                    subject=self.subject, 
                     from_email=self.from_email,
+                    recipient=recipient,
+                    fail_silently=fail_silently,
                 )
         elif isinstance(self.to, (string,)):
             async_send_mail.delay(
-                subject=self.subject,
-                recipient=self.to,
                 message=self.body,
-                fail_silently=fail_silently,
+                subject=self.subject,
                 from_email=self.from_email,
+                recipient=self.to,
+                fail_silently=fail_silently,
             )
         else:
             raise TypeError('sending message failed unrecognized recipent address format '
